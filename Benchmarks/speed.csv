@@ -1,0 +1,129 @@
+index,Algorithm,verify/s,sign/s,op/s,decap/s,encap/s,keygen/s
+0,rsa  512 bits,46088.5,3862.8,NaN,NaN,NaN,NaN
+1,rsa 1024 bits,16248.0,836.0,NaN,NaN,NaN,NaN
+2,rsa 2048 bits,4764.0,129.0,NaN,NaN,NaN,NaN
+3,rsa 3072 bits,2205.0,42.1,NaN,NaN,NaN,NaN
+4,rsa 4096 bits,1263.0,18.8,NaN,NaN,NaN,NaN
+5,rsa 7680 bits,368.0,2.4,NaN,NaN,NaN,NaN
+6,rsa 15360 bits,93.0,0.4,NaN,NaN,NaN,NaN
+7,dsa  512 bits,3376.5,2274.5,NaN,NaN,NaN,NaN
+8,dsa 1024 bits,1233.5,1043.5,NaN,NaN,NaN,NaN
+9,dsa 2048 bits,378.5,346.0,NaN,NaN,NaN,NaN
+10,160 bits ecdsa (secp160r1),834.7,762.9,NaN,NaN,NaN,NaN
+11,192 bits ecdsa (nistp192),707.0,615.2,NaN,NaN,NaN,NaN
+12,224 bits ecdsa (nistp224),541.9,449.7,NaN,NaN,NaN,NaN
+13,256 bits ecdsa (nistp256),1929.0,5693.8,NaN,NaN,NaN,NaN
+14,384 bits ecdsa (nistp384),182.6,141.3,NaN,NaN,NaN,NaN
+15,521 bits ecdsa (nistp521),76.1,59.0,NaN,NaN,NaN,NaN
+16,163 bits ecdsa (nistk163),242.7,472.9,NaN,NaN,NaN,NaN
+17,233 bits ecdsa (nistk233),172.4,333.0,NaN,NaN,NaN,NaN
+18,283 bits ecdsa (nistk283),84.9,168.2,NaN,NaN,NaN,NaN
+19,409 bits ecdsa (nistk409),41.7,83.5,NaN,NaN,NaN,NaN
+20,571 bits ecdsa (nistk571),19.4,38.5,NaN,NaN,NaN,NaN
+21,163 bits ecdsa (nistb163),224.6,441.2,NaN,NaN,NaN,NaN
+22,233 bits ecdsa (nistb233),158.8,324.2,NaN,NaN,NaN,NaN
+23,283 bits ecdsa (nistb283),78.0,154.3,NaN,NaN,NaN,NaN
+24,409 bits ecdsa (nistb409),38.3,74.5,NaN,NaN,NaN,NaN
+25,571 bits ecdsa (nistb571),17.9,34.2,NaN,NaN,NaN,NaN
+26,256 bits ecdsa (brainpoolP256r1),429.8,389.8,NaN,NaN,NaN,NaN
+27,256 bits ecdsa (brainpoolP256t1),448.5,402.0,NaN,NaN,NaN,NaN
+28,384 bits ecdsa (brainpoolP384r1),169.0,141.5,NaN,NaN,NaN,NaN
+29,384 bits ecdsa (brainpoolP384t1),184.5,143.0,NaN,NaN,NaN,NaN
+30,512 bits ecdsa (brainpoolP512r1),109.5,85.0,NaN,NaN,NaN,NaN
+31,512 bits ecdsa (brainpoolP512t1),115.0,86.4,NaN,NaN,NaN,NaN
+32,160 bits ecdh (secp160r1),NaN,NaN,811.6,NaN,NaN,NaN
+33,192 bits ecdh (nistp192),NaN,NaN,641.5,NaN,NaN,NaN
+34,224 bits ecdh (nistp224),NaN,NaN,479.9,NaN,NaN,NaN
+35,256 bits ecdh (nistp256),NaN,NaN,2587.0,NaN,NaN,NaN
+36,384 bits ecdh (nistp384),NaN,NaN,152.0,NaN,NaN,NaN
+37,521 bits ecdh (nistp521),NaN,NaN,61.5,NaN,NaN,NaN
+38,163 bits ecdh (nistk163),NaN,NaN,484.9,NaN,NaN,NaN
+39,233 bits ecdh (nistk233),NaN,NaN,347.5,NaN,NaN,NaN
+40,283 bits ecdh (nistk283),NaN,NaN,177.5,NaN,NaN,NaN
+41,409 bits ecdh (nistk409),NaN,NaN,85.4,NaN,NaN,NaN
+42,571 bits ecdh (nistk571),NaN,NaN,40.3,NaN,NaN,NaN
+43,163 bits ecdh (nistb163),NaN,NaN,457.8,NaN,NaN,NaN
+44,233 bits ecdh (nistb233),NaN,NaN,337.0,NaN,NaN,NaN
+45,283 bits ecdh (nistb283),NaN,NaN,160.5,NaN,NaN,NaN
+46,409 bits ecdh (nistb409),NaN,NaN,77.5,NaN,NaN,NaN
+47,571 bits ecdh (nistb571),NaN,NaN,36.1,NaN,NaN,NaN
+48,256 bits ecdh (brainpoolP256r1),NaN,NaN,416.1,NaN,NaN,NaN
+49,256 bits ecdh (brainpoolP256t1),NaN,NaN,420.0,NaN,NaN,NaN
+50,384 bits ecdh (brainpoolP384r1),NaN,NaN,148.5,NaN,NaN,NaN
+51,384 bits ecdh (brainpoolP384t1),NaN,NaN,153.5,NaN,NaN,NaN
+52,512 bits ecdh (brainpoolP512r1),NaN,NaN,88.5,NaN,NaN,NaN
+53,512 bits ecdh (brainpoolP512t1),NaN,NaN,91.0,NaN,NaN,NaN
+54,253 bits ecdh (X25519),NaN,NaN,2697.5,NaN,NaN,NaN
+55,448 bits ecdh (X448),NaN,NaN,346.5,NaN,NaN,NaN
+56,253 bits EdDSA (Ed25519),2546.0,7164.0,NaN,NaN,NaN,NaN
+57,456 bits EdDSA (Ed448),302.0,434.5,NaN,NaN,NaN,NaN
+58,frodo640aes,NaN,NaN,NaN,55.2,55.7,59.0
+59,frodo640shake,NaN,NaN,NaN,74.5,72.6,98.0
+60,frodo976aes,NaN,NaN,NaN,23.9,23.6,25.5
+61,frodo976shake,NaN,NaN,NaN,33.0,34.3,43.3
+62,frodo1344aes,NaN,NaN,NaN,12.6,12.6,13.2
+63,frodo1344shake,NaN,NaN,NaN,18.2,18.2,23.6
+64,kyber512,NaN,NaN,NaN,11459.3,8675.5,8774.1
+65,kyber768,NaN,NaN,NaN,7108.5,5944.9,6368.9
+66,kyber1024,NaN,NaN,NaN,4754.5,4139.4,4565.1
+67,ntru_hps2048509,NaN,NaN,NaN,2381.5,3119.2,136.3
+68,ntru_hps2048677,NaN,NaN,NaN,1528.0,2194.9,82.5
+69,ntru_hps4096821,NaN,NaN,NaN,1172.5,1733.2,57.5
+70,ntru_hps40961229,NaN,NaN,NaN,603.5,982.7,26.7
+71,ntru_hrss701,NaN,NaN,NaN,1507.0,3447.7,80.5
+72,ntru_hrss1373,NaN,NaN,NaN,410.5,1075.9,21.2
+73,lightsaber,NaN,NaN,NaN,10097.5,8881.0,8084.7
+74,saber,NaN,NaN,NaN,6459.0,5866.2,5687.7
+75,firesaber,NaN,NaN,NaN,4370.5,4191.3,4199.5
+76,bikel1,NaN,NaN,NaN,35.3,644.2,65.0
+77,bikel3,NaN,NaN,NaN,11.3,221.0,20.6
+78,kyber90s512,NaN,NaN,NaN,2389.5,2822.2,3479.5
+79,kyber90s768,NaN,NaN,NaN,1523.5,1777.8,2143.9
+80,kyber90s1024,NaN,NaN,NaN,1044.0,1181.4,1388.4
+81,hqc128,NaN,NaN,NaN,460.5,679.4,1217.7
+82,hqc192,NaN,NaN,NaN,184.5,265.0,503.5
+83,hqc256,NaN,NaN,NaN,96.0,136.8,272.9
+84,ntrulpr653,NaN,NaN,NaN,618.5,821.0,1282.7
+85,ntrulpr761,NaN,NaN,NaN,482.0,648.5,1049.5
+86,ntrulpr857,NaN,NaN,NaN,393.0,526.1,872.6
+87,ntrulpr1277,NaN,NaN,NaN,201.5,279.5,470.9
+88,sntrup653,NaN,NaN,NaN,754.0,1446.7,58.0
+89,sntrup761,NaN,NaN,NaN,590.5,1148.5,43.5
+90,sntrup857,NaN,NaN,NaN,488.9,963.1,33.5
+91,sntrup1277,NaN,NaN,NaN,229.5,498.0,15.3
+92,dilithium2,2990.5,1012.1,NaN,NaN,NaN,NaN
+93,p256_dilithium2,1124.5,803.5,NaN,NaN,NaN,NaN
+94,rsa3072_dilithium2,1268.0,40.5,NaN,NaN,NaN,NaN
+95,dilithium3,1810.0,668.8,NaN,NaN,NaN,NaN
+96,p384_dilithium3,158.0,111.2,NaN,NaN,NaN,NaN
+97,dilithium5,1051.0,490.5,NaN,NaN,NaN,NaN
+98,p521_dilithium5,69.2,50.5,NaN,NaN,NaN,NaN
+99,dilithium2_aes,1179.0,298.0,NaN,NaN,NaN,NaN
+100,p256_dilithium2_aes,720.5,283.8,NaN,NaN,NaN,NaN
+101,rsa3072_dilithium2_aes,788.5,37.5,NaN,NaN,NaN,NaN
+102,dilithium3_aes,728.5,191.0,NaN,NaN,NaN,NaN
+103,p384_dilithium3_aes,140.0,75.1,NaN,NaN,NaN,NaN
+104,dilithium5_aes,436.5,145.5,NaN,NaN,NaN,NaN
+105,p521_dilithium5_aes,64.2,42.2,NaN,NaN,NaN,NaN
+106,falcon512,3144.5,58.0,NaN,NaN,NaN,NaN
+107,p256_falcon512,1183.0,58.0,NaN,NaN,NaN,NaN
+108,rsa3072_falcon512,1278.0,24.3,NaN,NaN,NaN,NaN
+109,falcon1024,1582.0,27.2,NaN,NaN,NaN,NaN
+110,p521_falcon1024,72.5,18.5,NaN,NaN,NaN,NaN
+111,picnicl1full,103.0,82.1,NaN,NaN,NaN,NaN
+112,p256_picnicl1full,91.5,75.1,NaN,NaN,NaN,NaN
+113,rsa3072_picnicl1full,97.5,28.2,NaN,NaN,NaN,NaN
+114,picnic3l1,23.9,18.5,NaN,NaN,NaN,NaN
+115,p256_picnic3l1,23.5,18.1,NaN,NaN,NaN,NaN
+116,rsa3072_picnic3l1,23.5,13.2,NaN,NaN,NaN,NaN
+117,rainbowVclassic,6.1,6.2,NaN,NaN,NaN,NaN
+118,p521_rainbowVclassic,5.6,5.6,NaN,NaN,NaN,NaN
+119,sphincsharaka128frobust,34.5,2.1,NaN,NaN,NaN,NaN
+120,p256_sphincsharaka128frobust,31.3,2.0,NaN,NaN,NaN,NaN
+121,rsa3072_sphincsharaka128frobust,32.8,2.0,NaN,NaN,NaN,NaN
+122,sphincssha256128frobust,37.6,2.2,NaN,NaN,NaN,NaN
+123,p256_sphincssha256128frobust,36.8,2.3,NaN,NaN,NaN,NaN
+124,rsa3072_sphincssha256128frobust,38.6,2.2,NaN,NaN,NaN,NaN
+125,sphincsshake256128frobust,29.9,1.7000000000000002,NaN,NaN,NaN,NaN
+126,p256_sphincsshake256128frobust,29.7,1.7000000000000002,NaN,NaN,NaN,NaN
+127,p256_sphincsshake256128frobust,29.7,1.7000000000000002,NaN,NaN,NaN,NaN

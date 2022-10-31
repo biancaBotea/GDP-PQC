@@ -1,0 +1,524 @@
+[ 
+	 { 
+		"Algorithm":"rsa  512 bits",
+		 "verify/s": 46088.5,
+		 "sign/s": 3862.8}, 
+	 { 
+		"Algorithm": "rsa 1024 bits",
+		 "verify/s": 16248.0,
+		 "sign/s": 836.0}, 
+	 { 
+		"Algorithm": "rsa 2048 bits",
+		 "verify/s": 4764.0,
+		 "sign/s": 129.0}, 
+	 { 
+		"Algorithm": "rsa 3072 bits",
+		 "verify/s": 2205.0,
+		 "sign/s": 42.1}, 
+	 { 
+		"Algorithm": "rsa 4096 bits",
+		 "verify/s": 1263.0,
+		 "sign/s": 18.8}, 
+	 { 
+		"Algorithm": "rsa 7680 bits",
+		 "verify/s": 368.0,
+		 "sign/s": 2.4}, 
+	 { 
+		"Algorithm": "rsa 15360 bits",
+		 "verify/s": 93.0,
+		 "sign/s": 0.4}, 
+	 { 
+		"Algorithm": "dsa  512 bits",
+		 "verify/s": 3376.5,
+		 "sign/s": 2274.5}, 
+	 { 
+		"Algorithm": "dsa 1024 bits",
+		 "verify/s": 1233.5,
+		 "sign/s": 1043.5}, 
+	 { 
+		"Algorithm": "dsa 2048 bits",
+		 "verify/s": 378.5,
+		 "sign/s": 346.0}, 
+	 { 
+		"Algorithm": "160 bits ecdsa (secp160r1)",
+		 "verify/s": 834.7,
+		 "sign/s": 762.9}, 
+	 { 
+		"Algorithm": "192 bits ecdsa (nistp192)",
+		 "verify/s": 707.0,
+		 "sign/s": 615.2}, 
+	 { 
+		"Algorithm": "224 bits ecdsa (nistp224)",
+		 "verify/s": 541.9,
+		 "sign/s": 449.7}, 
+	 { 
+		"Algorithm": "256 bits ecdsa (nistp256)",
+		 "verify/s": 1929.0,
+		 "sign/s": 5693.8}, 
+	 { 
+		"Algorithm": "384 bits ecdsa (nistp384)",
+		 "verify/s": 182.6,
+		 "sign/s": 141.3}, 
+	 { 
+		"Algorithm": "521 bits ecdsa (nistp521)",
+		 "verify/s": 76.1,
+		 "sign/s": 59.0}, 
+	 { 
+		"Algorithm": "163 bits ecdsa (nistk163)",
+		 "verify/s": 242.7,
+		 "sign/s": 472.9}, 
+	 { 
+		"Algorithm": "233 bits ecdsa (nistk233)",
+		 "verify/s": 172.4,
+		 "sign/s": 333.0}, 
+	 { 
+		"Algorithm": "283 bits ecdsa (nistk283)",
+		 "verify/s": 84.9,
+		 "sign/s": 168.2}, 
+	 { 
+		"Algorithm": "409 bits ecdsa (nistk409)",
+		 "verify/s": 41.7,
+		 "sign/s": 83.5}, 
+	 { 
+		"Algorithm": "571 bits ecdsa (nistk571)",
+		 "verify/s": 19.4,
+		 "sign/s": 38.5}, 
+	 { 
+		"Algorithm": "163 bits ecdsa (nistb163)",
+		 "verify/s": 224.6,
+		 "sign/s": 441.2}, 
+	 { 
+		"Algorithm": "233 bits ecdsa (nistb233)",
+		 "verify/s": 158.8,
+		 "sign/s": 324.2}, 
+	 { 
+		"Algorithm": "283 bits ecdsa (nistb283)",
+		 "verify/s": 78.0,
+		 "sign/s": 154.3}, 
+	 { 
+		"Algorithm": "409 bits ecdsa (nistb409)",
+		 "verify/s": 38.3,
+		 "sign/s": 74.5}, 
+	 { 
+		"Algorithm": "571 bits ecdsa (nistb571)",
+		 "verify/s": 17.9,
+		 "sign/s": 34.2}, 
+	 { 
+		"Algorithm": "256 bits ecdsa (brainpoolP256r1)",
+		 "verify/s": 429.8,
+		 "sign/s": 389.8}, 
+	 { 
+		"Algorithm": "256 bits ecdsa (brainpoolP256t1)",
+		 "verify/s": 448.5,
+		 "sign/s": 402.0}, 
+	 { 
+		"Algorithm": "384 bits ecdsa (brainpoolP384r1)",
+		 "verify/s": 169.0,
+		 "sign/s": 141.5}, 
+	 { 
+		"Algorithm": "384 bits ecdsa (brainpoolP384t1)",
+		 "verify/s": 184.5,
+		 "sign/s": 143.0}, 
+	 { 
+		"Algorithm": "512 bits ecdsa (brainpoolP512r1)",
+		 "verify/s": 109.5,
+		 "sign/s": 85.0}, 
+	 { 
+		"Algorithm": "512 bits ecdsa (brainpoolP512t1)",
+		 "verify/s": 115.0,
+		 "sign/s": 86.4}, 
+	 { 
+		"Algorithm": "160 bits ecdh (secp160r1)",
+		 "op/s": 811.6}, 
+	 { 
+		"Algorithm": "192 bits ecdh (nistp192)",
+		 "op/s": 641.5}, 
+	 { 
+		"Algorithm": "224 bits ecdh (nistp224)",
+		 "op/s": 479.9}, 
+	 { 
+		"Algorithm": "256 bits ecdh (nistp256)",
+		 "op/s": 2587.0}, 
+	 { 
+		"Algorithm": "384 bits ecdh (nistp384)",
+		 "op/s": 152.0}, 
+	 { 
+		"Algorithm": "521 bits ecdh (nistp521)",
+		 "op/s": 61.5}, 
+	 { 
+		"Algorithm": "163 bits ecdh (nistk163)",
+		 "op/s": 484.9}, 
+	 { 
+		"Algorithm": "233 bits ecdh (nistk233)",
+		 "op/s": 347.5}, 
+	 { 
+		"Algorithm": "283 bits ecdh (nistk283)",
+		 "op/s": 177.5}, 
+	 { 
+		"Algorithm": "409 bits ecdh (nistk409)",
+		 "op/s": 85.4}, 
+	 { 
+		"Algorithm": "571 bits ecdh (nistk571)",
+		 "op/s": 40.3}, 
+	 { 
+		"Algorithm": "163 bits ecdh (nistb163)",
+		 "op/s": 457.8}, 
+	 { 
+		"Algorithm": "233 bits ecdh (nistb233)",
+		 "op/s": 337.0}, 
+	 { 
+		"Algorithm": "283 bits ecdh (nistb283)",
+		 "op/s": 160.5}, 
+	 { 
+		"Algorithm": "409 bits ecdh (nistb409)",
+		 "op/s": 77.5}, 
+	 { 
+		"Algorithm": "571 bits ecdh (nistb571)",
+		 "op/s": 36.1}, 
+	 { 
+		"Algorithm": "256 bits ecdh (brainpoolP256r1)",
+		 "op/s": 416.1}, 
+	 { 
+		"Algorithm": "256 bits ecdh (brainpoolP256t1)",
+		 "op/s": 420.0}, 
+	 { 
+		"Algorithm": "384 bits ecdh (brainpoolP384r1)",
+		 "op/s": 148.5}, 
+	 { 
+		"Algorithm": "384 bits ecdh (brainpoolP384t1)",
+		 "op/s": 153.5}, 
+	 { 
+		"Algorithm": "512 bits ecdh (brainpoolP512r1)",
+		 "op/s": 88.5}, 
+	 { 
+		"Algorithm": "512 bits ecdh (brainpoolP512t1)",
+		 "op/s": 91.0}, 
+	 { 
+		"Algorithm": "253 bits ecdh (X25519)",
+		 "op/s": 2697.5}, 
+	 { 
+		"Algorithm": "448 bits ecdh (X448)",
+		 "op/s": 346.5}, 
+	 { 
+		"Algorithm": "253 bits EdDSA (Ed25519)",
+		 "verify/s": 2546.0,
+		 "sign/s": 7164.0}, 
+	 { 
+		"Algorithm": "456 bits EdDSA (Ed448)",
+		 "verify/s": 302.0,
+		 "sign/s": 434.5}, 
+	 { 
+		"Algorithm": "frodo640aes",
+		 "decap/s": 55.2,
+		 "encap/s": 55.7,
+		 "keygen/s": 59.0}, 
+	 { 
+		"Algorithm": "frodo640shake",
+		 "decap/s": 74.5,
+		 "encap/s": 72.6,
+		 "keygen/s": 98.0}, 
+	 { 
+		"Algorithm": "frodo976aes",
+		 "decap/s": 23.9,
+		 "encap/s": 23.6,
+		 "keygen/s": 25.5}, 
+	 { 
+		"Algorithm": "frodo976shake",
+		 "decap/s": 33.0,
+		 "encap/s": 34.3,
+		 "keygen/s": 43.3}, 
+	 { 
+		"Algorithm": "frodo1344aes",
+		 "decap/s": 12.6,
+		 "encap/s": 12.6,
+		 "keygen/s": 13.2}, 
+	 { 
+		"Algorithm": "frodo1344shake",
+		 "decap/s": 18.2,
+		 "encap/s": 18.2,
+		 "keygen/s": 23.6}, 
+	 { 
+		"Algorithm": "kyber512",
+		 "decap/s": 11459.3,
+		 "encap/s": 8675.5,
+		 "keygen/s": 8774.1}, 
+	 { 
+		"Algorithm": "kyber768",
+		 "decap/s": 7108.5,
+		 "encap/s": 5944.9,
+		 "keygen/s": 6368.9}, 
+	 { 
+		"Algorithm": "kyber1024",
+		 "decap/s": 4754.5,
+		 "encap/s": 4139.4,
+		 "keygen/s": 4565.1}, 
+	 { 
+		"Algorithm": "ntru_hps2048509",
+		 "decap/s": 2381.5,
+		 "encap/s": 3119.2,
+		 "keygen/s": 136.3}, 
+	 { 
+		"Algorithm": "ntru_hps2048677",
+		 "decap/s": 1528.0,
+		 "encap/s": 2194.9,
+		 "keygen/s": 82.5}, 
+	 { 
+		"Algorithm": "ntru_hps4096821",
+		 "decap/s": 1172.5,
+		 "encap/s": 1733.2,
+		 "keygen/s": 57.5}, 
+	 { 
+		"Algorithm": "ntru_hps40961229",
+		 "decap/s": 603.5,
+		 "encap/s": 982.7,
+		 "keygen/s": 26.7}, 
+	 { 
+		"Algorithm": "ntru_hrss701",
+		 "decap/s": 1507.0,
+		 "encap/s": 3447.7,
+		 "keygen/s": 80.5}, 
+	 { 
+		"Algorithm": "ntru_hrss1373",
+		 "decap/s": 410.5,
+		 "encap/s": 1075.9,
+		 "keygen/s": 21.2}, 
+	 { 
+		"Algorithm": "lightsaber",
+		 "decap/s": 10097.5,
+		 "encap/s": 8881.0,
+		 "keygen/s": 8084.7}, 
+	 { 
+		"Algorithm": "saber",
+		 "decap/s": 6459.0,
+		 "encap/s": 5866.2,
+		 "keygen/s": 5687.7}, 
+	 { 
+		"Algorithm": "firesaber",
+		 "decap/s": 4370.5,
+		 "encap/s": 4191.3,
+		 "keygen/s": 4199.5}, 
+	 { 
+		"Algorithm": "bikel1",
+		 "decap/s": 35.3,
+		 "encap/s": 644.2,
+		 "keygen/s": 65.0}, 
+	 { 
+		"Algorithm": "bikel3",
+		 "decap/s": 11.3,
+		 "encap/s": 221.0,
+		 "keygen/s": 20.6}, 
+	 { 
+		"Algorithm": "kyber90s512",
+		 "decap/s": 2389.5,
+		 "encap/s": 2822.2,
+		 "keygen/s": 3479.5}, 
+	 { 
+		"Algorithm": "kyber90s768",
+		 "decap/s": 1523.5,
+		 "encap/s": 1777.8,
+		 "keygen/s": 2143.9}, 
+	 { 
+		"Algorithm": "kyber90s1024",
+		 "decap/s": 1044.0,
+		 "encap/s": 1181.4,
+		 "keygen/s": 1388.4}, 
+	 { 
+		"Algorithm": "hqc128",
+		 "decap/s": 460.5,
+		 "encap/s": 679.4,
+		 "keygen/s": 1217.7}, 
+	 { 
+		"Algorithm": "hqc192",
+		 "decap/s": 184.5,
+		 "encap/s": 265.0,
+		 "keygen/s": 503.5}, 
+	 { 
+		"Algorithm": "hqc256",
+		 "decap/s": 96.0,
+		 "encap/s": 136.8,
+		 "keygen/s": 272.9}, 
+	 { 
+		"Algorithm": "ntrulpr653",
+		 "decap/s": 618.5,
+		 "encap/s": 821.0,
+		 "keygen/s": 1282.7}, 
+	 { 
+		"Algorithm": "ntrulpr761",
+		 "decap/s": 482.0,
+		 "encap/s": 648.5,
+		 "keygen/s": 1049.5}, 
+	 { 
+		"Algorithm": "ntrulpr857",
+		 "decap/s": 393.0,
+		 "encap/s": 526.1,
+		 "keygen/s": 872.6}, 
+	 { 
+		"Algorithm": "ntrulpr1277",
+		 "decap/s": 201.5,
+		 "encap/s": 279.5,
+		 "keygen/s": 470.9}, 
+	 { 
+		"Algorithm": "sntrup653",
+		 "decap/s": 754.0,
+		 "encap/s": 1446.7,
+		 "keygen/s": 58.0}, 
+	 { 
+		"Algorithm": "sntrup761",
+		 "decap/s": 590.5,
+		 "encap/s": 1148.5,
+		 "keygen/s": 43.5}, 
+	 { 
+		"Algorithm": "sntrup857",
+		 "decap/s": 488.9,
+		 "encap/s": 963.1,
+		 "keygen/s": 33.5}, 
+	 { 
+		"Algorithm": "sntrup1277",
+		 "decap/s": 229.5,
+		 "encap/s": 498.0,
+		 "keygen/s": 15.3}, 
+	 { 
+		"Algorithm": "dilithium2",
+		 "verify/s": 2990.5,
+		 "sign/s": 1012.1}, 
+	 { 
+		"Algorithm": "p256_dilithium2",
+		 "verify/s": 1124.5,
+		 "sign/s": 803.5}, 
+	 { 
+		"Algorithm": "rsa3072_dilithium2",
+		 "verify/s": 1268.0,
+		 "sign/s": 40.5}, 
+	 { 
+		"Algorithm": "dilithium3",
+		 "verify/s": 1810.0,
+		 "sign/s": 668.8}, 
+	 { 
+		"Algorithm": "p384_dilithium3",
+		 "verify/s": 158.0,
+		 "sign/s": 111.2}, 
+	 { 
+		"Algorithm": "dilithium5",
+		 "verify/s": 1051.0,
+		 "sign/s": 490.5}, 
+	 { 
+		"Algorithm": "p521_dilithium5",
+		 "verify/s": 69.2,
+		 "sign/s": 50.5}, 
+	 { 
+		"Algorithm": "dilithium2_aes",
+		 "verify/s": 1179.0,
+		 "sign/s": 298.0}, 
+	 { 
+		"Algorithm": "p256_dilithium2_aes",
+		 "verify/s": 720.5,
+		 "sign/s": 283.8}, 
+	 { 
+		"Algorithm": "rsa3072_dilithium2_aes",
+		 "verify/s": 788.5,
+		 "sign/s": 37.5}, 
+	 { 
+		"Algorithm": "dilithium3_aes",
+		 "verify/s": 728.5,
+		 "sign/s": 191.0}, 
+	 { 
+		"Algorithm": "p384_dilithium3_aes",
+		 "verify/s": 140.0,
+		 "sign/s": 75.1}, 
+	 { 
+		"Algorithm": "dilithium5_aes",
+		 "verify/s": 436.5,
+		 "sign/s": 145.5}, 
+	 { 
+		"Algorithm": "p521_dilithium5_aes",
+		 "verify/s": 64.2,
+		 "sign/s": 42.2}, 
+	 { 
+		"Algorithm": "falcon512",
+		 "verify/s": 3144.5,
+		 "sign/s": 58.0}, 
+	 { 
+		"Algorithm": "p256_falcon512",
+		 "verify/s": 1183.0,
+		 "sign/s": 58.0}, 
+	 { 
+		"Algorithm": "rsa3072_falcon512",
+		 "verify/s": 1278.0,
+		 "sign/s": 24.3}, 
+	 { 
+		"Algorithm": "falcon1024",
+		 "verify/s": 1582.0,
+		 "sign/s": 27.2}, 
+	 { 
+		"Algorithm": "p521_falcon1024",
+		 "verify/s": 72.5,
+		 "sign/s": 18.5}, 
+	 { 
+		"Algorithm": "picnicl1full",
+		 "verify/s": 103.0,
+		 "sign/s": 82.1}, 
+	 { 
+		"Algorithm": "p256_picnicl1full",
+		 "verify/s": 91.5,
+		 "sign/s": 75.1}, 
+	 { 
+		"Algorithm": "rsa3072_picnicl1full",
+		 "verify/s": 97.5,
+		 "sign/s": 28.2}, 
+	 { 
+		"Algorithm": "picnic3l1",
+		 "verify/s": 23.9,
+		 "sign/s": 18.5}, 
+	 { 
+		"Algorithm": "p256_picnic3l1",
+		 "verify/s": 23.5,
+		 "sign/s": 18.1}, 
+	 { 
+		"Algorithm": "rsa3072_picnic3l1",
+		 "verify/s": 23.5,
+		 "sign/s": 13.2}, 
+	 { 
+		"Algorithm": "rainbowVclassic",
+		 "verify/s": 6.1,
+		 "sign/s": 6.2}, 
+	 { 
+		"Algorithm": "p521_rainbowVclassic",
+		 "verify/s": 5.6,
+		 "sign/s": 5.6}, 
+	 { 
+		"Algorithm": "sphincsharaka128frobust",
+		 "verify/s": 34.5,
+		 "sign/s": 2.1}, 
+	 { 
+		"Algorithm": "p256_sphincsharaka128frobust",
+		 "verify/s": 31.3,
+		 "sign/s": 2.0}, 
+	 { 
+		"Algorithm": "rsa3072_sphincsharaka128frobust",
+		 "verify/s": 32.8,
+		 "sign/s": 2.0}, 
+	 { 
+		"Algorithm": "sphincssha256128frobust",
+		 "verify/s": 37.6,
+		 "sign/s": 2.2}, 
+	 { 
+		"Algorithm": "p256_sphincssha256128frobust",
+		 "verify/s": 36.8,
+		 "sign/s": 2.3}, 
+	 { 
+		"Algorithm": "rsa3072_sphincssha256128frobust",
+		 "verify/s": 38.6,
+		 "sign/s": 2.2}, 
+	 { 
+		"Algorithm": "sphincsshake256128frobust",
+		 "verify/s": 29.9,
+		 "sign/s": 1.7}, 
+	 { 
+		"Algorithm": "p256_sphincsshake256128frobust",
+		 "verify/s": 29.7,
+		 "sign/s": 1.7}, 
+	 { 
+		"Algorithm": "p256_sphincsshake256128frobust",
+		 "verify/s": 29.7,
+		 "sign/s": 1.7} 
+ ]
