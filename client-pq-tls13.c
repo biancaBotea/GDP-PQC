@@ -109,7 +109,7 @@ static int Tls13SecretCallback(WOLFSSL* ssl, int id, const unsigned char* secret
 }
 #endif /* WOLFSSL_TLS13 && HAVE_SECRET_CALLBACK */
 
-int run_client(char *server_ip, char *cert_file_path)
+int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToServer)
 {
     int ret = 0;
 #if defined(WOLFSSL_TLS13) && defined(HAVE_LIBOQS)
@@ -182,7 +182,7 @@ int run_client(char *server_ip, char *cert_file_path)
         ret = -1; goto exit;
     }
 
-    ret = wolfSSL_UseKeyShare(ssl, WOLFSSL_P521_KYBER_LEVEL5);
+    ret = wolfSSL_UseKeyShare(ssl, KeyExch);
     if (ret < 0) {
         fprintf(stderr, "ERROR: failed to set the requested group to "
                         "P521_KYBER_LEVEL5.\n");
@@ -214,21 +214,34 @@ int run_client(char *server_ip, char *cert_file_path)
     wolfSSL_FreeArrays(ssl);
 #endif
 
-    /* Get a message for the server from stdin */
-    printf("Message for server: ");
-    memset(buff, 0, sizeof(buff));
-    if (fgets(buff, sizeof(buff), stdin) == NULL) {
-        fprintf(stderr, "ERROR: failed to get message for server\n");
-        ret = -1; goto exit;
-    }
-    len = strnlen(buff, sizeof(buff));
+    if (strlen(MsgToServer) == 0) {
+        /* Get a message for the server from stdin */
+        printf("Message for server: ");
+        memset(buff, 0, sizeof(buff));
+        if (fgets(buff, sizeof(buff), stdin) == NULL) {
+            fprintf(stderr, "ERROR: failed to get message for server\n");
+            ret = -1; goto exit;
+        }
+        len = strnlen(buff, sizeof(buff));
 
-    /* Send the message to the server */
-    if ((ret = wolfSSL_write(ssl, buff, len)) != len) {
-        fprintf(stderr, "ERROR: failed to write entire message\n");
-        fprintf(stderr, "%d bytes of %d bytes were sent", ret, (int) len);
-        goto exit;
+        /* Send input message to the server */
+        if ((ret = wolfSSL_write(ssl, buff, len)) != len) {
+            fprintf(stderr, "ERROR: failed to write entire message\n");
+            fprintf(stderr, "%d bytes of %d bytes were sent", ret, (int) len);
+            goto exit;
+        }
+    } else {
+        printf("Message for server: %s\n", MsgToServer);
+        /* Send hard coded message to the server */
+        len = sizeof(MsgToServer);
+        if ((ret = wolfSSL_write(ssl, MsgToServer, len)) != len) {
+            fprintf(stderr, "ERROR: failed to write entire message\n");
+            fprintf(stderr, "%d bytes of %d bytes were sent", ret, (int) len);
+            goto exit;
+        }
     }
+
+    
 
     /* Read the server data into our buff array */
     memset(buff, 0, sizeof(buff));
