@@ -24,21 +24,34 @@
 /* extra src files */
 #include "client-pq-tls13.h"
 
-int main() {
-  /* application args */
-  char *server_addr = "10.42.0.174";
-  char *cert_file_path = "./certs/falcon_level1_root_cert.pem";
-  int KeyExch = WOLFSSL_P521_KYBER_LEVEL5;
-  char * MsgToServer = "";
+/* application args */
+char *server_addr = "127.0.0.1";
+char *cert_file_path = "./certs/ca-ecc-cert.pem";
+int kem[] = {WOLFSSL_ECC_SECP256R1, WOLFSSL_KYBER_LEVEL5, WOLFSSL_SABER_LEVEL5};
+char *kemNames[3] = {"ECDSA", "Kyber", "Saber"};
+char * MsgToServer = "";
 
+int benchmark_KEM() {
   /* run client 5 times */
   int i;
-  for (i = 0; i < 5; i++) {
-    run_client(server_addr, cert_file_path, KeyExch, MsgToServer);
+  for (i = 0; i < 3; i++) {
+    printf("Benchmarked Handshake using %s\n", kemNames[i]);
+    run_client(server_addr, cert_file_path, kem[i], "Test");
     printf("\n");
   }
 
-  run_client(server_addr, cert_file_path, KeyExch, "shutdown");
+  return 0;
+}
+
+int benchmark_DS() {
+  return 0;
+}
+
+int main() {
+
+  benchmark_KEM(); 
+
+  run_client(server_addr, cert_file_path, kem[0], "shutdown");
 
   return 0;
 }
