@@ -121,6 +121,7 @@ static int Tls13SecretCallback(WOLFSSL* ssl, int id, const unsigned char* secret
 static int mSockfd = SOCKET_INVALID;
 static int mConnd = SOCKET_INVALID;
 static int mShutdown = 0;
+int *mShutdownPtr = &mShutdown;
 
 #ifdef HAVE_SIGNAL
 static void sig_handler(const int sig)
@@ -140,7 +141,7 @@ static void sig_handler(const int sig)
 #endif
 #endif
 
-int main(int argc, char** argv)
+int run_server(char *cert_file_path, char *key_file_path)
 {
     int ret = 0;
 #if defined(WOLFSSL_TLS13) && defined(HAVE_LIBOQS)
@@ -162,15 +163,6 @@ int main(int argc, char** argv)
     signal(SIGINT, sig_handler);
 #endif
 
-    if(argc == 3) {
-        cert_file = argv[1];
-        key_file  = argv[2];
-    } else if (argc != 1) {
-        printf("usage: %s <IPv4 address> [<cert file> <key file>]\n", argv[0]);
-        printf("Default cert file: %s, key file: %s\n", cert_file, key_file);
-        return 0;
-    }
-
     /* Initialize wolfSSL */
     wolfSSL_Init();
 
@@ -190,7 +182,7 @@ int main(int argc, char** argv)
     }
 
     /* Load server certificates into WOLFSSL_CTX */
-    if ((ret = wolfSSL_CTX_use_certificate_file(ctx, cert_file, WOLFSSL_FILETYPE_PEM))
+    if ((ret = wolfSSL_CTX_use_certificate_file(ctx, cert_file_path, WOLFSSL_FILETYPE_PEM))
         != WOLFSSL_SUCCESS) {
         fprintf(stderr, "ERROR: failed to load %s, please check the file.\n",
                 cert_file);
@@ -198,7 +190,7 @@ int main(int argc, char** argv)
     }
 
     /* Load server key into WOLFSSL_CTX */
-    if ((ret = wolfSSL_CTX_use_PrivateKey_file(ctx, key_file, WOLFSSL_FILETYPE_PEM))
+    if ((ret = wolfSSL_CTX_use_PrivateKey_file(ctx, key_file_path, WOLFSSL_FILETYPE_PEM))
         != WOLFSSL_SUCCESS) {
         fprintf(stderr, "ERROR: failed to load %s, please check the file.\n",
                 key_file);
@@ -226,6 +218,8 @@ int main(int argc, char** argv)
         fprintf(stderr, "ERROR: failed to listen\n");
         goto exit;
     }
+
+    printf("mShutdown: %d\n", mShutdown);
 
     /* Continue to accept clients until mShutdown is issued */
     while (!mShutdown) {
@@ -337,9 +331,6 @@ exit:
     printf("Example requires TLS v1.3 and liboqs.\n");
     printf("Configure wolfssl like this: ./configure --with-liboqs\n");
 #endif /* WOLFSSL_TLS13 */
-
-    (void)argc;
-    (void)argv;
 
     return ret;
 }

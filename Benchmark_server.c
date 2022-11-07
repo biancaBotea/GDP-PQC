@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 
 #include <wolfssl/options.h>
 #include <wolfssl/ssl.h>
@@ -23,31 +22,22 @@
 #include <wolfssl/wolfcrypt/error-crypt.h>
 
 /* extra src files */
-#include "client-pq-tls13.h"
+#include "server-pq-tls13.h"
 
 /* application args */
-char *server_addr = "127.0.0.1";
-char *cert_file_paths[] = {"./certs/ca-ecc-cert.pem", "./certs/falcon_level5_root_cert.pem", "./certs/dilithium_level5_root_cert.pem"};
+char *cert_file_paths[] = {"./certs/server-ecc.pem", "./certs/falcon_level5_entity_cert.pem", "./certs/dilithium_level5_entity_cert.pem"};
+char *key_file_paths[] = {"./certs/ecc-key.pem", "./certs/falcon_level5_entity_key.pem", "./certs/dilithium_level5_entity_key.pem"};
 char *sigSchemeNames[3] = {"ECDSA", "Falcon", "Dilithium"};
-int kem[] = {WOLFSSL_ECC_SECP256R1, WOLFSSL_KYBER_LEVEL5, WOLFSSL_SABER_LEVEL5};
-char *kemNames[3] = {"ECDHE", "Kyber", "Saber"};
 char * MsgToServer = "";
+extern int *mShutdownPtr;
 
 int benchmark_KEM() {
   /* run KEM tests */
   printf("Started KEM Benchmarking\n");
 
-  int i;
-  for (i = 0; i < 3; i++) {
-    printf("Benchmarking Handshake using %s\n", kemNames[i]);
-    run_client(server_addr, cert_file_paths[0], kem[i], "Test");
-    printf("\n");
-  }
-
-  run_client(server_addr, cert_file_paths[0], kem[0], "shutdown");
+  run_server(cert_file_paths[0], key_file_paths[0]);
 
   printf("Finished KEM Benchmarking\n");
-
   return 0;
 }
 
@@ -57,11 +47,8 @@ int benchmark_DS() {
 
   int i;
   for (i = 0; i < 3; i++) {
-    sleep(3);
-    printf("Benchmarking Handshake using %s\n", sigSchemeNames[i]);
-    run_client(server_addr, cert_file_paths[i], kem[0], "Test");
-    sleep(3);
-    run_client(server_addr, cert_file_paths[i], kem[0], "shutdown");
+    *mShutdownPtr = 0; //Reset shutdown control boolean for server
+    run_server(cert_file_paths[i], key_file_paths[i]);
   }
 
   printf("Finished Signature Benchmarking\n");
@@ -72,7 +59,7 @@ int benchmark_DS() {
 int main() {
 
   benchmark_KEM();
-  sleep(10);
+  sleep(5);
   benchmark_DS();
 
   return 0;
