@@ -46,7 +46,7 @@ int benchmark_KEM() {
 
   run_client(server_addr, cert_file_paths[0], kem[0], "shutdown");
 
-  printf("Finished KEM Benchmarking\n");
+  printf("Finished KEM Benchmarking\n\n");
 
   return 0;
 }
@@ -64,7 +64,7 @@ int benchmark_DS() {
     run_client(server_addr, cert_file_paths[i], kem[0], "shutdown");
   }
 
-  printf("Finished Signature Benchmarking\n");
+  printf("Finished Signature Benchmarking\n\n");
 
   return 0;
 }

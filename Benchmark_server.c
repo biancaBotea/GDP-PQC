@@ -37,7 +37,7 @@ int benchmark_KEM() {
 
   run_server(cert_file_paths[0], key_file_paths[0]);
 
-  printf("Finished KEM Benchmarking\n");
+  printf("Finished KEM Benchmarking\n\n");
   return 0;
 }
 
@@ -49,9 +49,10 @@ int benchmark_DS() {
   for (i = 0; i < 3; i++) {
     *mShutdownPtr = 0; //Reset shutdown control boolean for server
     run_server(cert_file_paths[i], key_file_paths[i]);
+    sleep(1); //Server must wait for port to be released by OS
   }
 
-  printf("Finished Signature Benchmarking\n");
+  printf("Finished Signature Benchmarking\n\n");
 
   return 0;
 }
