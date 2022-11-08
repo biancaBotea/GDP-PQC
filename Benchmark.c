@@ -33,6 +33,7 @@ int kem[] = {WOLFSSL_ECC_SECP256R1, WOLFSSL_KYBER_LEVEL5, WOLFSSL_SABER_LEVEL5};
 char *kemNames[3] = {"ECDHE", "Kyber", "Saber"};
 char * MsgToServer = "";
 
+// Benchmarks KEM only with ECDSA signature scheme
 int benchmark_KEM() {
   /* run KEM tests */
   printf("Started KEM Benchmarking\n");
@@ -51,6 +52,7 @@ int benchmark_KEM() {
   return 0;
 }
 
+// Benchmarks DS only with ECC key exchange
 int benchmark_DS() {
   /* run signature tests */
   printf("Started Signature Benchmarking\n");
@@ -58,7 +60,7 @@ int benchmark_DS() {
   int i;
   for (i = 0; i < 3; i++) {
     sleep(3);
-    printf("Benchmarking Handshake using %s\n", sigSchemeNames[i]);
+    printf("\nBenchmarking Handshake using %s\n", sigSchemeNames[i]);
     run_client(server_addr, cert_file_paths[i], kem[0], "Test");
     sleep(3);
     run_client(server_addr, cert_file_paths[i], kem[0], "shutdown");
@@ -71,9 +73,15 @@ int benchmark_DS() {
 
 int main() {
 
-  benchmark_KEM();
-  sleep(10);
-  benchmark_DS();
+  int i;
+  int j;
+  for (i = 0; i < 3; i++) {
+    for (j = 0; j < 3; j++) {
+      printf("\nDS: %s \t KEM: %s\n", sigSchemeNames[i], kemNames[j]);
+      sleep(3);
+      run_client(server_addr, cert_file_paths[i], kem[j], "shutdown");
+    }
+  }
 
   return 0;
 }

@@ -28,6 +28,8 @@
 char *cert_file_paths[] = {"./certs/server-ecc.pem", "./certs/falcon_level5_entity_cert.pem", "./certs/dilithium_level5_entity_cert.pem"};
 char *key_file_paths[] = {"./certs/ecc-key.pem", "./certs/falcon_level5_entity_key.pem", "./certs/dilithium_level5_entity_key.pem"};
 char *sigSchemeNames[3] = {"ECDSA", "Falcon", "Dilithium"};
+int kem[] = {WOLFSSL_ECC_SECP256R1, WOLFSSL_KYBER_LEVEL5, WOLFSSL_SABER_LEVEL5};
+char *kemNames[3] = {"ECDHE", "Kyber", "Saber"};
 char * MsgToServer = "";
 extern int *mShutdownPtr;
 
@@ -59,9 +61,16 @@ int benchmark_DS() {
 
 int main() {
 
-  benchmark_KEM();
-  sleep(5);
-  benchmark_DS();
+  int i;
+  int j;
+  for (i = 0; i < 3; i++) {
+    for (j = 0; j < 3; j++) {
+      printf("\nDS: %s \t KEM: %s\n", sigSchemeNames[i], kemNames[j]);
+      *mShutdownPtr = 0; //Reset shutdown control boolean for server
+      run_server(cert_file_paths[i], key_file_paths[i]);
+      sleep(1); //Server must wait for port to be released by OS
+    }
+  }
 
   return 0;
 }

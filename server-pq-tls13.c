@@ -219,8 +219,6 @@ int run_server(char *cert_file_path, char *key_file_path)
         goto exit;
     }
 
-    printf("mShutdown: %d\n", mShutdown);
-
     /* Continue to accept clients until mShutdown is issued */
     while (!mShutdown) {
         printf("Waiting for a connection...\n");
