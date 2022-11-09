@@ -233,7 +233,7 @@ int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToSe
     } else {
         printf("Message for server: %s\n", MsgToServer);
         /* Send hard coded message to the server */
-        len = sizeof(MsgToServer);
+        len = strlen(MsgToServer);
         if ((ret = wolfSSL_write(ssl, MsgToServer, len)) != len) {
             fprintf(stderr, "ERROR: failed to write entire message\n");
             fprintf(stderr, "%d bytes of %d bytes were sent", ret, (int) len);
