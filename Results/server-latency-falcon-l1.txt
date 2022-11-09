@@ -1,0 +1,17 @@
+Running TLS Benchmarks...
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            N/A                           60555264        232  37158.381   2443.240      0.777     11.818          13982.693           60.270
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            SABER_LEVEL1                  66846720        256  41083.243   2649.363      0.776     12.031          12358.214           48.274
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            SABER_LEVEL3                  64487424        247  40894.937   2571.214      0.752     11.959          12313.886           49.854
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            SABER_LEVEL5                  61603840        236  41516.281   2523.499      0.708     11.641          12794.559           54.214
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            KYBER_LEVEL1                  65011712        249  41516.760   2658.673      0.747     11.660          11946.548           47.978
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            KYBER_LEVEL3                  62128128        238  40948.717   2489.709      0.723     11.899          11878.878           49.911
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            KYBER_LEVEL5                  52953088        203  40066.669   2166.665      0.630     11.654          12767.108           62.892
+Side    Cipher                             Group                      Total Bytes  Num Conns      Rx ms      Tx ms    Rx MB/s    Tx MB/s   Connect Total ms   Connect Avg ms
+Server  TLS13-AES128-GCM-SHA256            ECC_SECP256R1                 56885248        218  39008.219   2317.735      0.695     11.703          13533.732           62.081
