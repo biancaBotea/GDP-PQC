@@ -62,6 +62,10 @@ most of the steps in this Getting Started guide
 	 ./pico_setup.sh 
 	 sudo reboot
 
+To install the toolchain run:
+
+	sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib build-essential 
+
 Now we need to install and build the SDK fot the pico W:
 
 	 cd ~/pico/pico-examples/build
@@ -93,6 +97,14 @@ To see the results of the code you need to open the serial port:
 	sudo apt install minicom
 	minicom -b 115200 -o -D /dev/serial0
 
+To run ur project you have to write a CMakeLists.txt file then :
+
+	cp ../pico-sdk/external/pico_sdk_import.cmake .
+	cp ../pico-examples/pico_w/lwipopts_examples_common.h lwipopts.h
+	cd build
+	export PICO_SDK_PATH=../../pico-sdk
+	cmake -DPICO_BOARD=pico_w ..
+	make
 
 ## Build
 
