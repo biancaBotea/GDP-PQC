@@ -2,3 +2,5 @@ Benchmark
 Benchmark_server
 massif.out.*
 Benchmark_Power
+client
+Pi-3/Power/server

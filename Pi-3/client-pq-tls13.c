@@ -109,7 +109,12 @@ static int Tls13SecretCallback(WOLFSSL* ssl, int id, const unsigned char* secret
 }
 #endif /* WOLFSSL_TLS13 && HAVE_SECRET_CALLBACK */
 
-int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToServer)
+/* The main client function used in memory and power benchmarking.
+ *
+ * Output_level = 0 : Prints nothing stdout
+ * Output_level = 1 : Prints all incoming and outgoing messages to stdout
+ */
+int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToServer, int output_level)
 {
     int ret = 0;
 #if defined(WOLFSSL_TLS13) && defined(HAVE_LIBOQS)
@@ -216,7 +221,9 @@ int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToSe
 
     if (strlen(MsgToServer) == 0) {
         /* Get a message for the server from stdin */
-        printf("Message for server: ");
+        if (output_level == 1) {
+            printf("Message for server: ");
+        }       
         memset(buff, 0, sizeof(buff));
         if (fgets(buff, sizeof(buff), stdin) == NULL) {
             fprintf(stderr, "ERROR: failed to get message for server\n");
@@ -231,7 +238,9 @@ int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToSe
             goto exit;
         }
     } else {
-        printf("Message for server: %s\n", MsgToServer);
+        if (output_level == 1) {
+            printf("Message for server: %s\n", MsgToServer);
+        }
         /* Send hard coded message to the server */
         len = strlen(MsgToServer);
         if ((ret = wolfSSL_write(ssl, MsgToServer, len)) != len) {
@@ -241,8 +250,6 @@ int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToSe
         }
     }
 
-    
-
     /* Read the server data into our buff array */
     memset(buff, 0, sizeof(buff));
     if ((ret = wolfSSL_read(ssl, buff, sizeof(buff)-1)) < 0) {
@@ -251,7 +258,9 @@ int run_client(char *server_ip, char *cert_file_path, int KeyExch, char *MsgToSe
     }
 
     /* Print to stdout any data the server sends */
-    printf("Server: %s\n", buff);
+    if (output_level == 1) {
+        printf("Server: %s\n", buff);
+    }
 
     /* Return reporting a success */
     ret = 0;

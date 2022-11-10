@@ -141,7 +141,12 @@ static void sig_handler(const int sig)
 #endif
 #endif
 
-int run_server(char *cert_file_path, char *key_file_path)
+/* The main server function used in memory and power benchmarking.
+ *
+ * Output_level = 0 : Prints nothing stdout
+ * Output_level = 1 : Prints all incoming messages to stdout
+ */
+int run_server(char *cert_file_path, char *key_file_path, int output_level)
 {
     int ret = 0;
 #if defined(WOLFSSL_TLS13) && defined(HAVE_LIBOQS)
@@ -150,7 +155,7 @@ int run_server(char *cert_file_path, char *key_file_path)
     socklen_t          size = sizeof(clientAddr);
     char               buff[256];
     size_t             len;
-    const char*        reply = "I hear ya fa shizzle!\n";
+    const char*        reply = "Test Reply\n";
 
     /* declare wolfSSL objects */
     WOLFSSL_CTX* ctx = NULL;
@@ -221,7 +226,9 @@ int run_server(char *cert_file_path, char *key_file_path)
 
     /* Continue to accept clients until mShutdown is issued */
     while (!mShutdown) {
-        printf("Waiting for a connection...\n");
+        if (output_level == 1) {
+            printf("Waiting for a connection...\n");
+        }
 
         /* Accept client connections */
         if ((mConnd = accept(mSockfd, (struct sockaddr*)&clientAddr, &size))
@@ -262,7 +269,9 @@ int run_server(char *cert_file_path, char *key_file_path)
             goto exit;
         }
 
-        printf("Client connected successfully\n");
+        if (output_level == 1) {
+            printf("Client connected successfully\n");
+        }
 
     #ifdef HAVE_SECRET_CALLBACK
         wolfSSL_FreeArrays(ssl);
@@ -276,11 +285,15 @@ int run_server(char *cert_file_path, char *key_file_path)
         }
 
         /* Print to stdout any data the client sends */
-        printf("Client: %s\n", buff);
+        if (output_level == 1) {
+            printf("Client: %s\n", buff);
+        }
 
         /* Check for server shutdown command */
         if (strncmp(buff, "shutdown", 8) == 0) {
-            printf("Shutdown command issued!\n");
+            if (output_level == 1) {
+                printf("Shutdown command issued!\n");
+            }
             mShutdown = 1;
         }
 
@@ -307,7 +320,9 @@ int run_server(char *cert_file_path, char *key_file_path)
         }
     }
 
-    printf("Shutdown complete\n");
+    if (output_level == 1) {
+        printf("Shutdown complete\n");
+    }
 
 exit:
     /* Cleanup and return */

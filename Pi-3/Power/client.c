@@ -24,11 +24,11 @@
 #include <wolfssl/wolfcrypt/error-crypt.h>
 
 /* extra src files */
-#include "client-pq-tls13.h"
+#include "../client-pq-tls13.h"
 
 /* application args */
 char *server_addr = "127.0.0.1";
-char *cert_file_paths[] = {"./certs/ca-ecc-cert.pem", "./certs/falcon_level5_root_cert.pem", "./certs/dilithium_level5_root_cert.pem"};
+char *cert_file_paths[] = {"../../Certs/ca-ecc-cert.pem", "../../Certs/falcon_level5_root_cert.pem", "../../Certs/dilithium_level5_root_cert.pem"};
 char *sigSchemeNames[3] = {"ECDSA", "Falcon", "Dilithium"};
 int kem[] = {WOLFSSL_KYBER_LEVEL5, WOLFSSL_ECC_SECP256R1, WOLFSSL_SABER_LEVEL5};
 char *kemNames[3] = {"Kyber", "ECDHE", "Saber"};
@@ -50,8 +50,6 @@ int main() {
       printf("\nDS: %s \t KEM: %s\n", sigSchemeNames[i], kemNames[j]);
       sleep(3);
 
-      run_client(server_addr, cert_file_paths[i], kem[j], "dummy");
-
       // Measure cpu stats for power calculation pre handshake
       FILE *fileStream; 
       char fileText1 [100];
@@ -65,12 +63,12 @@ int main() {
       int counter = 0;
 
       while ((end.tv_sec - begin.tv_sec) < 5) {
-        run_client(server_addr, cert_file_paths[i], kem[j], "Test");
+        run_client(server_addr, cert_file_paths[i], kem[j], "Test", 0);
         gettimeofday(&end, 0);
         counter++;
       }
 
-      run_client(server_addr, cert_file_paths[i], kem[j], "shutdown");
+      run_client(server_addr, cert_file_paths[i], kem[j], "shutdown", 0);
 
       // Measure and process cpu stats for power calculations post handshake
       char fileText2 [100];
