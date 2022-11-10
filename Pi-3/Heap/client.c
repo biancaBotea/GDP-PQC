@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/time.h>
+#include <time.h>
 
 #include <wolfssl/options.h>
 #include <wolfssl/ssl.h>
@@ -58,12 +58,6 @@ char * MsgToServer = "";
 
 
 int main() {
-  struct timeval begin, end;
-  begin.tv_sec = 0;
-  begin.tv_usec = 0;
-  end.tv_sec = 0;
-  end.tv_usec = 0;
-
   // Test all KEMs for all DSs
   int i;
   int j;
@@ -71,70 +65,7 @@ int main() {
     for (j = 0; j < 7; j++) {
       printf("\nDS: %s \t KEM: %s\n", sigSchemeNames[i], kemNames[j]);
       sleep(3);
-
-      // Measure cpu stats for power calculation pre handshake
-      FILE *fileStream; 
-      char fileText1 [100];
-      fileStream = fopen ("/proc/stat", "r"); 
-      fgets (fileText1, 100, fileStream); 
-      fclose(fileStream);
-
-      // Calculate the time taken by run_client()
-      gettimeofday(&begin, 0);
-      gettimeofday(&end, 0);
-      int counter = 0;
-
-      while ((end.tv_sec - begin.tv_sec) < 5) {
-        run_client(server_addr, cert_file_paths[i], kem[j], "Test", 0);
-        gettimeofday(&end, 0);
-        counter++;
-      }
-
-      run_client(server_addr, cert_file_paths[i], kem[j], "shutdown", 0);
-
-      // Measure and process cpu stats for power calculations post handshake
-      char fileText2 [100];
-      fileStream = fopen ("/proc/stat", "r"); 
-      fgets (fileText2, 100, fileStream); 
-      fclose(fileStream);
-
-      char * fileText1Split = strtok(fileText1, " ");
-      fileText1Split = strtok(NULL, " ");
-      int cpuValues1[4];
-      int k = 0;
-      for (k = 0; k < 4; k++) {
-        cpuValues1[k] = atoi(fileText1Split);
-        fileText1Split = strtok(NULL, " ");
-      }
-
-      int cBusy1 = cpuValues1[0] + cpuValues1[1] + cpuValues1[2];
-      int cTotal1 = cpuValues1[3] + cBusy1;
-
-      char * fileText2Split = strtok(fileText2, " ");
-      fileText2Split = strtok(NULL, " ");
-      int cpuValues2[4];
-      k = 0;
-      for (k = 0; k < 4; k++) {
-        cpuValues2[k] = atoi(fileText2Split);
-        fileText2Split = strtok(NULL, " ");
-      }
-
-      int cBusy2 = cpuValues2[0] + cpuValues2[1] + cpuValues2[2];
-      int cTotal2 = cpuValues2[3] + cBusy2;
-
-      int tempH = cBusy2 - cBusy1;
-      int tempL = cTotal2 - cTotal1;
-
-      float util = (float)tempH / (float)tempL;
-      float power = 0;
-
-      if (util > 0.5) {
-        power = 1.4584 * util + 4.7788;
-      } else {
-        power = 3.4495 * util + 3.8563;
-      }
-
-      printf("power=%f\tutil=%f\tcount=%d\n", power, util, counter);
+      run_client(server_addr, cert_file_paths[i], kem[j], "shutdown", 1);
     }
   }
 
