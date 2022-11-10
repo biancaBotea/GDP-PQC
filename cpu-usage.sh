@@ -1,6 +1,8 @@
+#!/usr/bin/env bash
+
 text1=$(cat /proc/stat | head -1)
 
-sleep 1
+sleep 0.01
 
 text2=$(cat /proc/stat | head -1)
 
@@ -20,3 +22,5 @@ declare -i tempH=$cBusy2-$cBusy1
 echo $tempH
 declare -i tempL=$cTotal2-$cTotal1
 echo $tempL
+
+echo "scale=2 ; $tempH / $tempL" | bc
