@@ -70,6 +70,24 @@ Now we need to install and build the SDK fot the pico W:
 	 
 Now turn ssh on by going into raspberry pi configuration
 
+Because liboqs is not suported on the cortex M0 we are going to use mbed TLS which is implemented in the pico-sdk develope branch so we need to switch to it:
+	cd ~/pico/pico-sdk
+	git switch develop
+	git submodule update --init
+
+Before we start building this we have to install doxygen:
+
+	cd && git clone https://github.com/doxygen/doxygen.git
+	cd doxygen
+	mkdir build && cd build
+	sudo apt-get instatall bison
+	sudo apt-get instatall flux
+	sudo apt-get instatall libclang1-9
+	cmake -G "Unix Makefiles" ..
+	make && sudo make install
+
+***More to be added****
+
 To see the results of the code you need to open the serial port:
 
 	sudo apt install minicom
