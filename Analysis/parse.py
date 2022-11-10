@@ -94,7 +94,7 @@ class heap_usage_batch:
                 params.append([])
                 for c in range(4,len(line)):
                     if line[c] == " ":
-                        params
+                        params[len(params)-1].append()
                         break
             pass
 
