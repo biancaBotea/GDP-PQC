@@ -59,9 +59,11 @@ def parseLatencyFile(filepath):
                     param = param + c
                 
                 last_c = c
+            latencyParams.append(param)
+            param = ""
             return latency_test(latencyParams[0],latencyParams[1],latencyParams[2],\
                 latencyParams[3],latencyParams[4],latencyParams[5],latencyParams[6],\
-                latencyParams[7],latencyParams[8],latencyParams[9],)
+                latencyParams[7],latencyParams[8],latencyParams[9],latencyParams[10])
 
 
 def main():
