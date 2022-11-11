@@ -55,8 +55,8 @@ char *kemNames[] = {"ECDHE",
                     "Kyber Level 3",
                     "Kyber Level 5",
                     "Saber Level 1",
-                    "Kyber Level 3",
-                    "Kyber Level 5"};
+                    "Saber Level 3",
+                    "Saber Level 5"};
 char * MsgToServer = "";
 extern int *mShutdownPtr;
 
