@@ -68,14 +68,13 @@ class latency_batch:
      
 
 class heap_usage_test:
-    def __init__(self, sig, kem, totalAllocs, totalDeallocs, totalBytes, peakBytes, currentBytes):
+    def __init__(self, sig, kem, totalAllocs, totalDeallocs, totalBytes, peakBytes):
         self.sig = sig
         self.kem = kem
         self.totalAllocs = int(totalAllocs)
         self.totalDeallocs = int(totalDeallocs)
         self.totalBytes = int(totalBytes)
         self.peakBytes = int(peakBytes)
-        self.currentBytes = int(currentBytes)
 
 class heap_usage_batch:
     def __init__(self, side):
@@ -92,15 +91,44 @@ class heap_usage_batch:
             # interate through and get sig and kems
             if line[0] == "D":
                 params.append([])
-                for c in range(4,len(line)):
-                    if line[c] == " ":
-                        params[len(params)-1].append()
-                        break
-            pass
-
+                p = 0
+                pindex = 0
+                for c in range(0,len(line)):
+                    if line[c] == ":":
+                        Writing = True
+                        params[p].append("")
+                    elif line[c]==" " and Writing:
+                        Writing = False
+                        pindex += 1
+                    elif Writing:
+                        params[p][pindex] = params[p][pindex] + line[c]
         for line in f:
-            # iterate through and get allocs, deallocs, total bytes, peak bytes 
-            pass
+            # iterate through and get allocs, deallocs, total bytes, peak bytes
+            p = 0
+            if "total   Allocs   " in line:
+                params[p].append("")
+                pindex = 2
+            elif "total   Deallocs " in line:
+                params[p].append("")
+                pindex = 3
+            elif "total   Bytes    " in line:
+                params[p].append("")
+                pindex = 4
+            elif "peak    Bytes    " in line:
+                params[p].append("")
+                pindex = 5
+                p += 1
+
+            for c in range(0,len(line)):
+                if c == "=":
+                    afterEq = True
+                if afterEq and c!=" ":
+                    params[p][pindex].append(c)
+
+            for ht in params:
+                batch.append(heap_usage_test(params[0], params[1],params[2],\
+                    params[3], params[4], params[5]))
+
 
 def runLatency():
     latency_tests = list()
@@ -115,5 +143,10 @@ def runLatency():
             elif a == "ecc":
                 c = ""
                 latency_tests.append(latency_batch(s,a,c))
+
+def runHeap():
+    heap_usage_tests = list()
+    for s in side:
+        heap_usage_tests.append(heap_usage_batch(s))
 
 runLatency()
