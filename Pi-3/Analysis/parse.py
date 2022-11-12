@@ -75,9 +75,9 @@ class latency_batch:
         self.algorithm = algorithm
         self.config = config
         if config != "":
-            self.filepath = path + side + "-latency-" + algorithm + "-" + config + ext
+            self.filepath = path + "Latency/" + side + "-latency-" + algorithm + "-" + config + ext
         else:
-            self.filepath = path + side + "-latency-" + algorithm + ext
+            self.filepath = path + "Latency/" + side + "-latency-" + algorithm + ext
         self.latencyBatch = self.parseLatencyFile(self.filepath)
         
     def parseLatencyFile(self,filepath):
@@ -169,7 +169,7 @@ class heap_usage_batch:
         - None
         """
         self.side = side
-        self.filepath = path + side + "-heap-usage" + ext
+        self.filepath = path + "Heap/" + side + "-heap-usage" + ext
         self.heapUsageBatch = self.parseHeapUsageFile(self.filepath)
     
     def parseHeapUsageFile(self, filepath):
@@ -239,6 +239,8 @@ class heap_usage_batch:
         for ht in params:
             batch.append(heap_usage_test(ht[0], ht[1],ht[2],\
                 ht[3], ht[4], ht[5]))
+        return batch
+
 
 
 def runLatency():
