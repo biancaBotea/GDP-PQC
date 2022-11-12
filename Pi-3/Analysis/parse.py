@@ -300,20 +300,20 @@ class power_batch:
         f = open(filepath, "r")
         batch = list()
         params = list()
-        Writing = True
+        Writing = False
         p = 0
         pindex = 0
         for line in f:
             if line[0]=="D":
                 # DS/KEM Line
+                params.append([])
                 for c in range(0,len(line)):
-                    params.append([])
                     if line[c] == " " and line[c-1] == ":":
                         Writing = True
                         params[p].append("")
-                    elif (line[c] == " " and line[c+1] == " ") or line[c]=="\n":
-                        Writing=False
-                        pindex +=1
+                    elif Writing and (line[c] == " " and line[c+1] == " ") or line[c]=="\n":
+                        Writing = False
+                        pindex += 1
                     elif Writing and not line[c]==" ":
                         params[p][pindex] = params[p][pindex] + line[c]
             elif line[0]=="p":
@@ -322,16 +322,19 @@ class power_batch:
                 for c in range(0,len(line)):
                     if line[c] == "=":
                         afterEq = True
+                        params[p].append("")
                     elif afterEq and line[c] == " ":
                         afterEq = False
                         pindex += 1
                     elif line[c] == "\n":
+                        p += 1
+                        pindex = 0
                         break
                     elif afterEq and line[c]!=" " and line[c] != "=":
                         params[p][pindex] = params[p][pindex] + line[c]
-            for pt in params:
-                batch.append(power_test(pt[0], pt[1], pt[2], pt[3], pt[4]))
-            return batch
+        for pt in params:
+            batch.append(power_test(pt[0], pt[1], pt[2], pt[3], pt[4]))
+        return batch
 
 
 def runLatency():
