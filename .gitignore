@@ -1,3 +1,6 @@
 massif.out.*
 client
 server
+Pi-3/Analysis/.vscode/launch.json
+.gitignore
+Pi-3/Analysis/test_parse.py
