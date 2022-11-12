@@ -239,6 +239,8 @@ class heap_usage_batch:
         for ht in params:
             batch.append(heap_usage_test(ht[0], ht[1],ht[2],\
                 ht[3], ht[4], ht[5]))
+        return batch
+
 
 
 def runLatency():
