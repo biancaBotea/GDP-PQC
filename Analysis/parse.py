@@ -1,3 +1,7 @@
+"""
+Configurations for parsing files used by runLatency() and runHeapUsage()
+"""
+
 path = "../Results/"
 ext = ".txt"
 side = ["client","server"]
@@ -8,8 +12,33 @@ dilitiumconfigs = ["l2","l3","l5"]
 falconconfigs = ["l1","l5"]
 eccconfigs = [""]
 
+
 class latency_test:
+    """
+    ### Summary
+    class structure for a single latency test
+    - __init__()
+        - initialise test properties
+    """
     def __init__(self, side, cipher, group, totalBytes, numConns, Rx_ms, Tx_ms, Rx_MBps, Tx_MBps, connTotal_ms, connAve_ms):
+        """ 
+        ### Summary:
+        class latency_test __init__()
+        ### Parameters:
+        - side {string}: client/server side
+        - cipher {string}: cipher description
+        - group {string}: cipher group
+        - totalBytes {integer}: total Bytes
+        - numConns {integer}: number of connections
+        - Rx_ms {float}: Receive Time (ms)
+        - Tx_ms {float}: Transmit Time (ms)
+        - Rx_MBps {float}: Receive Rate (MB/s)
+        - Tx_MBps {float}:  Transmit Rate (MB/s)
+        - connTotal_ms {float}: Total Connection Time
+        - connAve_ms {float}: Mean Connection Time
+        ### Returns:
+        - None
+        """
         self.side = side
         self.cipher = cipher
         self.group = group
@@ -23,7 +52,25 @@ class latency_test:
         self.connAve_ms = float(connAve_ms)
 
 class latency_batch:
+    """
+    ### Summary
+    class structure for batch of latency tests
+    - __init__()
+        - initialises batch properties and calls parseLatencyFile()
+    - parseLatencyFile() 
+        - parses a single latency batch file from batch properties
+    """
     def __init__(self, side, algorithm, config):
+        """
+        ### Summary
+        - Initialises batch properties and parses latency tests from batch filepath
+        ### Parameters:
+        - side {string}: Client/Server side
+        - algorithm {string}: TLS 1.3 Algorithm
+        - config {string}: Algorithm Config
+        ### Returns:
+        - None
+        """
         self.side = side
         self.algorithm = algorithm
         self.config = config
@@ -34,6 +81,15 @@ class latency_batch:
         self.latencyBatch = self.parseLatencyFile(self.filepath)
         
     def parseLatencyFile(self,filepath):
+        """
+        ### Summary
+        - Parse latency test file and store parameters in latency test class structure
+        - Initialise latency batch list and store latency tests
+        ### Parameters:
+        - filepath {string}: latency batch filepath
+        ### Returns:
+        - list({latency_batch}) 
+        """
         f = open(filepath, "r")
         l = 0
         batch = list()
@@ -55,7 +111,6 @@ class latency_batch:
                             param = ""
 
                     elif writing == True:
-                        # append character to parameter
                         param = param + c
                     
                     last_c = c
@@ -68,7 +123,26 @@ class latency_batch:
      
 
 class heap_usage_test:
+    """
+    ### Summary:
+    Class structure for single heap usage test
+    - __init__
+        - initialises single heap usage test
+    """
     def __init__(self, sig, kem, totalAllocs, totalDeallocs, totalBytes, peakBytes):
+        """
+        ### Summary:
+        class heap_usage_test __init__()
+        ### Parameters:
+        - sig {string}: Signature Method
+        - kem {string}: KEM Method
+        - totalAllocs: total heap Allocations
+        - totalDeallocs: total heap Deallocations (should == totalAllocs)
+        - totalBytes: total heap Bytes
+        - peakBytes: peak heap Bytes
+        ### Returns:
+        - None 
+        """
         self.sig = sig
         self.kem = kem
         self.totalAllocs = int(totalAllocs)
@@ -77,12 +151,37 @@ class heap_usage_test:
         self.peakBytes = int(peakBytes)
 
 class heap_usage_batch:
+    """
+    ### Summary:
+    class structure for batch of heap usage tests
+    - __init__()
+        - initiailises batch properties and calls parseHeapUsageFile()
+    - parseHeapUsageFile()
+        - parses a single heap usage batch file from batch properties
+    """
     def __init__(self, side):
+        """
+        ### Summary
+        - Initialises batch properties and parses heap usage tests from batch filepath
+        ### Parameters
+        - side {string}: Client/Server side
+        ### Returns:
+        - None
+        """
         self.side = side
         self.filepath = path + side + "-heap-usage" + ext
         self.heapUsageBatch = self.parseHeapUsageFile(self.filepath)
     
     def parseHeapUsageFile(self, filepath):
+        """
+        ### Summary
+        - Parse heap usage test file and store parameters in heap usage test class structure
+        - Initialise heap usage batch list and store heap usage tests
+        ### Parameters:
+        - filepath {string}: heap usage batch filepath
+        ### Returns:
+        - list({heap_usage_batch})
+        """
         f = open(filepath, "r")
         p = 0
         batch = list()
@@ -143,6 +242,14 @@ class heap_usage_batch:
 
 
 def runLatency():
+    """
+    ### Summary
+    - Parse full set of latency tests from parse.py configurations
+    ### Parameters:
+    - None
+    ### Returns:
+    - list({latency_batch})
+    """
     latency_tests = list()
     for s in side:
         for a in algorithm:
@@ -158,10 +265,15 @@ def runLatency():
     return latency_tests
 
 def runHeapUsage():
+    """
+    ### Summary
+    - Parse full set of heap usage tests from parse.py configurations
+    ### Parameters:
+    - None
+    ### Returns:
+    - list({heap_usage_batch})
+    """
     heap_usage_tests = list()
     for s in side:
         heap_usage_tests.append(heap_usage_batch(s))
     return heap_usage_tests
-
-runLatency()
-runHeapUsage()
