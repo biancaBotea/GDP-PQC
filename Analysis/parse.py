@@ -84,27 +84,33 @@ class heap_usage_batch:
     
     def parseHeapUsageFile(self, filepath):
         f = open(filepath, "r")
-        l = 0
+        p = 0
         batch = list()
         params = list()
         for line in f:
             # interate through and get sig and kems
             if line[0] == "D":
                 params.append([])
-                p = 0
                 pindex = 0
+                Writing = False
+                #this can be simplified by starting write from two-char string ": "
                 for c in range(0,len(line)):
-                    if line[c] == ":":
+                    if line[c] == " " and line[c-1] == ":":
                         Writing = True
                         params[p].append("")
-                    elif line[c]==" " and Writing:
+                    elif (line[c]==" " and Writing and not line[c-1]==":") or line[c] == "\n":
+                        # skip whitespace between : and string by checking if it
+                        # doesn't come after a colon to reset
                         Writing = False
                         pindex += 1
-                    elif Writing:
+                    elif Writing and not line[c]==" ":
+                        # do not write gap whitespace
                         params[p][pindex] = params[p][pindex] + line[c]
+                p += 1
+        f.seek(0)
+        p = 0
         for line in f:
             # iterate through and get allocs, deallocs, total bytes, peak bytes
-            p = 0
             if "total   Allocs   " in line:
                 params[p].append("")
                 pindex = 2
@@ -117,17 +123,23 @@ class heap_usage_batch:
             elif "peak    Bytes    " in line:
                 params[p].append("")
                 pindex = 5
+            elif "current Bytes    " in line:
                 p += 1
+                continue
 
+            afterEq = False
             for c in range(0,len(line)):
-                if c == "=":
+                if line[c] == "=":
                     afterEq = True
-                if afterEq and c!=" ":
-                    params[p][pindex].append(c)
+                    # params[p].append("")
+                elif line[c] == "\n":
+                    break
+                elif afterEq and line[c]!=" " and line[c] !="=":
+                    params[p][pindex] = params[p][pindex] + line[c]
 
-            for ht in params:
-                batch.append(heap_usage_test(params[0], params[1],params[2],\
-                    params[3], params[4], params[5]))
+        for ht in params:
+            batch.append(heap_usage_test(ht[0], ht[1],ht[2],\
+                ht[3], ht[4], ht[5]))
 
 
 def runLatency():
@@ -143,10 +155,13 @@ def runLatency():
             elif a == "ecc":
                 c = ""
                 latency_tests.append(latency_batch(s,a,c))
+    return latency_tests
 
-def runHeap():
+def runHeapUsage():
     heap_usage_tests = list()
     for s in side:
         heap_usage_tests.append(heap_usage_batch(s))
+    return heap_usage_tests
 
 runLatency()
+runHeapUsage()
