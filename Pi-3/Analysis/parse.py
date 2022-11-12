@@ -77,7 +77,7 @@ class latency_batch:
         if config != "":
             self.filepath = path + "Latency/" + side + "-latency-" + algorithm + "-" + config + ext
         else:
-            self.filepath = path + side + "-latency-" + algorithm + ext
+            self.filepath = path + "Latency/" + side + "-latency-" + algorithm + ext
         self.latencyBatch = self.parseLatencyFile(self.filepath)
         
     def parseLatencyFile(self,filepath):
