@@ -1,0 +1,98 @@
+total   Allocs   =       129
+total   Deallocs =       129
+total   Bytes    =    138629
+peak    Bytes    =     58239
+current Bytes    =         0
+
+total   Allocs   =       120
+total   Deallocs =       120
+total   Bytes    =    118179
+peak    Bytes    =     64478
+current Bytes    =         0
+
+total   Allocs   =       120
+total   Deallocs =       120
+total   Bytes    =    117349
+peak    Bytes    =     63998
+current Bytes    =         0
+
+total   Allocs   =        89
+total   Deallocs =        89
+total   Bytes    =     74246
+peak    Bytes    =     28747
+current Bytes    =         0
+
+total   Allocs   =        80
+total   Deallocs =        80
+total   Bytes    =     53794
+peak    Bytes    =     31104
+current Bytes    =         0
+
+total   Allocs   =        80
+total   Deallocs =        80
+total   Bytes    =     52970
+peak    Bytes    =     30624
+current Bytes    =         0
+
+total   Allocs   =        89
+total   Deallocs =        89
+total   Bytes    =    106147
+peak    Bytes    =     34758
+current Bytes    =         0
+
+total   Allocs   =        80
+total   Deallocs =        80
+total   Bytes    =     85699
+peak    Bytes    =     40997
+current Bytes    =         0
+
+total   Allocs   =        80
+total   Deallocs =        80
+total   Bytes    =     84867
+peak    Bytes    =     40517
+current Bytes    =         0
+
+DS: ECDSA 	 KEM: ECDHE
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: ECDSA 	 KEM: Kyber
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: ECDSA 	 KEM: Saber
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: Falcon 	 KEM: ECDHE
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: Falcon 	 KEM: Kyber
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: Falcon 	 KEM: Saber
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: Dilithium 	 KEM: ECDHE
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: Dilithium 	 KEM: Kyber
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
+
+DS: Dilithium 	 KEM: Saber
+Message for server: shutdown
+Server: I hear ya fa shizzle!
+
