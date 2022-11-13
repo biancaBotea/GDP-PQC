@@ -1,0 +1,116 @@
+total   Allocs   =       119
+total   Deallocs =       119
+total   Bytes    =     68000
+peak    Bytes    =     32709
+current Bytes    =         0
+
+total   Allocs   =       108
+total   Deallocs =       108
+total   Bytes    =     42816
+peak    Bytes    =     34212
+current Bytes    =         0
+
+total   Allocs   =       108
+total   Deallocs =       108
+total   Bytes    =     42368
+peak    Bytes    =     34116
+current Bytes    =         0
+
+total   Allocs   =       116
+total   Deallocs =       116
+total   Bytes    =     87303
+peak    Bytes    =     37463
+current Bytes    =         0
+
+total   Allocs   =       105
+total   Deallocs =       105
+total   Bytes    =     62119
+peak    Bytes    =     34881
+current Bytes    =         0
+
+total   Allocs   =       105
+total   Deallocs =       105
+total   Bytes    =     61671
+peak    Bytes    =     34785
+current Bytes    =         0
+
+total   Allocs   =       116
+total   Deallocs =       116
+total   Bytes    =    120877
+peak    Bytes    =     47697
+current Bytes    =         0
+
+total   Allocs   =       105
+total   Deallocs =       105
+total   Bytes    =     95693
+peak    Bytes    =     49200
+current Bytes    =         0
+
+total   Allocs   =       105
+total   Deallocs =       105
+total   Bytes    =     95245
+peak    Bytes    =     49104
+current Bytes    =         0
+
+DS: ECDSA 	 KEM: ECDHE
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: ECDSA 	 KEM: Kyber
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: ECDSA 	 KEM: Saber
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: Falcon 	 KEM: ECDHE
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: Falcon 	 KEM: Kyber
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: Falcon 	 KEM: Saber
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: Dilithium 	 KEM: ECDHE
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: Dilithium 	 KEM: Kyber
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete
+
+DS: Dilithium 	 KEM: Saber
+Waiting for a connection...
+Client connected successfully
+Client: shutdown
+Shutdown command issued!
+Shutdown complete

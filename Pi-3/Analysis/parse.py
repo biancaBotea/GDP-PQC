@@ -12,6 +12,7 @@ dilitiumconfigs = ["l2","l3","l5"]
 falconconfigs = ["l1","l5"]
 eccconfigs = [""]
 
+powerduration = ["1s","60s"]
 
 class latency_test:
     """
@@ -88,7 +89,7 @@ class latency_batch:
         ### Parameters:
         - filepath {string}: latency batch filepath
         ### Returns:
-        - list({latency_batch}) 
+        - list({latency_test}) 
         """
         f = open(filepath, "r")
         l = 0
@@ -121,7 +122,6 @@ class latency_batch:
                     latencyParams[7],latencyParams[8],latencyParams[9],latencyParams[10]))
         return batch
      
-
 class heap_usage_test:
     """
     ### Summary:
@@ -180,7 +180,7 @@ class heap_usage_batch:
         ### Parameters:
         - filepath {string}: heap usage batch filepath
         ### Returns:
-        - list({heap_usage_batch})
+        - list({heap_usage_test})
         """
         f = open(filepath, "r")
         p = 0
@@ -230,7 +230,6 @@ class heap_usage_batch:
             for c in range(0,len(line)):
                 if line[c] == "=":
                     afterEq = True
-                    # params[p].append("")
                 elif line[c] == "\n":
                     break
                 elif afterEq and line[c]!=" " and line[c] !="=":
@@ -241,6 +240,108 @@ class heap_usage_batch:
                 ht[3], ht[4], ht[5]))
         return batch
 
+class power_test:
+    """
+    ### Summary
+    Class structure for a single power test
+    - __init__
+        - initialise test properties
+    """
+    def __init__(self, sig, kem, power, util, count):
+        """
+        ### Summary
+        class power_test __init__()
+        ### Parameters
+        - sig {string}: Signature Method
+        - kem {string}: KEM Methods
+        - power {float}: Power (/W)
+        - util {float}: CPU utilisation (%)
+        - count {integer}: Test Count
+            - count parameter is only filled for client-side devices, else returns 0.
+        ### Returns
+        - None
+        """
+        self.sig = sig
+        self.kem = kem
+        self.power = float(power)
+        self.util = float(util)
+        self.count = int(count)
+            
+
+class power_batch:
+    """
+    ### Summary
+    class structure for batch of latency tests
+    - __init__()
+        - initialises batch properties and calls parseLatencyFile()
+    - parseLatencyFile() 
+        - parses a single latency batch file from batch properties
+    """
+    def __init__(self, side, duration):
+        """
+        ### Summary
+        - Initialises batch properties and parses power usage tests from batch filepath
+        ### Parameters
+        - side {string}: Client/Server Side
+        - durations {duration}: Test Duration
+        ### Returns:
+        - None
+        """
+        self.side = side
+        self.filepath = path + "Power/" + side + "-" + duration + ext
+        self.powerBatch = self.parsePowerFile(self.filepath)
+    
+    def parsePowerFile(self, filepath):
+        """
+        ### Summary
+        - Parse power test file and store parameters in power test
+        - Initialise power batch list and store power tests
+        ### Parameters:
+        - filepath {string}: power batch filepath
+        ### Returns:
+        - list({power_test})
+        """
+        f = open(filepath, "r")
+        batch = list()
+        params = list()
+        Writing = False
+        p = 0
+        pindex = 0
+        for line in f:
+            if line[0]=="D":
+                # DS/KEM Line
+                params.append([])
+                for c in range(0,len(line)):
+                    if line[c] == " " and line[c-1] == ":":
+                        Writing = True
+                        params[p].append("")
+                    elif Writing and (line[c] == " " and line[c+1] == " ") or line[c]=="\n":
+                        Writing = False
+                        pindex += 1
+                    elif Writing and not line[c]==" ":
+                        params[p][pindex] = params[p][pindex] + line[c]
+            elif line[0]=="p":
+                # power/util/count line
+                afterEq = False
+                for c in range(0,len(line)):
+                    if line[c] == "=":
+                        afterEq = True
+                        params[p].append("")
+                    elif afterEq and line[c] == " ":
+                        afterEq = False
+                        pindex += 1
+                    elif line[c] == "\n":
+                        p += 1
+                        pindex = 0
+                        break
+                    elif afterEq and line[c]!=" " and line[c] != "=":
+                        params[p][pindex] = params[p][pindex] + line[c]
+        for pt in params:
+            if self.side == "server":
+                batch.append(power_test(pt[0], pt[1], pt[2], pt[3], 0))
+            elif self.side == "client":
+                batch.append(power_test(pt[0], pt[1], pt[2], pt[3], pt[4]))
+        return batch
 
 
 def runLatency():
@@ -267,6 +368,7 @@ def runLatency():
     return latency_tests
 
 def runHeapUsage():
+
     """
     ### Summary
     - Parse full set of heap usage tests from parse.py configurations
@@ -279,3 +381,18 @@ def runHeapUsage():
     for s in side:
         heap_usage_tests.append(heap_usage_batch(s))
     return heap_usage_tests
+
+def runPower():
+    """
+    ### Summary
+    - Parse full set of power tests from parse.py configurations
+    ### Parameters:
+    - None
+    ### Returns:
+    - list({power_batch})
+    """
+    power_tests = list()
+    for s in side:
+        for d in powerduration:
+            power_tests.append(power_batch(s,d))
+    return power_tests
