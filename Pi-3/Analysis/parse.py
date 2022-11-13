@@ -12,6 +12,7 @@ dilitiumconfigs = ["l2","l3","l5"]
 falconconfigs = ["l1","l5"]
 eccconfigs = [""]
 
+powerduration = ["1s","60s"]
 
 class latency_test:
     """
@@ -256,6 +257,7 @@ class power_test:
         - power {float}: Power (/W)
         - util {float}: CPU utilisation (%)
         - count {integer}: Test Count
+            - count parameter is only filled for client-side devices, else returns 0.
         ### Returns
         - None
         """
@@ -264,6 +266,7 @@ class power_test:
         self.power = float(power)
         self.util = float(util)
         self.count = int(count)
+            
 
 class power_batch:
     """
@@ -274,17 +277,18 @@ class power_batch:
     - parseLatencyFile() 
         - parses a single latency batch file from batch properties
     """
-    def __init__(self, side):
+    def __init__(self, side, duration):
         """
         ### Summary
         - Initialises batch properties and parses power usage tests from batch filepath
         ### Parameters
         - side {string}: Client/Server Side
+        - durations {duration}: Test Duration
         ### Returns:
         - None
         """
         self.side = side
-        self.filepath = path + "Power/" + side + ext
+        self.filepath = path + "Power/" + side + "-" + duration + ext
         self.powerBatch = self.parsePowerFile(self.filepath)
     
     def parsePowerFile(self, filepath):
@@ -333,7 +337,10 @@ class power_batch:
                     elif afterEq and line[c]!=" " and line[c] != "=":
                         params[p][pindex] = params[p][pindex] + line[c]
         for pt in params:
-            batch.append(power_test(pt[0], pt[1], pt[2], pt[3], pt[4]))
+            if self.side == "server":
+                batch.append(power_test(pt[0], pt[1], pt[2], pt[3], 0))
+            elif self.side == "client":
+                batch.append(power_test(pt[0], pt[1], pt[2], pt[3], pt[4]))
         return batch
 
 
@@ -386,5 +393,6 @@ def runPower():
     """
     power_tests = list()
     for s in side:
-        power_tests.append(power_batch(s))
+        for d in powerduration:
+            power_tests.append(power_batch(s,d))
     return power_tests
