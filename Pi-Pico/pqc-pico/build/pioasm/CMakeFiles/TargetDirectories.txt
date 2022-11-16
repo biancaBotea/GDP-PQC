@@ -1,0 +1,3 @@
+H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/pioasm/CMakeFiles/pioasm.dir
+H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/pioasm/CMakeFiles/edit_cache.dir
+H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/pioasm/CMakeFiles/rebuild_cache.dir
