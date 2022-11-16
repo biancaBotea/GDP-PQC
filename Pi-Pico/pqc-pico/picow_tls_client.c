@@ -7,15 +7,13 @@
 #include "lwip/pbuf.h"
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
-#include "lwip/dns.h"
 
-#define TLS_CLIENT_SERVER        "worldtimeapi.org"
-#define TLS_CLIENT_HTTP_REQUEST  "GET /api/ip HTTP/1.1\r\n" \
-                                 "Host: " TLS_CLIENT_SERVER "\r\n" \
-                                 "Connection: close\r\n" \
-                                 "\r\n"
+#define TLS_CLIENT_SERVER        "host"
+#define TLS_CLIENT_HTTP_REQUEST  "GET %s HTTP/1.0\r\nExtra-header: "
 #define TLS_CLIENT_TIMEOUT_SECS  15
 
+#define DFL_SERVER_ADDR         "10.9.19.29"
+#define DFL_SERVER_PORT         4433
 
 typedef struct TLS_CLIENT_T_ {
     struct altcp_pcb *pcb;
@@ -123,7 +121,7 @@ static err_t tls_client_recv(void *arg, struct altcp_pcb *pcb, struct pbuf *p, e
 static void tls_client_connect_to_server_ip(const ip_addr_t *ipaddr, TLS_CLIENT_T *state)
 {
     err_t err;
-    u16_t port = 443;
+    u16_t port = DFL_SERVER_PORT;
 
     printf("connecting to server IP %s port %d\n", ipaddr_ntoa(ipaddr), port);
     err = altcp_connect(state->pcb, ipaddr, port, tls_client_connected);
@@ -134,24 +132,10 @@ static void tls_client_connect_to_server_ip(const ip_addr_t *ipaddr, TLS_CLIENT_
     }
 }
 
-static void tls_client_dns_found(const char* hostname, const ip_addr_t *ipaddr, void *arg)
-{
-    if (ipaddr)
-    {
-        printf("DNS resolving complete\n");
-        tls_client_connect_to_server_ip(ipaddr, (TLS_CLIENT_T *) arg);
-    }
-    else
-    {
-        printf("error resolving hostname %s\n", hostname);
-        tls_client_close(arg);
-    }
-}
-
-
 static bool tls_client_open(const char *hostname, void *arg) {
     err_t err;
     ip_addr_t server_ip;
+    IP4_ADDR(&server_ip,10,9,19,29);
     TLS_CLIENT_T *state = (TLS_CLIENT_T*)arg;
 
     state->pcb = altcp_tls_new(tls_config, IPADDR_TYPE_ANY);
@@ -176,17 +160,7 @@ static bool tls_client_open(const char *hostname, void *arg) {
     // case you switch the cyw43_arch type later.
     cyw43_arch_lwip_begin();
 
-    err = dns_gethostbyname(hostname, &server_ip, tls_client_dns_found, state);
-    if (err == ERR_OK)
-    {
-        /* host is in DNS cache */
-        tls_client_connect_to_server_ip(&server_ip, state);
-    }
-    else if (err != ERR_INPROGRESS)
-    {
-        printf("error initiating DNS resolving, err=%d\n", err);
-        tls_client_close(state->pcb);
-    }
+    tls_client_connect_to_server_ip(&server_ip, state);
 
     cyw43_arch_lwip_end();
 
@@ -236,15 +210,17 @@ void run_TLS_CLIENT_Test(void) {
 
 int main() {
     stdio_init_all();
-
+    sleep_ms(5000);
+    printf("Running TLS client\n");
+    printf("Connecting to WiFi: %s, %s\n", WIFI_SSID, WIFI_PASSWORD); 
     if (cyw43_arch_init()) {
         printf("failed to initialise\n");
         return 1;
     }
     cyw43_arch_enable_sta_mode();
-
-    if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000)) {
-        printf("failed to connect\n");
+    int ret = cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000);	
+    if (ret) {
+        printf("failed to connect %d\n", ret);
         return 1;
     }
     run_TLS_CLIENT_Test();
@@ -255,4 +231,3 @@ int main() {
     cyw43_arch_deinit();
     return 0;
 }
-

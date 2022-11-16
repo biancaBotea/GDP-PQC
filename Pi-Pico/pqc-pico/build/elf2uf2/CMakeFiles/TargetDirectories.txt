@@ -1,5 +1,0 @@
-H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/elf2uf2/CMakeFiles/elf2uf2.dir
-H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/elf2uf2/CMakeFiles/edit_cache.dir
-H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/elf2uf2/CMakeFiles/rebuild_cache.dir
-H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/elf2uf2/boot_uf2_headers/CMakeFiles/edit_cache.dir
-H:/Part 4 EEE/ELEC6200 Group Design Project/pqc-pico/build/elf2uf2/boot_uf2_headers/CMakeFiles/rebuild_cache.dir
