@@ -79,6 +79,18 @@ Because liboqs is not suported on the cortex M0 we are going to use mbed TLS whi
 	git switch develop
 	git submodule update --init
 
+This mbed only has the classic algorithms so to use the PQC ones we need to :
+
+	git clone https://github.com/kbuersti/mbedtls.git
+	cd mbedtls
+	git switch mbedtls-2.16-pqc
+	git submodule update --init
+	mkdir build && cd build
+	cmake -DUSE_SHARED_MBEDTLS_LIBRARY=On /path/to/mbedtls_source
+	cmake --build .
+
+*****DON'T DO THIS YET AS IT BREAKS THINGS UP*****
+
 Before we start building this we have to install doxygen:
 
 	cd && git clone https://github.com/doxygen/doxygen.git
