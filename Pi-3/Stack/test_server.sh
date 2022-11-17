@@ -5,6 +5,6 @@ do
     for j in {0..5}
     do
         sleep 1
-        valgrind --tool=massif --stacks=yes ./server $i
+        valgrind --tool=massif --heap=no --stacks=yes --detailed-freq=100 ./server $i
     done
 done
