@@ -1,0 +1,126 @@
+cmd: ./server 1
+43012
+
+cmd: ./server 2
+83036
+
+cmd: ./server 2
+82996
+
+cmd: ./server 2
+83036
+
+cmd: ./server 2
+83036
+
+cmd: ./server 2
+82968
+
+cmd: ./server 2
+82996
+
+cmd: ./server 2
+83036
+
+cmd: ./server 3
+52512
+
+cmd: ./server 3
+52512
+
+cmd: ./server 3
+52512
+
+cmd: ./server 3
+52512
+
+cmd: ./server 3
+52512
+
+cmd: ./server 3
+52488
+
+cmd: ./server 3
+52512
+
+cmd: ./server 4
+80152
+
+cmd: ./server 4
+80152
+
+cmd: ./server 4
+80152
+
+cmd: ./server 4
+80152
+
+cmd: ./server 4
+80152
+
+cmd: ./server 4
+80152
+
+cmd: ./server 4
+80152
+
+cmd: ./server 5
+123160
+
+cmd: ./server 5
+123160
+
+cmd: ./server 5
+123160
+
+cmd: ./server 5
+123160
+
+cmd: ./server 5
+123160
+
+cmd: ./server 5
+123160
+
+cmd: ./server 5
+123160
+
+cmd: ./server 0
+25640
+
+cmd: ./server 0
+25672
+
+cmd: ./server 0
+25640
+
+cmd: ./server 0
+25672
+
+cmd: ./server 0
+25672
+
+cmd: ./server 0
+25672
+
+cmd: ./server 0
+25672
+
+cmd: ./server 1
+43012
+
+cmd: ./server 1
+43012
+
+cmd: ./server 1
+43012
+
+cmd: ./server 1
+42992
+
+cmd: ./server 1
+43012
+
+cmd: ./server 1
+43012
+
