@@ -1,0 +1,126 @@
+cmd: ./client 2 5
+18768
+
+cmd: ./client 2 6
+25328
+
+cmd: ./client 3 0
+38048
+
+cmd: ./client 3 1
+38048
+
+cmd: ./client 3 2
+38024
+
+cmd: ./client 3 3
+38024
+
+cmd: ./client 3 4
+38024
+
+cmd: ./client 3 5
+38048
+
+cmd: ./client 3 6
+38024
+
+cmd: ./client 4 0
+59528
+
+cmd: ./client 4 1
+59552
+
+cmd: ./client 4 2
+59552
+
+cmd: ./client 4 3
+59528
+
+cmd: ./client 4 4
+59552
+
+cmd: ./client 4 5
+59552
+
+cmd: ./client 4 6
+59528
+
+cmd: ./client 5 0
+94600
+
+cmd: ./client 5 1
+94624
+
+cmd: ./client 5 2
+94624
+
+cmd: ./client 5 3
+94624
+
+cmd: ./client 5 4
+94624
+
+cmd: ./client 5 5
+94624
+
+cmd: ./client 5 6
+94624
+
+cmd: ./client 0 0
+18352
+
+cmd: ./client 0 1
+17432
+
+cmd: ./client 0 2
+19112
+
+cmd: ./client 0 3
+24952
+
+cmd: ./client 0 4
+17432
+
+cmd: ./client 0 5
+18768
+
+cmd: ./client 0 6
+25328
+
+cmd: ./client 1 0
+18352
+
+cmd: ./client 1 1
+14192
+
+cmd: ./client 1 2
+19112
+
+cmd: ./client 1 3
+24952
+
+cmd: ./client 1 4
+14840
+
+cmd: ./client 1 5
+18768
+
+cmd: ./client 1 6
+25328
+
+cmd: ./client 2 0
+18352
+
+cmd: ./client 2 1
+14192
+
+cmd: ./client 2 2
+19112
+
+cmd: ./client 2 3
+24952
+
+cmd: ./client 2 4
+14840
+
