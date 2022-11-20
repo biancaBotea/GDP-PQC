@@ -104,6 +104,9 @@ Before we start building this we have to install doxygen:
 
 ***More to be added****
 
+Use this to run the programm over SWD
+	 openocd -f interface/raspberrypi-swd.cfg -f target/rp2040.cfg -c "program blink/blink.elf verify reset exit"
+
 To see the results of the code you need to open the serial port:
 
 	sudo apt install minicom
