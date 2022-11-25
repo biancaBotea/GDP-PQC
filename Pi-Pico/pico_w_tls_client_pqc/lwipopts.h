@@ -8,6 +8,10 @@
 #undef TCP_WND
 #define TCP_WND  16384
 
+/* Altered MEM_SIZE to handle PQC algorithms (default = 4000) */
+#undef MEM_SIZE
+#define MEM_SIZE 32000
+
 #define LWIP_ALTCP               1
 #define LWIP_ALTCP_TLS           1
 #define LWIP_ALTCP_TLS_MBEDTLS   1
