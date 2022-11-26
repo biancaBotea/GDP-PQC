@@ -1,4 +1,5 @@
 # ESP32
+We are using the ESP32-S3-DevKitC-1.
 
 We are going to use VSCode as our IDE with the espressif ESP-IDF extancion. 
 
@@ -19,6 +20,13 @@ We are going to use VSCode as our IDE with the espressif ESP-IDF extancion.
  ![Screen Shot 2022-11-26 at 3 45 16 PM](https://user-images.githubusercontent.com/108932109/204097527-02a3a8d9-375f-49ae-9a8e-7dfb5b483577.png)
  
 And the flasing method is UART, so you need to make sure the microcomtoller is connected to your computer through the UART port.
+
+At the end you should have this:
+
+![Screen Shot 2022-11-26 at 3 58 05 PM](https://user-images.githubusercontent.com/108932109/204097631-a309c18c-75f4-4b8d-858c-0914555eee70.png)
+
+If u got through the blink example the provide you might have to change line 22 from main to #define BLINK_GPIO 38 as that is the LED pot for this specific device.
+
 
 
 
