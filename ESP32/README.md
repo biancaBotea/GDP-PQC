@@ -15,7 +15,9 @@ We are going to use VSCode as our IDE with the espressif ESP-IDF extancion.
  ## Installing ESP-IDF
 
  This [video](https://www.youtube.com/watch?v=Lc6ausiKvQM&list=TLPQMjYxMTIwMjLsECCqAIaFWA&index=3&ab_channel=EspressifSystems) walks you thruogh this process. Some things to note before wathcing the video is that the target we are using is the esp32s3 chip (via ESP_PROG) 
-![Screen Shot 2022-11-26 at 3 45 16 PM](https://user-images.githubusercontent.com/108932109/204097527-02a3a8d9-375f-49ae-9a8e-7dfb5b483577.png)
+ 
+ ![Screen Shot 2022-11-26 at 3 45 16 PM](https://user-images.githubusercontent.com/108932109/204097527-02a3a8d9-375f-49ae-9a8e-7dfb5b483577.png)
+ 
 And the flasing method is UART, so you need to make sure the microcomtoller is connected to your computer through the UART port.
 
 
