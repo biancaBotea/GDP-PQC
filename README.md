@@ -86,7 +86,7 @@ This mbed only has the classic algorithms so to use the PQC ones we need to :
 	git switch mbedtls-2.16-pqc
 	git submodule update --init
 	mkdir build && cd build
-	cmake -DUSE_SHARED_MBEDTLS_LIBRARY=On /path/to/mbedtls_source
+	cmake -DUSE_SHARED_MBEDTLS_LIBRARY=On ../
 	cmake --build .
 
 *****DON'T DO THIS YET AS IT BREAKS THINGS UP*****
@@ -103,6 +103,10 @@ Before we start building this we have to install doxygen:
 	make && sudo make install
 
 ***More to be added****
+
+Use this to run the programm over SWD
+	
+	openocd -f interface/raspberrypi-swd.cfg -f target/rp2040.cfg -c "program blink/blink.elf verify reset exit"
 
 To see the results of the code you need to open the serial port:
 
