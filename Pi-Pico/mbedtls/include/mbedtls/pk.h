@@ -78,6 +78,10 @@
 #include "pq/kyber.h"
 #endif
 
+#if defined(MBEDTLS_SABER_C)
+#include "pq/saber.h"
+#endif
+
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
     !defined(inline) && !defined(__cplusplus)
 #define inline __inline
@@ -115,6 +119,7 @@ typedef enum {
     MBEDTLS_PK_ECKEY_DH,
     MBEDTLS_PK_ECDSA,
     MBEDTLS_PK_SPHINCS,
+    MBEDTLS_PK_SABER,
 	MBEDTLS_PK_KYBER,
 	MBEDTLS_PK_RSA_ALT,
     MBEDTLS_PK_RSASSA_PSS,
