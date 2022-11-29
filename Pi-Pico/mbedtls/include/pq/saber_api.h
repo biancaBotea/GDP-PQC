@@ -44,9 +44,10 @@
 	#define Saber_type 3
 #endif
 
-
-int crypto_kem_keypair(unsigned char *pk, unsigned char *sk);
-int crypto_kem_enc(unsigned char *ct, unsigned char *ss, const unsigned char *pk);
-int crypto_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned char *sk);
+int crypto_kem_keypair(unsigned char *pk, unsigned char *sk, 
+  int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
+int crypto_kem_enc(unsigned char *c, unsigned char *k, const unsigned char *pk,
+  int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
+int crypto_kem_dec(unsigned char *k, const unsigned char *c, const unsigned char *sk);
 
 #endif /* api_h */
