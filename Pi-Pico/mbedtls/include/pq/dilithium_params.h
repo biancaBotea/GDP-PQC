@@ -10,7 +10,7 @@
 #define SEEDBYTES_D 32
 #define CRHBYTES 64
 #define N 256
-#define Q 8380417
+#define Q_D 8380417
 #define D 13
 #define ROOT_OF_UNITY 1753
 
@@ -21,7 +21,7 @@
 #define TAU 39
 #define BETA 78
 #define GAMMA1 (1 << 17)
-#define GAMMA2 ((Q-1)/88)
+#define GAMMA2 ((Q_D-1)/88)
 #define OMEGA 80
 
 #elif DILITHIUM_MODE == 3
@@ -31,7 +31,7 @@
 #define TAU 49
 #define BETA 196
 #define GAMMA1 (1 << 19)
-#define GAMMA2 ((Q-1)/32)
+#define GAMMA2 ((Q_D-1)/32)
 #define OMEGA 55
 
 #elif DILITHIUM_MODE == 5
@@ -41,7 +41,7 @@
 #define TAU 60
 #define BETA 120
 #define GAMMA1 (1 << 19)
-#define GAMMA2 ((Q-1)/32)
+#define GAMMA2 ((Q_D-1)/32)
 #define OMEGA 75
 
 #endif
@@ -56,9 +56,9 @@
 #define POLYZ_PACKEDBYTES   640
 #endif
 
-#if GAMMA2 == (Q-1)/88
+#if GAMMA2 == (Q_D-1)/88
 #define POLYW1_PACKEDBYTES  192
-#elif GAMMA2 == (Q-1)/32
+#elif GAMMA2 == (Q_D-1)/32
 #define POLYW1_PACKEDBYTES  128
 #endif
 
@@ -68,8 +68,8 @@
 #define POLYETA_PACKEDBYTES 128
 #endif
 
-#define CRYPTO_PUBLICKEYBYTES_D_D (SEEDBYTES_D + K*POLYT1_PACKEDBYTES)
-#define CRYPTO_SECRETKEYBYTES_D_D (3*SEEDBYTES_D \
+#define CRYPTO_PUBLICKEYBYTES_D (SEEDBYTES_D + K*POLYT1_PACKEDBYTES)
+#define CRYPTO_SECRETKEYBYTES_D (3*SEEDBYTES_D \
                                + L*POLYETA_PACKEDBYTES \
                                + K*POLYETA_PACKEDBYTES \
                                + K*POLYT0_PACKEDBYTES)

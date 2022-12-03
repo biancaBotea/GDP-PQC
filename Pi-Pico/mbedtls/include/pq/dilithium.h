@@ -81,25 +81,25 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
 void challenge(poly *c, const unsigned char seed[SEEDBYTES_D]);
 
 //#define crypto_sign_keypair DILITHIUM_NAMESPACE(keypair)
-int crypto_sign_keypair(unsigned char *pk, unsigned char *sk);
+int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk);
 
 //#define crypto_sign_signature DILITHIUM_NAMESPACE(signature)
-int crypto_sign_signature(unsigned char *sig, size_t *siglen,
+int crypto_sign_signature_d(unsigned char *sig, size_t *siglen,
                           const unsigned char *m, size_t mlen,
                           const unsigned char *sk);
 
 //#define crypto_sign DILITHIUM_NAMESPACETOP
-int crypto_sign(unsigned char *sm, size_t *smlen,
+int crypto_sign_d(unsigned char *sm, size_t *smlen,
                 const unsigned char *m, size_t mlen,
                 const unsigned char *sk);
 
 //#define crypto_sign_verify DILITHIUM_NAMESPACE(verify)
-int crypto_sign_verify(const unsigned char *sig, size_t siglen,
+int crypto_sign_verify_d(const unsigned char *sig, size_t siglen,
                        const unsigned char *m, size_t mlen,
                        const unsigned char *pk);
 
 //#define crypto_sign_open DILITHIUM_NAMESPACE(open)
-int crypto_sign_open(unsigned char *m, size_t *mlen,
+int crypto_sign_open_d(unsigned char *m, size_t *mlen,
                      const unsigned char *sm, size_t smlen,
                      const unsigned char *pk);
 
