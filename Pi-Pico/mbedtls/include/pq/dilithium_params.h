@@ -1,9 +1,13 @@
-#ifndef PARAMS_H
-#define PARAMS_H
+#ifndef PARAMS_D_H
+#define PARAMS_D_H
 
-#include "config.h"
+// #include "mbedtls/config.h"
 
-#define SEEDBYTES 32
+#ifndef DILITHIUM_MODE
+#define DILITHIUM_MODE 3 /* Change this for different security strengths */
+#endif
+
+#define SEEDBYTES_D 32
 #define CRHBYTES 64
 #define N 256
 #define Q 8380417
@@ -64,11 +68,11 @@
 #define POLYETA_PACKEDBYTES 128
 #endif
 
-#define CRYPTO_PUBLICKEYBYTES (SEEDBYTES + K*POLYT1_PACKEDBYTES)
-#define CRYPTO_SECRETKEYBYTES (3*SEEDBYTES \
+#define CRYPTO_PUBLICKEYBYTES_D_D (SEEDBYTES_D + K*POLYT1_PACKEDBYTES)
+#define CRYPTO_SECRETKEYBYTES_D_D (3*SEEDBYTES_D \
                                + L*POLYETA_PACKEDBYTES \
                                + K*POLYETA_PACKEDBYTES \
                                + K*POLYT0_PACKEDBYTES)
-#define CRYPTO_BYTES (SEEDBYTES + L*POLYZ_PACKEDBYTES + POLYVECH_PACKEDBYTES)
+#define CRYPTO_BYTES_D_D (SEEDBYTES_D + L*POLYZ_PACKEDBYTES + POLYVECH_PACKEDBYTES)
 
 #endif

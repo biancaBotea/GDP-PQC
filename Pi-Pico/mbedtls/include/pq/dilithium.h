@@ -1,17 +1,17 @@
-#ifndef SIGN_H
-#define SIGN_H
+#ifndef DILITHIUM_H
+#define DILITHIUM_H
 
 #include <stddef.h>
 #include <stdint.h>
 #include "pq/dilithium_params.h"
-#include "pq/dilithium_polyvec.h"
 #include "pq/dilithium_poly.h"
+#include "pq/dilithium_polyvec.h"
 
 
 typedef struct mbedtls_dilithium_context
 {
-	unsigned char pk[CRYPTO_PUBLICKEYBYTES];
-	unsigned char sk[CRYPTO_SECRETKEYBYTES];
+	unsigned char pk[CRYPTO_PUBLICKEYBYTES_D];
+	unsigned char sk[CRYPTO_SECRETKEYBYTES_D];
 }mbedtls_dilithium_context;
 
 
@@ -77,28 +77,28 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
 
 
 
-#define challenge DILITHIUM_NAMESPACE(challenge)
-void challenge(poly *c, const unsigned char seed[SEEDBYTES]);
+//#define challenge DILITHIUM_NAMESPACE(challenge)
+void challenge(poly *c, const unsigned char seed[SEEDBYTES_D]);
 
-#define crypto_sign_keypair DILITHIUM_NAMESPACE(keypair)
+//#define crypto_sign_keypair DILITHIUM_NAMESPACE(keypair)
 int crypto_sign_keypair(unsigned char *pk, unsigned char *sk);
 
-#define crypto_sign_signature DILITHIUM_NAMESPACE(signature)
+//#define crypto_sign_signature DILITHIUM_NAMESPACE(signature)
 int crypto_sign_signature(unsigned char *sig, size_t *siglen,
                           const unsigned char *m, size_t mlen,
                           const unsigned char *sk);
 
-#define crypto_sign DILITHIUM_NAMESPACETOP
+//#define crypto_sign DILITHIUM_NAMESPACETOP
 int crypto_sign(unsigned char *sm, size_t *smlen,
                 const unsigned char *m, size_t mlen,
                 const unsigned char *sk);
 
-#define crypto_sign_verify DILITHIUM_NAMESPACE(verify)
+//#define crypto_sign_verify DILITHIUM_NAMESPACE(verify)
 int crypto_sign_verify(const unsigned char *sig, size_t siglen,
                        const unsigned char *m, size_t mlen,
                        const unsigned char *pk);
 
-#define crypto_sign_open DILITHIUM_NAMESPACE(open)
+//#define crypto_sign_open DILITHIUM_NAMESPACE(open)
 int crypto_sign_open(unsigned char *m, size_t *mlen,
                      const unsigned char *sm, size_t smlen,
                      const unsigned char *pk);

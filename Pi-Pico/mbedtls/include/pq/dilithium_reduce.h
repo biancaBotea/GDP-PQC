@@ -1,5 +1,5 @@
-#ifndef REDUCE_H
-#define REDUCE_H
+#ifndef REDUCE_D_H
+#define REDUCE_D_H
 
 #include <stdint.h>
 #include "pq/dilithium_params.h"

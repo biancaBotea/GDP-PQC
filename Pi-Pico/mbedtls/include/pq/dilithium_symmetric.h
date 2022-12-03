@@ -1,5 +1,5 @@
-#ifndef SYMMETRIC_H
-#define SYMMETRIC_H
+#ifndef SYMMETRIC_D_H
+#define SYMMETRIC_D_H
 
 #include <stdint.h>
 #include "pq/dilithium_params.h"
@@ -38,7 +38,7 @@ typedef keccak_state stream256_state;
 
 #define dilithium_shake128_stream_init DILITHIUM_NAMESPACE(dilithium_shake128_stream_init)
 void dilithium_shake128_stream_init(keccak_state *state,
-                                    const unsigned char seed[SEEDBYTES],
+                                    const unsigned char seed[SEEDBYTES_D],
                                     uint16_t nonce);
 
 #define dilithium_shake256_stream_init DILITHIUM_NAMESPACE(dilithium_shake256_stream_init)

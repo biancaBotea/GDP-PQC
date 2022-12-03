@@ -1,8 +1,9 @@
 #ifndef KYBER_H
 #define KYBER_H
 
-#include "mbedtls/bignum.h"
 #include "pq/kyber_params.h"
+#include "mbedtls/bignum.h"
+
 
 /*
 * KYBER error codes
@@ -17,17 +18,15 @@
 #define CRYPTO_CIPHERTEXTBYTES KYBER_CIPHERTEXTBYTES
 #define CRYPTO_BYTES           KYBER_SYMBYTES
 
-// printf("%s %s\n", KYBER_K, KYBER_SYMBYTES);
-
-#if   (KYBER_K == 2)
-#define CRYPTO_ALGNAME "Kyber512"
-#elif (KYBER_K == 3)
-#define CRYPTO_ALGNAME "Kyber768"
-#elif (KYBER_K == 4)
-#define CRYPTO_ALGNAME "Kyber1024"
-#else
-#error "KYBER_K must be in {2,3,4}"
-#endif
+// #if   (KYBER_K == 2)
+// #define CRYPTO_ALGNAME "Kyber512"
+// #elif (KYBER_K == 3)
+// #define CRYPTO_ALGNAME "Kyber768"
+// #elif (KYBER_K == 4)
+// #define CRYPTO_ALGNAME "Kyber1024"
+// #else
+// #error "KYBER_K must be in {2,3,4}"
+// #endif
 
 typedef struct
 {

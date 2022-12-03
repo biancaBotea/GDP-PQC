@@ -1,5 +1,5 @@
-#ifndef ROUNDING_H
-#define ROUNDING_H
+#ifndef ROUNDING_D_H
+#define ROUNDING_D_H
 
 #include <stdint.h>
 #include "pq/dilithium_params.h"

@@ -1,5 +1,5 @@
-#ifndef POLYVEC_H
-//#define POLYVEC_H
+#ifndef POLYVEC_D_H
+#define POLYVEC_D_H
 
 #include <stdint.h>
 #include "pq/dilithium_params.h"
@@ -28,8 +28,7 @@ void polyvecl_ntt(polyvecl *v);
 void polyvecl_invntt_tomont(polyvecl *v);
 //#define polyvecl_pointwise_poly_montgomery DILITHIUM_NAMESPACE(polyvecl_pointwise_poly_montgomery)
 void polyvecl_pointwise_poly_montgomery(polyvecl *r, const poly *a, const polyvecl *v);
-//#define polyvecl_pointwise_acc_montgomery \
-        DILITHIUM_NAMESPACE(polyvecl_pointwise_acc_montgomery)
+//#define polyvecl_pointwise_acc_montgomery DILITHIUM_NAMESPACE(polyvecl_pointwise_acc_montgomery)
 void polyvecl_pointwise_acc_montgomery(poly *w,
                                        const polyvecl *u,
                                        const polyvecl *v);
@@ -85,7 +84,7 @@ void polyveck_use_hint(polyveck *w, const polyveck *v, const polyveck *h);
 void polyveck_pack_w1(unsigned char r[K*POLYW1_PACKEDBYTES], const polyveck *w1);
 
 //#define polyvec_matrix_expand DILITHIUM_NAMESPACE(polyvec_matrix_expand)
-void polyvec_matrix_expand(polyvecl mat[K], const unsigned char rho[SEEDBYTES]);
+void polyvec_matrix_expand(polyvecl mat[K], const unsigned char rho[SEEDBYTES_D]);
 
 //#define polyvec_matrix_pointwise_montgomery DILITHIUM_NAMESPACE(polyvec_matrix_pointwise_montgomery)
 void polyvec_matrix_pointwise_montgomery(polyveck *t, const polyvecl mat[K], const polyvecl *v);
