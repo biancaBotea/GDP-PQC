@@ -88,7 +88,7 @@ This mbed only has the classic algorithms so to use the PQC ones we need to :
 	mkdir build && cd build
 	cmake -DUSE_SHARED_MBEDTLS_LIBRARY=On ../
 	cmake --build .
-
+<!-- 
 *****DON'T DO THIS YET AS IT BREAKS THINGS UP*****
 
 Before we start building this we have to install doxygen:
@@ -102,7 +102,7 @@ Before we start building this we have to install doxygen:
 	cmake -G "Unix Makefiles" ..
 	make && sudo make install
 
-***More to be added****
+***More to be added**** -->
 
 Use this to run the programm over SWD
 	
