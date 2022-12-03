@@ -109,6 +109,22 @@ struct mbedtls_md_info_t
     int (*process_func)( void *ctx, const unsigned char *input );
 };
 
+struct mbedtls_md_info_t_shake
+{
+    /** Digest identifier */
+    mbedtls_md_type_t type;
+
+    /** Name of the message digest */
+    const char * name;
+
+    /** Output length of the digest fucntion in bytes */
+    unsigned char size;
+
+    /** Block length of the digest function in bytes */
+    unsigned char block_size ;
+
+};
+
 #if defined(MBEDTLS_MD2_C)
 extern const mbedtls_md_info_t mbedtls_md2_info;
 #endif

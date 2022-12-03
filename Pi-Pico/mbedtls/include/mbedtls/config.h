@@ -1099,6 +1099,33 @@
  */
 #define MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED
 
+/**
+ * \def MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED
+ *
+ * Enable the ECDHE-DILITHIUM based ciphersuite modes in SSL / TLS.
+ *
+ * Requires: MBEDTLS_ECDH_C, MBEDTLS_DILITHIUM_C, MBEDTLS_X509_CRT_PARSE_C,
+ *
+ * This enables the following ciphersuites (if other requisites are
+ * enabled as well):
+ *      MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256
+ */
+#define MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED
+
+ /**
+ * \def MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
+ *
+ * Enable the KYBER-DILITHIUM based ciphersuite modes in SSL / TLS.
+ *
+ * Requires: MBEDTLS_KYBER_C, MBEDTLS_DILITHIUM_C, MBEDTLS_X509_CRT_PARSE_C,
+ *
+ * This enables the following ciphersuites (if other requisites are
+ * enabled as well):
+ *      MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256
+ */
+#define MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
+
+
  /**
  * \def MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED
  *
@@ -1389,6 +1416,14 @@
 *
 */
 #define MBEDTLS_SSL_SPHINCS
+
+/**
+* \def MBEDTLS_DILITHIUM_SSL
+*
+* Enable DILITHIUM ciphersuites.
+*
+*/
+#define MBEDTLS_SSL_DILITHIUM
 
 /**
 * \def MBEDTLS_SSL_HS_FRAGMENTATION
@@ -2391,6 +2426,22 @@
  */
 #define MBEDTLS_SPHINCS_C
 #define MBEDTLS_SPHINCS_MAX_SIZE 100000
+
+/**
+ * \def MBEDTLS_DILITHIUM_C
+ *
+ * Enable the DILITHIUM algorithm.
+ *
+ * Module:  library/spx.c
+ * Caller:
+ *
+ * This module is used by the following key exchanges:
+ *      PQ
+ *
+ * Requires: TODO
+ */
+#define MBEDTLS_DILITHIUM_C
+
 
  /**
  * \def MBEDTLS_KYBER_C

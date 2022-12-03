@@ -17,6 +17,8 @@
 #define CRYPTO_CIPHERTEXTBYTES KYBER_CIPHERTEXTBYTES
 #define CRYPTO_BYTES           KYBER_SYMBYTES
 
+// printf("%s %s\n", KYBER_K, KYBER_SYMBYTES);
+
 #if   (KYBER_K == 2)
 #define CRYPTO_ALGNAME "Kyber512"
 #elif (KYBER_K == 3)

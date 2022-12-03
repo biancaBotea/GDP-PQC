@@ -321,6 +321,12 @@
  */
 #define MBEDTLS_OID_SPHINCS_ALG					MBEDTLS_OID_ANSI_X9_62 "\xff\01"
 
+/*
+ * DILITHIUM algorithm
+ */
+#define MBEDTLS_OID_DILITHIUM_ALG				MBEDTLS_OID_ANSI_X9_62 "\xfd\01"
+
+
 /* 
  * EC key algorithms from RFC 5480
  */
@@ -428,6 +434,10 @@
 
 #define MBEDTLS_OID_SPHINCS_SHAKE256		MBEDTLS_OID_ANSI_X9_62_SIG_SHA2 "\xfe"
 #define MBEDTLS_OID_SPHINCS_SHA256			MBEDTLS_OID_ANSI_X9_62_SIG_SHA2 "\xff"
+
+#define MBEDTLS_OID_DILITHIUM_SHAKE256		MBEDTLS_OID_GOV "\x03\x04\x03\x14"
+#define MBEDTLS_OID_SHAKE256 				MBEDTLS_OID_GOV "\x03\x04\x02\x0c"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

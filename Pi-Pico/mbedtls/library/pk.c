@@ -153,14 +153,18 @@ const mbedtls_pk_info_t * mbedtls_pk_info_from_type( mbedtls_pk_type_t pk_type )
 		case MBEDTLS_PK_SPHINCS:
 			return(&mbedtls_sphincs_info);
 #endif 
+#if defined(MBEDTLS_DILITHIUM_C)
+        case MBEDTLS_PK_DILITHIUM:
+            return(&mbedtls_dilithium_info);
+#endif 
 #if defined(MBEDTLS_KYBER_C)
 		case MBEDTLS_PK_KYBER:
 			return(&mbedtls_kyber_info);
 #endif 
-#if defined(MBEDTLS_SABER_C)
-        case MBEDTLS_PK_SABER:
-            return(&mbedtls_saber_info);
-#endif 
+// #if defined(MBEDTLS_SABER_C)
+//         case MBEDTLS_PK_SABER:
+//             return(&mbedtls_saber_info);
+// #endif 
 
 		/* MBEDTLS_PK_RSA_ALT omitted on purpose */
         default:

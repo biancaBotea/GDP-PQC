@@ -160,6 +160,10 @@ extern const mbedtls_pk_info_t mbedtls_ecdsa_info;
 extern const mbedtls_pk_info_t mbedtls_sphincs_info;
 #endif
 
+#if defined(MBEDTLS_DILITHIUM_C)
+extern const mbedtls_pk_info_t mbedtls_dilithium_info;
+#endif
+
 #if defined(MBEDTLS_KYBER_C)
 extern const mbedtls_pk_info_t mbedtls_kyber_info;
 #endif

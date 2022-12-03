@@ -74,13 +74,17 @@
 #include "pq/spx.h"
 #endif
 
+#if defined(MBEDTLS_DILITHIUM_C)
+#include "pq/dilithium.h"
+#endif
+
 #if defined(MBEDTLS_KYBER_C)
 #include "pq/kyber.h"
 #endif
 
-#if defined(MBEDTLS_SABER_C)
-#include "pq/saber.h"
-#endif
+// #if defined(MBEDTLS_SABER_C)
+// #include "pq/saber.h"
+// #endif
 
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
     !defined(inline) && !defined(__cplusplus)
@@ -119,7 +123,8 @@ typedef enum {
     MBEDTLS_PK_ECKEY_DH,
     MBEDTLS_PK_ECDSA,
     MBEDTLS_PK_SPHINCS,
-    MBEDTLS_PK_SABER,
+    MBEDTLS_PK_DILITHIUM,
+    // MBEDTLS_PK_SABER,
 	MBEDTLS_PK_KYBER,
 	MBEDTLS_PK_RSA_ALT,
     MBEDTLS_PK_RSASSA_PSS,
@@ -222,6 +227,18 @@ static inline mbedtls_ecp_keypair *mbedtls_pk_ec( const mbedtls_pk_context pk )
 static inline mbedtls_sphincs_context *mbedtls_pk_sphincs(const mbedtls_pk_context pk)
 {
 	return((mbedtls_sphincs_context *)(pk).pk_ctx);
+}
+#endif /* MBEDTLS_DILITHIUMPHINCS_C */
+#if defined(MBEDTLS_DILITHIUM_C)
+/**
+* Quick access to an DILITHIUM context inside a PK context.
+*
+* \warning You must make sure the PK context actually holds an EC context
+* before using this function!
+*/
+static inline mbedtls_dilithium_context *mbedtls_pk_dilithium(const mbedtls_pk_context pk)
+{
+  return((mbedtls_dilithium_context *)(pk).pk_ctx);
 }
 #endif /* MBEDTLS_SPHINCS_C */
 #if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)
