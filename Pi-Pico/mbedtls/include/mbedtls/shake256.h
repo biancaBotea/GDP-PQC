@@ -19,7 +19,7 @@ extern "C" {
 typedef struct mbedtls_shake256_context
 {
 	
-	keccak_state state;				/*!< The intermediate digest state. */
+	uint32_t  state[8];				/*!< The intermediate digest state. */
 	unsigned char buffer[136];  			/*!< The data block being processed. */
 	uint32_t buffer_len[2];          	/*!< The number of Bytes processed. */  
 
@@ -109,3 +109,5 @@ int mbedtls_shake256_finish_ret( mbedtls_shake256_context *ctx,
 int mbedtls_shake256_ret( const unsigned char *input,
                         size_t ilen,
                         unsigned char output[64]);
+			
+#endif
