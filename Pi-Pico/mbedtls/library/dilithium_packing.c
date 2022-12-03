@@ -12,15 +12,15 @@
 *              - const uint8_t rho[]: byte array containing rho
 *              - const polyveck *t1: pointer to vector t1
 **************************************************/
-void pack_pk(uint8_t pk[CRYPTO_PUBLICKEYBYTES],
-             const uint8_t rho[SEEDBYTES],
+void pack_pk(uint8_t pk[CRYPTO_PUBLICKEYBYTES_D],
+             const uint8_t rho[SEEDBYTES_D],
              const polyveck *t1)
 {
   unsigned int i;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     pk[i] = rho[i];
-  pk += SEEDBYTES;
+  pk += SEEDBYTES_D;
 
   for(i = 0; i < K; ++i)
     polyt1_pack(pk + i*POLYT1_PACKEDBYTES, &t1->vec[i]);
@@ -35,15 +35,15 @@ void pack_pk(uint8_t pk[CRYPTO_PUBLICKEYBYTES],
 *              - const polyveck *t1: pointer to output vector t1
 *              - uint8_t pk[]: byte array containing bit-packed pk
 **************************************************/
-void unpack_pk(uint8_t rho[SEEDBYTES],
+void unpack_pk(uint8_t rho[SEEDBYTES_D],
                polyveck *t1,
-               const uint8_t pk[CRYPTO_PUBLICKEYBYTES])
+               const uint8_t pk[CRYPTO_PUBLICKEYBYTES_D])
 {
   unsigned int i;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     rho[i] = pk[i];
-  pk += SEEDBYTES;
+  pk += SEEDBYTES_D;
 
   for(i = 0; i < K; ++i)
     polyt1_unpack(&t1->vec[i], pk + i*POLYT1_PACKEDBYTES);
@@ -62,27 +62,27 @@ void unpack_pk(uint8_t rho[SEEDBYTES],
 *              - const polyvecl *s1: pointer to vector s1
 *              - const polyveck *s2: pointer to vector s2
 **************************************************/
-void pack_sk(uint8_t sk[CRYPTO_SECRETKEYBYTES],
-             const uint8_t rho[SEEDBYTES],
-             const uint8_t tr[SEEDBYTES],
-             const uint8_t key[SEEDBYTES],
+void pack_sk(uint8_t sk[CRYPTO_SECRETKEYBYTES_D],
+             const uint8_t rho[SEEDBYTES_D],
+             const uint8_t tr[SEEDBYTES_D],
+             const uint8_t key[SEEDBYTES_D],
              const polyveck *t0,
              const polyvecl *s1,
              const polyveck *s2)
 {
   unsigned int i;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     sk[i] = rho[i];
-  sk += SEEDBYTES;
+  sk += SEEDBYTES_D;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     sk[i] = key[i];
-  sk += SEEDBYTES;
+  sk += SEEDBYTES_D;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     sk[i] = tr[i];
-  sk += SEEDBYTES;
+  sk += SEEDBYTES_D;
 
   for(i = 0; i < L; ++i)
     polyeta_pack(sk + i*POLYETA_PACKEDBYTES, &s1->vec[i]);
@@ -109,27 +109,27 @@ void pack_sk(uint8_t sk[CRYPTO_SECRETKEYBYTES],
 *              - const polyveck *s2: pointer to output vector s2
 *              - uint8_t sk[]: byte array containing bit-packed sk
 **************************************************/
-void unpack_sk(uint8_t rho[SEEDBYTES],
-               uint8_t tr[SEEDBYTES],
-               uint8_t key[SEEDBYTES],
+void unpack_sk(uint8_t rho[SEEDBYTES_D],
+               uint8_t tr[SEEDBYTES_D],
+               uint8_t key[SEEDBYTES_D],
                polyveck *t0,
                polyvecl *s1,
                polyveck *s2,
-               const uint8_t sk[CRYPTO_SECRETKEYBYTES])
+               const uint8_t sk[CRYPTO_SECRETKEYBYTES_D])
 {
   unsigned int i;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     rho[i] = sk[i];
-  sk += SEEDBYTES;
+  sk += SEEDBYTES_D;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     key[i] = sk[i];
-  sk += SEEDBYTES;
+  sk += SEEDBYTES_D;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     tr[i] = sk[i];
-  sk += SEEDBYTES;
+  sk += SEEDBYTES_D;
 
   for(i=0; i < L; ++i)
     polyeta_unpack(&s1->vec[i], sk + i*POLYETA_PACKEDBYTES);
@@ -149,20 +149,20 @@ void unpack_sk(uint8_t rho[SEEDBYTES],
 * Description: Bit-pack signature sig = (c, z, h).
 *
 * Arguments:   - uint8_t sig[]: output byte array
-*              - const uint8_t *c: pointer to challenge hash length SEEDBYTES
+*              - const uint8_t *c: pointer to challenge hash length SEEDBYTES_D
 *              - const polyvecl *z: pointer to vector z
 *              - const polyveck *h: pointer to hint vector h
 **************************************************/
-void pack_sig(uint8_t sig[CRYPTO_BYTES],
-              const uint8_t c[SEEDBYTES],
+void pack_sig(uint8_t sig[CRYPTO_BYTES_D],
+              const uint8_t c[SEEDBYTES_D],
               const polyvecl *z,
               const polyveck *h)
 {
   unsigned int i, j, k;
 
-  for(i=0; i < SEEDBYTES; ++i)
+  for(i=0; i < SEEDBYTES_D; ++i)
     sig[i] = c[i];
-  sig += SEEDBYTES;
+  sig += SEEDBYTES_D;
 
   for(i = 0; i < L; ++i)
     polyz_pack(sig + i*POLYZ_PACKEDBYTES, &z->vec[i]);
@@ -174,7 +174,7 @@ void pack_sig(uint8_t sig[CRYPTO_BYTES],
 
   k = 0;
   for(i = 0; i < K; ++i) {
-    for(j = 0; j < N; ++j)
+    for(j = 0; j < N_D; ++j)
       if(h->vec[i].coeffs[j] != 0)
         sig[k++] = j;
 
@@ -195,16 +195,16 @@ void pack_sig(uint8_t sig[CRYPTO_BYTES],
 *
 * Returns 1 in case of malformed signature; otherwise 0.
 **************************************************/
-int unpack_sig(uint8_t c[SEEDBYTES],
+int unpack_sig(uint8_t c[SEEDBYTES_D],
                polyvecl *z,
                polyveck *h,
-               const uint8_t sig[CRYPTO_BYTES])
+               const uint8_t sig[CRYPTO_BYTES_D])
 {
   unsigned int i, j, k;
 
-  for(i = 0; i < SEEDBYTES; ++i)
+  for(i = 0; i < SEEDBYTES_D; ++i)
     c[i] = sig[i];
-  sig += SEEDBYTES;
+  sig += SEEDBYTES_D;
 
   for(i = 0; i < L; ++i)
     polyz_unpack(&z->vec[i], sig + i*POLYZ_PACKEDBYTES);
@@ -213,7 +213,7 @@ int unpack_sig(uint8_t c[SEEDBYTES],
   /* Decode h */
   k = 0;
   for(i = 0; i < K; ++i) {
-    for(j = 0; j < N; ++j)
+    for(j = 0; j < N_D; ++j)
       h->vec[i].coeffs[j] = 0;
 
     if(sig[OMEGA + i] < k || sig[OMEGA + i] > OMEGA)

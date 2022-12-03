@@ -3,14 +3,14 @@
 #include "pq/dilithium_symmetric.h"
 #include "fips202.h"
 
-void dilithium_shake128_stream_init(keccak_state *state, const unsigned char seed[SEEDBYTES], uint16_t nonce)
+void dilithium_shake128_stream_init(keccak_state *state, const unsigned char seed[SEEDBYTES_D], uint16_t nonce)
 {
   unsigned char t[2];
   t[0] = nonce;
   t[1] = nonce >> 8;
 
   shake128_init(state);
-  shake128_absorb(state, seed, SEEDBYTES);
+  shake128_absorb(state, seed, SEEDBYTES_D);
   shake128_absorb(state, t, 2);
   shake128_finalize(state);
 }

@@ -9,9 +9,9 @@
 
 #define SEEDBYTES_D 32
 #define CRHBYTES 64
-#define N 256
+#define N_D 256
 #define Q_D 8380417
-#define D 13
+#define D_D 13
 #define ROOT_OF_UNITY 1753
 
 #if DILITHIUM_MODE == 2

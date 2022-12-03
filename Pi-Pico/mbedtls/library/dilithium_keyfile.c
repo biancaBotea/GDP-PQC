@@ -32,9 +32,9 @@ int prepare_dilithium_key_formtat ( unsigned char *pk , unsigned char *sk ,
 
 	// Write keys to buffer in ASN .1 format
 	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, pk, 
-		CRYPTO_PUBLICKEYBYTES * 8));
+		CRYPTO_PUBLICKEYBYTES_D * 8));
 	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, sk, 
-		CRYPTO_SECRETKEYBYTES * 8));
+		CRYPTO_SECRETKEYBYTES_D * 8));
 	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, len));
 	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, 
 		MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ));
