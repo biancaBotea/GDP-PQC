@@ -240,10 +240,10 @@ static int pk_write_sphincs_pubkey(unsigned char **p, unsigned char *start,
 
 static int pk_write_dilithium_pubkey(unsigned char **p, unsigned char *start, mbedtls_dilithium_context *dilithium){
 
-    size_t len = MBEDTLS_DILITHIUM_PK_LEN;
-
+    size_t len = mbedtls_pk_get_len((mbedtls_pk_context *)dilithium->pk);//MBEDTLS_DILITHIUM_PK_LEN;
+    int ret;
     if (*p < start || (size_t) (*p - start) < len)
-        return(MBEDTLS_ERR_ANS1_BUF_TOO_SMALL);
+        return(MBEDTLS_ERR_ASN1_BUF_TOO_SMALL);
 
     MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(p, start, dilithium->pk, len*8));
 
@@ -539,7 +539,7 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
             * PublicKey BIT STRING
         * }
     */
-        mbedtls_dilithium_context *dilithium = mbedtls_pk_dilithium();
+        mbedtls_dilithium_context *dilithium = mbedtls_pk_dilithium(*key);
         unsigned char *buf, *c;
         size_t len = 0;
         size_t *final_buf_bytes_written;
@@ -548,12 +548,12 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
 
 
         // Write keys to buffer in ASN .1 format
-        MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->pk, 
-            CRYPTO_PUBLICKEYBYTES * 8));
-        MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->sk, 
-            CRYPTO_SECRETKEYBYTES * 8));
-        MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, len));
-        MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, 
+        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->pk, 
+            CRYPTO_PUBLICKEYBYTES_D * 8));
+        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->sk, 
+            CRYPTO_SECRETKEYBYTES_D * 8));
+        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, len));
+        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_tag(&c, buf, 
             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ));
     }
 

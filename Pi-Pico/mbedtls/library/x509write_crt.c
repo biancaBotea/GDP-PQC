@@ -420,7 +420,7 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
 
 
 
-#if defined(MBEDTLS_DILITHIUM_C)
+/*#if defined(MBEDTLS_DILITHIUM_C)
     unsigned char sig[MBEDTLS_DILITHIUM_MAX_SIZE];
 #else
     unsigned char sig[SIGNATURE_MAX_SIZE];
@@ -432,16 +432,16 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
     /*
      * Prepare data to be signed at the end of the target buffer
      */
-    c = buf + size;
+  //  c = buf + size; 
 
     /* Signature algorithm needed in TBS, and later for actual signature */
 
     /* There's no direct way of extracting a signature algorithm
      * (represented as an element of mbedtls_pk_type_t) from a PK instance. */
-    if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_RSA ) )
+    /*if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_RSA ) )
         pk_alg = MBEDTLS_PK_RSA;
     else if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_ECDSA ) )
-        pk_alg = MBEDTLS_PK_ECDSA;
+        pk_alg = MBEDTLS_PK_ECDSA; */
 #if defined(MBEDTLS_DILITHIUM_C)
   else if (mbedtls_pk_can_do(ctx->issuer_key, MBEDTLS_PK_DILITHIUM))
     pk_alg = MBEDTLS_PK_DILITHIUM;

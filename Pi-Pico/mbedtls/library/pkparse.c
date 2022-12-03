@@ -694,18 +694,18 @@ static int pk_parse_key_dilithium(mbedtls_dilithium_context *pk, unsigned char  
     if( ( ret = mbedtls_asn1_get_bitstring_null( &p, end, &len ) ) != 0 )
                 return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret );  
 
-    if(len != MBEDTLS_DILITHIUM_SK_LEN)
+    /*if(len != MBEDTLS_DILITHIUM_SK_LEN)
         return(MBEDTLS_ERR_ASN1_LENGTH_MISMATCH);
-
+*/
     memcpy(pk->sk, p, len);
     *p += len;
 
     if( ( ret = mbedtls_asn1_get_bitstring_null( &p, end, &len ) ) != 0 )
                 return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret );
 
-    if(len != MBEDTLS_DILITHIUM_PK_LEN)
+    /*if(len != MBEDTLS_DILITHIUM_PK_LEN)
         return(MBEDTLS_ERR_ASN1_LENGTH_MISMATCH);    
-
+*/
     memcpy(pk->pk, p, len);
 
     return(0);
@@ -718,14 +718,15 @@ static int pk_get_dilithium_pubkey(unsigned char **p, const unsigned char *end, 
     /* 
     * PublicKey    BIT STRING
     */
-
+    int ret;
+    size_t len;
     if( ( ret = mbedtls_asn1_get_bitstring_null( &p, end, &len ) ) != 0 )
         return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret );
 
-    if(len != MBEDTLS_DILITHIUM_PK_LEN)
-        return(MBEDTLS_ERR_ASN1_LENGTH_MISMATCH);    
-
-    memcpy(pk->pk, p, len);
+/*    if(len != size_t mbedtls_pk_get_len(*dilithium))
+        return(MBEDTLS_ERR_ASN1_LENGTH_MISMATCH);  
+*/
+    memcpy(dilithium->pk, p, len);
 
     p += len;
 

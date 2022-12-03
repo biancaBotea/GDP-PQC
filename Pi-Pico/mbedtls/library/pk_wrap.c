@@ -52,7 +52,7 @@
 
 #if defined(MBEDTLS_PK_C)
 #include "mbedtls/pk_internal.h"
-
+#endif
 /* Even if RSA not activated, for the sake of RSA-alt */
 #include "mbedtls/rsa.h"
 
@@ -864,7 +864,7 @@ const mbedtls_pk_info_t mbedtls_sphincs_info = {
 #if defined(MBEDTLS_DILITHIUM_C)
 static size_t dilithium_get_bitlen(const void *ctx)
 {
-    return(((mbedtls_dilithium_context *)ctx)->key.bitlen);
+    return(sizeof(((mbedtls_dilithium_context *)ctx)->pk));
 }
 
 static int dilithium_can_do(mbedtls_pk_type_t type)
@@ -896,9 +896,13 @@ static int dilithium_sign_wrap(void *ctx, mbedtls_md_type_t md_alg,
 
 static int dilithium_check_pair(const void *pub, const void *prv)
 {
-    return(mbedtls_dilithium_check_pub_priv(
-        (const mbedtls_dilithium_context *)pub,
-        (const mbedtls_dilithium_context *)prv));
+    return(memcmp(((const mbedtls_dilithium_context *)pub)->pk, 
+        ((const mbedtls_dilithium_context *)prv)->pk,
+        mbedtls_dilithium_get_len((const mbedtls_dilithium_context *)pub)));
+    
+    //return(mbedtls_dilithium_check_pub_priv(
+      //  (const mbedtls_dilithium_context *)pub,
+        //(const mbedtls_dilithium_context *)prv));
 }
 
 static void *dilithium_alloc_wrap(void)
@@ -917,7 +921,7 @@ static void dilithium_free_wrap(void *ctx)
     mbedtls_free(ctx);
 }
 
-static void dilithium_debug(const void *ctx, mbedtls_pk_debug_item *items)
+/*static void dilithium_debug(const void *ctx, mbedtls_pk_debug_item *items)
 {
     items->type = MBEDTLS_PK_DEBUG_MPI;
     items->name = "root";
@@ -952,7 +956,7 @@ const mbedtls_pk_info_t mbedtls_dilithium_info = {
 #endif
     dilithium_debug,
 };
-#endif /* MBEDTLS_SDILITHIUM_C */
+#endif MBEDTLS_DILITHIUM_C */ 
 
 
 #if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)
