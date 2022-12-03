@@ -5,9 +5,9 @@
 #include "pq/dilithium_params.h"
 #include "pq/dilithium_poly.h"
 
-/* Vectors of polynomials of length L */
+/* Vectors of polynomials of length L_D */
 typedef struct {
-  poly vec[L];
+  poly vec[L_D];
 } polyvecl;
 
 //#define polyvecl_uniform_eta DILITHIUM_NAMESPACE(polyvecl_uniform_eta)
@@ -39,9 +39,9 @@ int polyvecl_chknorm(const polyvecl *v, int32_t B);
 
 
 
-/* Vectors of polynomials of length K */
+/* Vectors of polynomials of length K_D */
 typedef struct {
-  poly vec[K];
+  poly vec[K_D];
 } polyveck;
 
 //#define polyveck_uniform_eta DILITHIUM_NAMESPACE(polyveck_uniform_eta)
@@ -81,12 +81,12 @@ unsigned int polyveck_make_hint(polyveck *h,
 void polyveck_use_hint(polyveck *w, const polyveck *v, const polyveck *h);
 
 //#define polyveck_pack_w1 DILITHIUM_NAMESPACE(polyveck_pack_w1)
-void polyveck_pack_w1(unsigned char r[K*POLYW1_PACKEDBYTES], const polyveck *w1);
+void polyveck_pack_w1(unsigned char r[K_D*POLYW1_PACKEDBYTES], const polyveck *w1);
 
 //#define polyvec_matrix_expand DILITHIUM_NAMESPACE(polyvec_matrix_expand)
-void polyvec_matrix_expand(polyvecl mat[K], const unsigned char rho[SEEDBYTES_D]);
+void polyvec_matrix_expand(polyvecl mat[K_D], const unsigned char rho[SEEDBYTES_D]);
 
 //#define polyvec_matrix_pointwise_montgomery DILITHIUM_NAMESPACE(polyvec_matrix_pointwise_montgomery)
-void polyvec_matrix_pointwise_montgomery(polyveck *t, const polyvecl mat[K], const polyvecl *v);
+void polyvec_matrix_pointwise_montgomery(polyveck *t, const polyvecl mat[K_D], const polyvecl *v);
 
 #endif
