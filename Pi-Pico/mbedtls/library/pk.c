@@ -161,10 +161,10 @@ const mbedtls_pk_info_t * mbedtls_pk_info_from_type( mbedtls_pk_type_t pk_type )
 		case MBEDTLS_PK_KYBER:
 			return(&mbedtls_kyber_info);
 #endif 
-// #if defined(MBEDTLS_SABER_C)
-//         case MBEDTLS_PK_SABER:
-//             return(&mbedtls_saber_info);
-// #endif 
+#if defined(MBEDTLS_SABER_C)
+        case MBEDTLS_PK_SABER:
+            return(&mbedtls_saber_info);
+#endif 
 
 		/* MBEDTLS_PK_RSA_ALT omitted on purpose */
         default:

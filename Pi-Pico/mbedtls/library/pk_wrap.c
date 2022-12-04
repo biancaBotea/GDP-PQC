@@ -52,7 +52,7 @@
 
 #if defined(MBEDTLS_PK_C)
 #include "mbedtls/pk_internal.h"
-#endif
+//#endif
 /* Even if RSA not activated, for the sake of RSA-alt */
 #include "mbedtls/rsa.h"
 
@@ -492,6 +492,7 @@ const mbedtls_pk_info_t mbedtls_eckeydh_info = {
 #endif /* MBEDTLS_ECP_C */
 
 #if defined(MBEDTLS_KYBER_C)
+//#include "/home/bb/pico/pico-sdk/lib/mbedtls/include/pq/kyber.h"
 static size_t kyber_get_bitlen(const void *ctx)
 {
 	return(((mbedtls_kyber_context *)ctx)->key.bitlen);
@@ -569,82 +570,79 @@ const mbedtls_pk_info_t mbedtls_kyber_info = {
 #endif /* MBEDTLS_KYBER_C */
 
 
-// #if defined(MBEDTLS_SABER_C)
-// static size_t saber_get_bitlen(const void *ctx)
-// {
-//     return(((mbedtls_saber_context *)ctx)->key.bitlen);
-// }
+#if defined(MBEDTLS_SABER_C)
+ static size_t saber_get_bitlen(const void *ctx)
+ {
+     return(((mbedtls_saber_context *)ctx)->key.bitlen);
+ }
+ static int saber_check_pair(const void *pub, const void *prv)
+ {
+     return(mbedtls_saber_check_pub_priv(
+         (const mbedtls_saber_context *)pub,
+         (const mbedtls_saber_context *)prv));
+ }
+ static void *saber_alloc_wrap(void)
+ {
+     void *ctx = mbedtls_calloc(1, sizeof(mbedtls_saber_context));
+     if (ctx != NULL)
+         mbedtls_saber_init(ctx);
 
-// static int saber_check_pair(const void *pub, const void *prv)
-// {
-//     return(mbedtls_saber_check_pub_priv(
-//         (const mbedtls_saber_context *)pub,
-//         (const mbedtls_saber_context *)prv));
-// }
+     return(ctx);
+ }
 
-// static void *saber_alloc_wrap(void)
-// {
-//     void *ctx = mbedtls_calloc(1, sizeof(mbedtls_saber_context));
+ static void saber_free_wrap(void *ctx)
+ {
+     mbedtls_saber_free((mbedtls_saber_context *)ctx);
+     mbedtls_free(ctx);
+ }
 
-//     if (ctx != NULL)
-//         mbedtls_saber_init(ctx);
+ static void saber_debug(const void *ctx, mbedtls_pk_debug_item *items)
+ {
+     items->type = MBEDTLS_PK_DEBUG_MPI;
+     items->name = "pk.Polynomial";
+     items->value = &(((mbedtls_saber_context *)ctx)->key.sk_poly);
 
-//     return(ctx);
-// }
+     items++;
 
-// static void saber_free_wrap(void *ctx)
-// {
-//     mbedtls_saber_free((mbedtls_saber_context *)ctx);
-//     mbedtls_free(ctx);
-// }
+     items->type = MBEDTLS_PK_DEBUG_NONE;
+     items->name = "pk.Hash";
+     items->value = &(((mbedtls_saber_context *)ctx)->key.pk_hash);
 
-// static void saber_debug(const void *ctx, mbedtls_pk_debug_item *items)
-// {
-//     items->type = MBEDTLS_PK_DEBUG_MPI;
-//     items->name = "pk.Polynomial";
-//     items->value = &(((mbedtls_saber_context *)ctx)->key.sk_poly);
+     items++;
 
-//     items++;
+     items->type = MBEDTLS_PK_DEBUG_NONE;
+     items->name = "pk.Seed";
+     items->value = &(((mbedtls_saber_context *)ctx)->key.pk_seed);
+ }
 
-//     items->type = MBEDTLS_PK_DEBUG_NONE;
-//     items->name = "pk.Hash";
-//     items->value = &(((mbedtls_saber_context *)ctx)->key.pk_hash);
+ static int saber_can_do(mbedtls_pk_type_t type)
+ {
+     return(type == MBEDTLS_PK_SABER);
+ }
 
-//     items++;
-
-//     items->type = MBEDTLS_PK_DEBUG_NONE;
-//     items->name = "pk.Seed";
-//     items->value = &(((mbedtls_saber_context *)ctx)->key.pk_seed);
-// }
-
-// static int saber_can_do(mbedtls_pk_type_t type)
-// {
-//     return(type == MBEDTLS_PK_SABER);
-// }
-
-// const mbedtls_pk_info_t mbedtls_saber_info = {
-//     MBEDTLS_PK_SABER,
-//     "SABER",
-//     saber_get_bitlen,        
-//     saber_can_do,
-//     NULL,
-//     NULL,
-// #if defined(MBEDTLS_ECDSA_C) && defined(MBEDTLS_ECP_RESTARTABLE)
-//     NULL,
-//     NULL,
-// #endif
-//     NULL,
-//     NULL,
-//     saber_check_pair,
-//     saber_alloc_wrap,       
-//     saber_free_wrap, 
-// #if defined(MBEDTLS_ECDSA_C) && defined(MBEDTLS_ECP_RESTARTABLE)
-//     NULL,
-//     NULL,
-// #endif       
-//     saber_debug,            
-// };
-// #endif /* MBEDTLS_SABER_C */
+ const mbedtls_pk_info_t mbedtls_saber_info = {
+     MBEDTLS_PK_SABER,
+     "SABER",
+     saber_get_bitlen,        
+     saber_can_do,
+     NULL,
+     NULL,
+ #if defined(MBEDTLS_ECDSA_C) && defined(MBEDTLS_ECP_RESTARTABLE)
+     NULL,
+     NULL,
+ #endif
+     NULL,
+     NULL,
+     saber_check_pair,
+     saber_alloc_wrap,       
+     saber_free_wrap, 
+ #if defined(MBEDTLS_ECDSA_C) && defined(MBEDTLS_ECP_RESTARTABLE)
+     NULL,
+     NULL,
+ #endif       
+     saber_debug,            
+ };
+ #endif /* MBEDTLS_SABER_C */
 
 #if defined(MBEDTLS_ECDSA_C)
 static int ecdsa_can_do( mbedtls_pk_type_t type )
@@ -932,7 +930,7 @@ static void dilithium_free_wrap(void *ctx)
     items->type = MBEDTLS_PK_DEBUG_MPI;
     items->name = "pk_seed";
     items->value = &(((mbedtls_dilithium_context *)ctx)->key.pk_seed);
-}
+}*/
 
 const mbedtls_pk_info_t mbedtls_dilithium_info = {
     MBEDTLS_PK_DILITHIUM,
@@ -954,9 +952,9 @@ const mbedtls_pk_info_t mbedtls_dilithium_info = {
     NULL,
     NULL,
 #endif
-    dilithium_debug,
+    NULL, //dilithium_debug,
 };
-#endif MBEDTLS_DILITHIUM_C */ 
+#endif /* MBEDTLS_DILITHIUM_C */ 
 
 
 #if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)

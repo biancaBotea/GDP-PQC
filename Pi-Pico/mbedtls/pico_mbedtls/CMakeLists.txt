@@ -17,6 +17,7 @@ if (EXISTS ${PICO_MBEDTLS_PATH}/${MBEDTLS_TEST_PATH})
 
     set(src_crypto
         aes.c
+        aes256ctr.c
         aesni.c
         arc4.c
         aria.c
@@ -27,27 +28,49 @@ if (EXISTS ${PICO_MBEDTLS_PATH}/${MBEDTLS_TEST_PATH})
         blowfish.c
         camellia.c
         ccm.c
+        certs.c
         chacha20.c
         chachapoly.c
         cipher.c
         cipher_wrap.c
-        #constant_time.c
         cmac.c
+        #constant_time.c
         ctr_drbg.c
         des.c
         dhm.c
+        dilithium.c
+        dilithium_ntt.c
+        dilithium_packing.c
+        dilithium_poly.c
+        dilithium_polyvec.c
+        dilithium_reduce.c
+        dilithium_rng.c
+        dilithium_rounding.c
+        dilithium_symmetric-aes.c
+        dilithium_symmetric-shake.c
         ecdh.c
         ecdsa.c
         ecjpake.c
         ecp.c
         ecp_curves.c
+        ecp_invasive.h
         entropy.c
         entropy_poll.c
         error.c
+        fips202.c
         gcm.c
         havege.c
         hkdf.c
         hmac_drbg.c
+        kyber_cbd.c
+        kyber_indcpa.c
+        kyber_kem.c
+        kyber_ntt.c
+        kyber_poly.c
+        kyber_polyvec.c
+        kyber_precomp.c
+        kyber_reduce.c
+        kyber_verify.c
         md.c
         md2.c
         md4.c
@@ -69,6 +92,7 @@ if (EXISTS ${PICO_MBEDTLS_PATH}/${MBEDTLS_TEST_PATH})
         platform.c
         platform_util.c
         poly1305.c
+        poly_mul.c
         #psa_crypto.c
         #psa_crypto_aead.c
         #psa_crypto_cipher.c
@@ -82,34 +106,36 @@ if (EXISTS ${PICO_MBEDTLS_PATH}/${MBEDTLS_TEST_PATH})
         #psa_crypto_slot_management.c
         #psa_crypto_storage.c
         #psa_its_file.c
+        recon_FireSaber.c
+        recon_LightSaber.c
+        recon_Saber.c
         ripemd160.c
         rsa.c
         rsa_internal.c
+        #saber_cbd.c
+        #saber_indcpa.c
+        #saber_kem.c
+        #saber_pack_unpack.c
+        #saber_poly.c
+        #saber_recon.c
+        #saber_rng.c
+        #saber_verify.c
         sha1.c
         sha256.c
         sha512.c
+        shake256.c
+        spx.c
+        spx_fors.c
+        spx_hash_address.c
+        spx_hash_sha256.c
+        spx_hash_sahke256.c
+        spx_utils.c
+        spx_wots.c
         threading.c
         timing.c
         version.c
         version_features.c
         xtea.c
-        fips202.c
-        kyber_cbd.c
-        kyber_indcpa.c
-        kyber_kem.c
-        kyber_ntt.c
-        kyber_poly.c
-        kyber_polyvec.c
-        kyber_precomp.c
-        kyber_reduce.c
-        kyber_verify.c
-        spx.c
-        spx_fors.c
-        spx_hash_address.c
-        spx_hash_sha256.c
-        spx_hash_shake256.c
-        spx_utils.c
-        spx_wots.c
     )
     list(TRANSFORM src_crypto PREPEND ${PICO_MBEDTLS_PATH}/library/)
     add_library(pico_mbedtls_crypto INTERFACE)
@@ -137,7 +163,6 @@ if (EXISTS ${PICO_MBEDTLS_PATH}/${MBEDTLS_TEST_PATH})
         ssl_ciphersuites.c
         ssl_cli.c
         ssl_cookie.c
-        #ssl_msg.c
         ssl_srv.c
         ssl_ticket.c
         ssl_tls.c

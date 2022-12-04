@@ -82,9 +82,9 @@
 #include "pq/kyber.h"
 #endif
 
-// #if defined(MBEDTLS_SABER_C)
-// #include "pq/saber.h"
-// #endif
+#if defined(MBEDTLS_SABER_C)
+#include "pq/saber.h"
+#endif
 
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
     !defined(inline) && !defined(__cplusplus)
@@ -124,7 +124,7 @@ typedef enum {
     MBEDTLS_PK_ECDSA,
     MBEDTLS_PK_SPHINCS,
     MBEDTLS_PK_DILITHIUM,
-    // MBEDTLS_PK_SABER,
+    MBEDTLS_PK_SABER,
 	MBEDTLS_PK_KYBER,
 	MBEDTLS_PK_RSA_ALT,
     MBEDTLS_PK_RSASSA_PSS,
@@ -228,7 +228,7 @@ static inline mbedtls_sphincs_context *mbedtls_pk_sphincs(const mbedtls_pk_conte
 {
 	return((mbedtls_sphincs_context *)(pk).pk_ctx);
 }
-#endif /* MBEDTLS_DILITHIUMPHINCS_C */
+#endif /* MBEDTLS_SPHINCS_C */
 #if defined(MBEDTLS_DILITHIUM_C)
 /**
 * Quick access to an DILITHIUM context inside a PK context.
