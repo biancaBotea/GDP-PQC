@@ -6,8 +6,8 @@
 
 #ifdef DIL_DITHIUM_USE_AES
 
-#include "aes256ctr.h"
-#include "fips202.h"
+#include "pq/aes256ctr.h"
+#include "pq/dilithium_fips202.h"
 
 typedef aes256ctr_ctx stream128_state;
 typedef aes256ctr_ctx stream256_state;
@@ -31,7 +31,7 @@ void dilithium_aes256ctr_init(aes256ctr_ctx *state,
 
 #else
 
-#include "fips202.h"
+#include "pq/dilithium_fips202.h"
 
 typedef keccak_state stream128_state;
 typedef keccak_state stream256_state;
@@ -52,11 +52,11 @@ void dilithium_shake256_stream_init(keccak_state *state,
 #define stream128_init(STATE, SEED, NONCE) \
         dilithium_shake128_stream_init(STATE, SEED, NONCE)
 #define stream128_squeezeblocks(OUT, OUTBL_DOCK_DS, STATE) \
-        shake128_squeezeblocks(OUT, OUTBL_DOCK_DS, STATE)
+        shake128_squeezeblocks_d(OUT, OUTBL_DOCK_DS, STATE)
 #define stream256_init(STATE, SEED, NONCE) \
         dilithium_shake256_stream_init(STATE, SEED, NONCE)
 #define stream256_squeezeblocks(OUT, OUTBL_DOCK_DS, STATE) \
-        shake256_squeezeblocks(OUT, OUTBL_DOCK_DS, STATE)
+        shake256_squeezeblocks_d(OUT, OUTBL_DOCK_DS, STATE)
 
 #endif
 

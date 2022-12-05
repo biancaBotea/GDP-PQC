@@ -26,9 +26,9 @@ int32_t power2round(int32_t *a0, int32_t a)  {
 * Name:        decompose
 *
 * Description: For finite field element a, compute high and low bits a0, a1 such
-*              that a mod^+ Q_D = a1*ALPHA + a0 with -ALPHA/2 < a0 <= ALPHA/2 except
-*              if a1 = (Q_D-1)/ALPHA where we set a1 = 0 and
-*              -ALPHA/2 <= a0 = a mod^+ Q_D - Q_D < 0. Assumes a to be standard
+*              that a mod^+ Q_D = a1*AL_D_DPHA + a0 with -AL_D_DPHA/2 < a0 <= AL_D_DPHA/2 except
+*              if a1 = (Q_D-1)/AL_D_DPHA where we set a1 = 0 and
+*              -AL_D_DPHA/2 <= a0 = a mod^+ Q_D - Q_D < 0. Assumes a to be standard
 *              representative.
 *
 * Arguments:   - int32_t a: input element

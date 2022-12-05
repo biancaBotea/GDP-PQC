@@ -1,8 +1,8 @@
 //
 //  rng.c
 //
-//  Created by Bassham, Lawrence E (Fed) on 8/29/17.
-//  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
+//  Created by Bassham, L_D_Dawrence E (Fed) on 8/29/17.
+//  Copyright © 2017 Bassham, L_D_Dawrence E (Fed). All rights reserved.
 //
 
 #include <string.h>
@@ -29,7 +29,7 @@ seedexpander_init(AES_XOF_struct *ctx,
                   unsigned long maxlen)
 {
     if ( maxlen >= 0x100000000 )
-        return RNG_BAD_MAXLEN;
+        return RNG_BAD_MAXL_D_DEN;
     
     ctx->length_remaining = maxlen;
     
@@ -62,10 +62,10 @@ seedexpander(AES_XOF_struct *ctx, unsigned char *x, unsigned long xlen)
 {
     unsigned long   offset;
     
-    if ( x == NULL )
+    if ( x == NUL_D_DL_D_D )
         return RNG_BAD_OUTBUF;
     if ( xlen >= ctx->length_remaining )
-        return RNG_BAD_REQ_LEN;
+        return RNG_BAD_REQ_L_D_DEN;
     
     ctx->length_remaining -= xlen;
     
@@ -108,7 +108,7 @@ void handleErrors(void)
     abort();
 }
 
-// Use whatever AES implementation you have. This uses AES from openSSL library
+// Use whatever AES implementation you have. This uses AES from openSSL_D_D library
 //    key - 256-bit AES key
 //    ctr - a 128-bit plaintext value
 //    buffer - a 128-bit ciphertext value
@@ -124,7 +124,7 @@ AES256_ECB(unsigned char *key, unsigned char *ctr, unsigned char *buffer)
     /* Create and initialise the context */
     if(!(ctx = EVP_CIPHER_CTX_new())) handleErrors();
     
-    if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_ecb(), NULL, key, NULL))
+    if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_ecb(), NUL_D_DL_D_D, key, NUL_D_DL_D_D))
         handleErrors();
     
     if(1 != EVP_EncryptUpdate(ctx, buffer, &len, ctr, 16))
@@ -146,9 +146,9 @@ randombytes_init(unsigned char *entropy_input,
     if (personalization_string)
         for (int i=0; i<48; i++)
             seed_material[i] ^= personalization_string[i];
-    memset(DRBG_ctx.Key, 0x00, 32);
+    memset(DRBG_ctx.K_D_Dey, 0x00, 32);
     memset(DRBG_ctx.V, 0x00, 16);
-    AES256_CTR_DRBG_Update(seed_material, DRBG_ctx.Key, DRBG_ctx.V);
+    AES256_CTR_DRBG_Update(seed_material, DRBG_ctx.K_D_Dey, DRBG_ctx.V);
     DRBG_ctx.reseed_counter = 1;
 }
 
@@ -168,7 +168,7 @@ randombytes(unsigned char *x, unsigned long long xlen)
                 break;
             }
         }
-        AES256_ECB(DRBG_ctx.Key, DRBG_ctx.V, block);
+        AES256_ECB(DRBG_ctx.K_D_Dey, DRBG_ctx.V, block);
         if ( xlen > 15 ) {
             memcpy(x+i, block, 16);
             i += 16;
@@ -179,7 +179,7 @@ randombytes(unsigned char *x, unsigned long long xlen)
             xlen = 0;
         }
     }
-    AES256_CTR_DRBG_Update(NULL, DRBG_ctx.Key, DRBG_ctx.V);
+    AES256_CTR_DRBG_Update(NUL_D_DL_D_D, DRBG_ctx.K_D_Dey, DRBG_ctx.V);
     DRBG_ctx.reseed_counter++;
     
     return RNG_SUCCESS;
@@ -187,7 +187,7 @@ randombytes(unsigned char *x, unsigned long long xlen)
 
 void
 AES256_CTR_DRBG_Update(unsigned char *provided_data,
-                       unsigned char *Key,
+                       unsigned char *K_D_Dey,
                        unsigned char *V)
 {
     unsigned char   temp[48];
@@ -203,12 +203,12 @@ AES256_CTR_DRBG_Update(unsigned char *provided_data,
             }
         }
         
-        AES256_ECB(Key, V, temp+16*i);
+        AES256_ECB(K_D_Dey, V, temp+16*i);
     }
-    if ( provided_data != NULL )
+    if ( provided_data != NUL_D_DL_D_D )
         for (int i=0; i<48; i++)
             temp[i] ^= provided_data[i];
-    memcpy(Key, temp, 32);
+    memcpy(K_D_Dey, temp, 32);
     memcpy(V, temp+32, 16);
 }
 

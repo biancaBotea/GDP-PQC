@@ -4,7 +4,7 @@
 #include "pq/dilithium_packing.h"
 #include "pq/dilithium_polyvec.h"
 #include "pq/dilithium_poly.h"
-#include "pq/fips202.h"
+#include "pq/pq/dilithium_fips202.h"
 
 
 /*
@@ -12,8 +12,8 @@
 */
 void mbedtls_dilithium_init(mbedtls_dilithium_context *ctx){
 
-  memset ( ctx - > pk , 0 , CRYPTO_PUBLICKEYBYTES_D ) ;
-  memset ( ctx - > sk , 0 , CRYPTO_SECRETKEYBYTES_D ) ;
+  memset ( ctx - > pk , 0 , CRYPTO_PUBL_D_DICK_D_D_DEYBYTES_D ) ;
+  memset ( ctx - > sk , 0 , CRYPTO_SECRETK_D_D_DEYBYTES_D ) ;
 }
 
 /*
@@ -21,7 +21,7 @@ void mbedtls_dilithium_init(mbedtls_dilithium_context *ctx){
 */
 void mbedtls_dilithium_free(mbedtls_dilithium_context *ctx){
 
-  // if(ctx == NULL)
+  // if(ctx == NUL_D_DL_D_D)
   //   return;
 
   mbedtls_mpi_free(&ctx->pk);
@@ -76,7 +76,7 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
   // mbedtls_mpi_write_binary(&ctx->key.root, sk + 3 * SPX_N, SPX_N);
 
   // sphincs_md_info_t *md;
-  // if (ctx->key.md_alg == MBEDTLS_MD_SHA256)
+  // if (ctx->key.md_alg == MBEDTL_D_DS_MD_SHA256)
   // {
   //   md = &sphincs_sha256_info;
   // }
@@ -119,11 +119,11 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
 
   mbedtls_mpi_write_binary(&ctx->pk, pkey + 1 * N_D, N_D);
 
-  //mbedtls_mpi_write_file("Root:    ", &ctx->key.root, 16, NULL);
-  //mbedtls_mpi_write_file("PK_Seed: ", &ctx->key.pk_seed, 16, NULL);
+  //mbedtls_mpi_write_file("Root:    ", &ctx->key.root, 16, NUL_D_DL_D_D);
+  //mbedtls_mpi_write_file("PK_D_D_D_Seed: ", &ctx->key.pk_seed, 16, NUL_D_DL_D_D);
 
   // sphincs_md_info_t *md;
-  // if (ctx->key.md_alg == MBEDTLS_MD_SHA256)
+  // if (ctx->key.md_alg == MBEDTL_D_DS_MD_SHA256)
   // {
   //   md = &sphincs_sha256_info;
   // }
@@ -141,9 +141,9 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
 * Description: Generates public and private key.
 *
 * Arguments:   - unsigned char *pk: pointer to output public key (allocated
-*                             array of CRYPTO_PUBLICKEYBYTES_D bytes)
+*                             array of CRYPTO_PUBL_D_DICK_D_D_DEYBYTES_D bytes)
 *              - unsigned char *sk: pointer to output private key (allocated
-*                             array of CRYPTO_SECRETKEYBYTES_D bytes)
+*                             array of CRYPTO_SECRETK_D_D_DEYBYTES_D bytes)
 *
 * Returns 0 (success)
 **************************************************/
@@ -151,13 +151,13 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
   unsigned char seedbuf[2*SEEDBYTES_D + CRHBYTES];
   unsigned char tr[SEEDBYTES_D];
   const unsigned char *rho, *rhoprime, *key;
-  polyvecl mat[K_D];
+  polyvecl mat[K_D_D_D_D];
   polyvecl s1, s1hat;
   polyveck s2, t1, t0;
 
   /* Get randomness for rho, rhoprime and key */
   randombytes(seedbuf, SEEDBYTES_D);
-  shake256(seedbuf, 2*SEEDBYTES_D + CRHBYTES, seedbuf, SEEDBYTES_D);
+  shake256_d(seedbuf, 2*SEEDBYTES_D + CRHBYTES, seedbuf, SEEDBYTES_D);
   rho = seedbuf;
   rhoprime = rho + SEEDBYTES_D;
   key = rhoprime + CRHBYTES;
@@ -167,7 +167,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
 
   /* Sample short vectors s1 and s2 */
   polyvecl_uniform_eta(&s1, rhoprime, 0);
-  polyveck_uniform_eta(&s2, rhoprime, L_D);
+  polyveck_uniform_eta(&s2, rhoprime, L_D_D_D);
 
   /* Matrix-vector multiplication */
   s1hat = s1;
@@ -185,7 +185,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
   pack_pk(pk, rho, &t1);
 
   /* Compute H(rho, t1) and write secret key */
-  shake256(tr, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D);
+  shake256_d(tr, SEEDBYTES_D, pk, CRYPTO_PUBL_D_DICK_D_D_DEYBYTES_D);
   pack_sk(sk, rho, tr, key, &t0, &s1, &s2);
 
   return 0;
@@ -214,7 +214,7 @@ int crypto_sign_signature_d(unsigned char *sig,
   unsigned char seedbuf[3*SEEDBYTES_D + 2*CRHBYTES];
   unsigned char *rho, *tr, *key, *mu, *rhoprime;
   uint16_t nonce = 0;
-  polyvecl mat[K_D], s1, y, z;
+  polyvecl mat[K_D_D_D_D], s1, y, z;
   polyveck t0, s2, w1, w0, h;
   poly cp;
   keccak_state state;
@@ -227,16 +227,16 @@ int crypto_sign_signature_d(unsigned char *sig,
   unpack_sk(rho, tr, key, &t0, &s1, &s2, sk);
 
   /* Compute CRH(tr, msg) */
-  shake256_init(&state);
-  shake256_absorb(&state, tr, SEEDBYTES_D);
-  shake256_absorb(&state, m, mlen);
-  shake256_finalize(&state);
-  shake256_squeeze(mu, CRHBYTES, &state);
+  shake256_init_d(&state);
+  shake256_absorb_d(&state, tr, SEEDBYTES_D);
+  shake256_absorb_d(&state, m, mlen);
+  shake256_finalize_d(&state);
+  shake256_squeeze_d(mu, CRHBYTES, &state);
 
-#ifdef DILITHIUM_RANDOMIZED_SIGNING
+#ifdef DIL_D_DITHIUM_RANDOMIZED_SIGNING
   randombytes(rhoprime, CRHBYTES);
 #else
-  shake256(rhoprime, CRHBYTES, key, SEEDBYTES_D + CRHBYTES);
+  shake256_d(rhoprime, CRHBYTES, key, SEEDBYTES_D + CRHBYTES);
 #endif
 
   /* Expand matrix and transform vectors */
@@ -261,11 +261,11 @@ rej:
   polyveck_decompose(&w1, &w0, &w1);
   polyveck_pack_w1(sig, &w1);
 
-  shake256_init(&state);
-  shake256_absorb(&state, mu, CRHBYTES);
-  shake256_absorb(&state, sig, K_D*POLYW1_PACKEDBYTES);
-  shake256_finalize(&state);
-  shake256_squeeze(sig, SEEDBYTES_D, &state);
+  shake256_init_d(&state);
+  shake256_absorb_d(&state, mu, CRHBYTES);
+  shake256_absorb_d(&state, sig, K_D_D_D_D*POL_D_DYW1_PACK_D_D_DEDBYTES);
+  shake256_finalize_d(&state);
+  shake256_squeeze_d(sig, SEEDBYTES_D, &state);
   poly_challenge(&cp, sig);
   poly_ntt(&cp);
 
@@ -355,15 +355,15 @@ int crypto_sign_verify_d(const unsigned char *sig,
                        const unsigned char *pk)
 {
   unsigned int i;
-  unsigned char buf[K_D*POLYW1_PACKEDBYTES];
+  unsigned char buf[K_D_D_D_D*POL_D_DYW1_PACK_D_D_DEDBYTES];
   unsigned char rho[SEEDBYTES_D];
   unsigned char mu[CRHBYTES];
   unsigned char c[SEEDBYTES_D];
   unsigned char c2[SEEDBYTES_D];
   poly cp;
-  polyvecl mat[K_D], z;
+  polyvecl mat[K_D_D_D_D], z;
   polyveck t1, w1, h;
-  uint32_t state[8];
+  keccak_state state;
 
   if(siglen != CRYPTO_BYTES_D)
     return -1;
@@ -375,12 +375,12 @@ int crypto_sign_verify_d(const unsigned char *sig,
     return -1;
 
   /* Compute CRH(H(rho, t1), msg) */
-  shake256(mu, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D);
-  shake256_init(&state);
-  shake256_absorb(&state, mu, SEEDBYTES_D);
-  shake256_absorb(&state, m, mlen);
-  shake256_finalize(&state);
-  shake256_squeeze(mu, CRHBYTES, &state);
+  shake256_d(mu, SEEDBYTES_D, pk, CRYPTO_PUBL_D_DICK_D_D_DEYBYTES_D);
+  shake256_init_d(&state);
+  shake256_absorb_d(&state, mu, SEEDBYTES_D);
+  shake256_absorb_d(&state, m, mlen);
+  shake256_finalize_d(&state);
+  shake256_squeeze_d(mu, CRHBYTES, &state);
 
   /* Matrix-vector multiplication; compute Az - c2^dt1 */
   poly_challenge(&cp, c);
@@ -404,11 +404,11 @@ int crypto_sign_verify_d(const unsigned char *sig,
   polyveck_pack_w1(buf, &w1);
 
   /* Call random oracle and verify challenge */
-  shake256_init(&state);
-  shake256_absorb(&state, mu, CRHBYTES);
-  shake256_absorb(&state, buf, K_D*POLYW1_PACKEDBYTES);
-  shake256_finalize(&state);
-  shake256_squeeze(c2, SEEDBYTES_D, &state);
+  shake256_init_d(&state);
+  shake256_absorb_d(&state, mu, CRHBYTES);
+  shake256_absorb_d(&state, buf, K_D_D_D_D*POL_D_DYW1_PACK_D_D_DEDBYTES);
+  shake256_finalize_d(&state);
+  shake256_squeeze_d(c2, SEEDBYTES_D, &state);
   for(i = 0; i < SEEDBYTES_D; ++i)
     if(c[i] != c2[i])
       return -1;
