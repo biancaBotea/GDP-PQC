@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "pq/fips202.h"
+#include "pq/dilithium_fips202.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,7 +19,7 @@ extern "C" {
 typedef struct mbedtls_shake256_context
 {
 	
-	uint32_t  state[8];				/*!< The intermediate digest state. */
+	keccak_state  state;				/*!< The intermediate digest state. */
 	unsigned char buffer[136];  			/*!< The data block being processed. */
 	uint32_t buffer_len[2];          	/*!< The number of Bytes processed. */  
 
