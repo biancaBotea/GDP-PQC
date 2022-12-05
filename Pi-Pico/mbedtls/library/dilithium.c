@@ -4,7 +4,7 @@
 #include "pq/dilithium_packing.h"
 #include "pq/dilithium_polyvec.h"
 #include "pq/dilithium_poly.h"
-#include "pq/pq/dilithium_fips202.h"
+#include "pq/dilithium_fips202.h"
 
 
 /*
@@ -12,8 +12,8 @@
 */
 void mbedtls_dilithium_init(mbedtls_dilithium_context *ctx){
 
-  memset ( ctx - > pk , 0 , CRYPTO_PUBLICK_DEYBYTES_D ) ;
-  memset ( ctx - > sk , 0 , CRYPTO_SECRETK_DEYBYTES_D ) ;
+  memset ( ctx -> pk , 0 , CRYPTO_PUBLICKEYBYTES_D ) ;
+  memset ( ctx -> sk , 0 , CRYPTO_SECRETKEYBYTES_D ) ;
 }
 
 /*
@@ -88,7 +88,7 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
   if ((ret = f_rng(p_rng, optrand, N_D)) != 0)
     return ret;
 
-  ret = crypto_sign(sig, &ull_slen, hash, hlen, sk);
+  ret = crypto_sign_d(sig, &ull_slen, hash, hlen, skey);
   *slen = (size_t)ull_slen;
 
   return (0);
@@ -110,7 +110,7 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
 * \return          \c 0 on success
 *                  or an error code on failure.
 */
-int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
+int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
   //mbedtls_md_type_t md_alg,
   const unsigned char *hash, size_t hlen,
   const unsigned char *sig, size_t slen)
@@ -132,7 +132,7 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
   //   md = &sphincs_shake256_info;
   // }
 
-  return crypto_sign_open(hash, hlen, sig, slen, pk);
+  return crypto_sign_open_d(hash, hlen, sig, slen, pkey);
 }
 
 /*************************************************
@@ -185,7 +185,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
   pack_pk(pk, rho, &t1);
 
   /* Compute H(rho, t1) and write secret key */
-  shake256_d(tr, SEEDBYTES_D, pk, CRYPTO_PUBLICK_DEYBYTES_D);
+  shake256_d(tr, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D);
   pack_sk(sk, rho, tr, key, &t0, &s1, &s2);
 
   return 0;
@@ -263,7 +263,7 @@ rej:
 
   shake256_init_d(&state);
   shake256_absorb_d(&state, mu, CRHBYTES);
-  shake256_absorb_d(&state, sig, K_D*POLYW1_PACK_DEDBYTES);
+  shake256_absorb_d(&state, sig, K_D*POLYW1_PACKEDBYTES);
   shake256_finalize_d(&state);
   shake256_squeeze_d(sig, SEEDBYTES_D, &state);
   poly_challenge(&cp, sig);
@@ -330,7 +330,7 @@ int crypto_sign_d(unsigned char *sm,
 
   for(i = 0; i < mlen; ++i)
     sm[CRYPTO_BYTES_D + mlen - 1 - i] = m[mlen - 1 - i];
-  crypto_sign_signature(sm, smlen, sm + CRYPTO_BYTES_D, mlen, sk);
+  crypto_sign_signature_d(sm, smlen, sm + CRYPTO_BYTES_D, mlen, sk);
   *smlen += mlen;
   return 0;
 }
@@ -355,7 +355,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
                        const unsigned char *pk)
 {
   unsigned int i;
-  unsigned char buf[K_D*POLYW1_PACK_DEDBYTES];
+  unsigned char buf[K_D*POLYW1_PACKEDBYTES];
   unsigned char rho[SEEDBYTES_D];
   unsigned char mu[CRHBYTES];
   unsigned char c[SEEDBYTES_D];
@@ -375,7 +375,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
     return -1;
 
   /* Compute CRH(H(rho, t1), msg) */
-  shake256_d(mu, SEEDBYTES_D, pk, CRYPTO_PUBLICK_DEYBYTES_D);
+  shake256_d(mu, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D);
   shake256_init_d(&state);
   shake256_absorb_d(&state, mu, SEEDBYTES_D);
   shake256_absorb_d(&state, m, mlen);
@@ -406,7 +406,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
   /* Call random oracle and verify challenge */
   shake256_init_d(&state);
   shake256_absorb_d(&state, mu, CRHBYTES);
-  shake256_absorb_d(&state, buf, K_D*POLYW1_PACK_DEDBYTES);
+  shake256_absorb_d(&state, buf, K_D*POLYW1_PACKEDBYTES);
   shake256_finalize_d(&state);
   shake256_squeeze_d(c2, SEEDBYTES_D, &state);
   for(i = 0; i < SEEDBYTES_D; ++i)
@@ -442,7 +442,7 @@ int crypto_sign_open_d(unsigned char *m,
     goto badsig;
 
   *mlen = smlen - CRYPTO_BYTES_D;
-  if(crypto_sign_verify(sm, CRYPTO_BYTES_D, sm + CRYPTO_BYTES_D, *mlen, pk))
+  if(crypto_sign_verify_d(sm, CRYPTO_BYTES_D, sm + CRYPTO_BYTES_D, *mlen, pk))
     goto badsig;
   else {
     /* All good, copy msg, return 0 */

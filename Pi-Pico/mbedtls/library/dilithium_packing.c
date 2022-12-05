@@ -1,7 +1,7 @@
-#include "params.h"
-#include "packing.h"
-#include "polyvec.h"
-#include "poly.h"
+#include "pq/dilithium_params.h"
+#include "pq/dilithium_packing.h"
+#include "pq/dilithium_polyvec.h"
+#include "pq/dilithium_poly.h"
 
 /*************************************************
 * Name:        pack_pk
