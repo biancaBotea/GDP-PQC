@@ -73,6 +73,6 @@
                                + L_D*POLYETA_PACKEDBYTES \
                                + K_D*POLYETA_PACKEDBYTES \
                                + K_D*POLYT0_PACKEDBYTES)
-#define CRYPTO_BYTES_D_D (SEEDBYTES_D + L_D*POLYZ_PACKEDBYTES + POLYVECH_PACKEDBYTES)
+#define CRYPTO_BYTES_D (SEEDBYTES_D + L_D*POLYZ_PACKEDBYTES + POLYVECH_PACKEDBYTES)
 
 #endif

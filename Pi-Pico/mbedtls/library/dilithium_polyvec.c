@@ -8,7 +8,7 @@
 *
 * Description: Implementation of ExpandA. Generates matrix A with uniformly
 *              random coefficients a_{i,j} by performing rejection
-*              sampling on the output stream of SHAK_DE128(rho|j|i)
+*              sampling on the output stream of SHAKE128(rho|j|i)
 *              or AES256CTR(rho,j|i).
 *
 * Arguments:   - polyvecl mat[K_D]: output matrix
@@ -226,7 +226,7 @@ void polyveck_sub(polyveck *w, const polyveck *u, const polyveck *v) {
 /*************************************************
 * Name:        polyveck_shiftl
 *
-* Description: Multiply vector of polynomials of L_Dength K_D by 2^D_D without modular
+* Description: Multiply vector of polynomials of Length K_D by 2^D_D without modular
 *              reduction. Assumes input coefficients to be less than 2^{31-D_D}.
 *
 * Arguments:   - polyveck *v: pointer to input/output vector
@@ -324,9 +324,9 @@ void polyveck_power2round(polyveck *v1, polyveck *v0, const polyveck *v) {
 * Name:        polyveck_decompose
 *
 * Description: For all coefficients a of polynomials in vector of length K_D,
-*              compute high and low bits a0, a1 such a mod^+ Q_D = a1*AL_DPHA + a0
-*              with -AL_DPHA/2 < a0 <= AL_DPHA/2 except a1 = (Q_D-1)/AL_DPHA where we
-*              set a1 = 0 and -AL_DPHA/2 <= a0 = a mod Q_D - Q_D < 0.
+*              compute high and low bits a0, a1 such a mod^+ Q_D = a1*ALPHA + a0
+*              with -ALPHA/2 < a0 <= ALPHA/2 except a1 = (Q_D-1)/ALPHA where we
+*              set a1 = 0 and -ALPHA/2 <= a0 = a mod Q_D - Q_D < 0.
 *              Assumes coefficients to be standard representatives.
 *
 * Arguments:   - polyveck *v1: pointer to output vector of polynomials with
@@ -382,9 +382,9 @@ void polyveck_use_hint(polyveck *w, const polyveck *u, const polyveck *h) {
     poly_use_hint(&w->vec[i], &u->vec[i], &h->vec[i]);
 }
 
-void polyveck_pack_w1(unsigned char r[K_D*POL_DYW1_PACK_DEDBYTES], const polyveck *w1) {
+void polyveck_pack_w1(unsigned char r[K_D*POLYW1_PACKEDBYTES], const polyveck *w1) {
   unsigned int i;
 
   for(i = 0; i < K_D; ++i)
-    polyw1_pack(&r[i*POL_DYW1_PACK_DEDBYTES], &w1->vec[i]);
+    polyw1_pack(&r[i*POLYW1_PACKEDBYTES], &w1->vec[i]);
 }

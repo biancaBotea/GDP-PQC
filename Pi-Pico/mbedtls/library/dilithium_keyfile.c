@@ -1,10 +1,10 @@
-#if !defined(MBEDTL_DS_CONFIG_FIL_DE)
+#if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
 #else
-#include MBEDTL_DS_CONFIG_FIL_DE
+#include MBEDTLS_CONFIG_FILE
 #endif
 
-#if defined(MBEDTL_DS_ASN1_PARSE_C)
+#if defined(MBEDTLS_ASN1_PARSE_C)
 
 #include "mbedtls/asn1.h"
 #include "mbedtls/platform_util.h"
@@ -16,9 +16,9 @@ int prepare_dilithium_key_formtat ( unsigned char *pk , unsigned char *sk ,
 	unsigned char *final_buf){
 
 /*
-	* DIL_DITHIUM_key ::= SEQUENCE {
-		* SecretK_Dey BIT STRING ,
-		* PublicK_Dey BIT STRING
+	* DILITHIUM_key ::= SEQUENCE {
+		* SecretKey BIT STRING ,
+		* PublicKey BIT STRING
 	* }
 */
 
@@ -31,13 +31,13 @@ int prepare_dilithium_key_formtat ( unsigned char *pk , unsigned char *sk ,
 
 
 	// Write keys to buffer in ASN .1 format
-	MBEDTL_DS_ANS1_CHK_D_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, pk, 
-		CRYPTO_PUBL_DICK_DEYBYTES_D * 8));
-	MBEDTL_DS_ANS1_CHK_D_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, sk, 
-		CRYPTO_SECRETK_DEYBYTES_D * 8));
-	MBEDTL_DS_ANS1_CHK_D_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, len));
-	MBEDTL_DS_ANS1_CHK_D_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, 
-		MBEDTL_DS_ASN1_CONSTRUCTED | MBEDTL_DS_ASN1_SEQUENCE ));
+	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, pk, 
+		CRYPTO_PUBLICKEYBYTES_D * 8));
+	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, sk, 
+		CRYPTO_SECRETKEYBYTES_D * 8));
+	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, len));
+	MBEDTLS_ANS1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, 
+		MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ));
 
 	//Base64 encoding the written buffer
 	size_t final_buf_size = 4*(len / 3 + (len % 3 != 0));
