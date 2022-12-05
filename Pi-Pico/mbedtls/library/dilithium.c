@@ -151,7 +151,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
   unsigned char seedbuf[2*SEEDBYTES_D + CRHBYTES];
   unsigned char tr[SEEDBYTES_D];
   const unsigned char *rho, *rhoprime, *key;
-  polyvecl mat[K];
+  polyvecl mat[K_D];
   polyvecl s1, s1hat;
   polyveck s2, t1, t0;
 
@@ -167,7 +167,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
 
   /* Sample short vectors s1 and s2 */
   polyvecl_uniform_eta(&s1, rhoprime, 0);
-  polyveck_uniform_eta(&s2, rhoprime, L);
+  polyveck_uniform_eta(&s2, rhoprime, L_D);
 
   /* Matrix-vector multiplication */
   s1hat = s1;
@@ -214,7 +214,7 @@ int crypto_sign_signature_d(unsigned char *sig,
   unsigned char seedbuf[3*SEEDBYTES_D + 2*CRHBYTES];
   unsigned char *rho, *tr, *key, *mu, *rhoprime;
   uint16_t nonce = 0;
-  polyvecl mat[K], s1, y, z;
+  polyvecl mat[K_D], s1, y, z;
   polyveck t0, s2, w1, w0, h;
   poly cp;
   keccak_state state;
@@ -263,7 +263,7 @@ rej:
 
   shake256_init(&state);
   shake256_absorb(&state, mu, CRHBYTES);
-  shake256_absorb(&state, sig, K*POLYW1_PACKEDBYTES);
+  shake256_absorb(&state, sig, K_D*POLYW1_PACKEDBYTES);
   shake256_finalize(&state);
   shake256_squeeze(sig, SEEDBYTES_D, &state);
   poly_challenge(&cp, sig);
@@ -355,13 +355,13 @@ int crypto_sign_verify_d(const unsigned char *sig,
                        const unsigned char *pk)
 {
   unsigned int i;
-  unsigned char buf[K*POLYW1_PACKEDBYTES];
+  unsigned char buf[K_D*POLYW1_PACKEDBYTES];
   unsigned char rho[SEEDBYTES_D];
   unsigned char mu[CRHBYTES];
   unsigned char c[SEEDBYTES_D];
   unsigned char c2[SEEDBYTES_D];
   poly cp;
-  polyvecl mat[K], z;
+  polyvecl mat[K_D], z;
   polyveck t1, w1, h;
   uint32_t state[8];
 
@@ -406,7 +406,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
   /* Call random oracle and verify challenge */
   shake256_init(&state);
   shake256_absorb(&state, mu, CRHBYTES);
-  shake256_absorb(&state, buf, K*POLYW1_PACKEDBYTES);
+  shake256_absorb(&state, buf, K_D*POLYW1_PACKEDBYTES);
   shake256_finalize(&state);
   shake256_squeeze(c2, SEEDBYTES_D, &state);
   for(i = 0; i < SEEDBYTES_D; ++i)

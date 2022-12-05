@@ -22,7 +22,7 @@ void pack_pk(uint8_t pk[CRYPTO_PUBLICKEYBYTES_D],
     pk[i] = rho[i];
   pk += SEEDBYTES_D;
 
-  for(i = 0; i < K; ++i)
+  for(i = 0; i < K_D; ++i)
     polyt1_pack(pk + i*POLYT1_PACKEDBYTES, &t1->vec[i]);
 }
 
@@ -45,7 +45,7 @@ void unpack_pk(uint8_t rho[SEEDBYTES_D],
     rho[i] = pk[i];
   pk += SEEDBYTES_D;
 
-  for(i = 0; i < K; ++i)
+  for(i = 0; i < K_D; ++i)
     polyt1_unpack(&t1->vec[i], pk + i*POLYT1_PACKEDBYTES);
 }
 
@@ -84,15 +84,15 @@ void pack_sk(uint8_t sk[CRYPTO_SECRETKEYBYTES_D],
     sk[i] = tr[i];
   sk += SEEDBYTES_D;
 
-  for(i = 0; i < L; ++i)
+  for(i = 0; i < L_D; ++i)
     polyeta_pack(sk + i*POLYETA_PACKEDBYTES, &s1->vec[i]);
-  sk += L*POLYETA_PACKEDBYTES;
+  sk += L_D*POLYETA_PACKEDBYTES;
 
-  for(i = 0; i < K; ++i)
+  for(i = 0; i < K_D; ++i)
     polyeta_pack(sk + i*POLYETA_PACKEDBYTES, &s2->vec[i]);
-  sk += K*POLYETA_PACKEDBYTES;
+  sk += K_D*POLYETA_PACKEDBYTES;
 
-  for(i = 0; i < K; ++i)
+  for(i = 0; i < K_D; ++i)
     polyt0_pack(sk + i*POLYT0_PACKEDBYTES, &t0->vec[i]);
 }
 
@@ -131,15 +131,15 @@ void unpack_sk(uint8_t rho[SEEDBYTES_D],
     tr[i] = sk[i];
   sk += SEEDBYTES_D;
 
-  for(i=0; i < L; ++i)
+  for(i=0; i < L_D; ++i)
     polyeta_unpack(&s1->vec[i], sk + i*POLYETA_PACKEDBYTES);
-  sk += L*POLYETA_PACKEDBYTES;
+  sk += L_D*POLYETA_PACKEDBYTES;
 
-  for(i=0; i < K; ++i)
+  for(i=0; i < K_D; ++i)
     polyeta_unpack(&s2->vec[i], sk + i*POLYETA_PACKEDBYTES);
-  sk += K*POLYETA_PACKEDBYTES;
+  sk += K_D*POLYETA_PACKEDBYTES;
 
-  for(i=0; i < K; ++i)
+  for(i=0; i < K_D; ++i)
     polyt0_unpack(&t0->vec[i], sk + i*POLYT0_PACKEDBYTES);
 }
 
@@ -164,16 +164,16 @@ void pack_sig(uint8_t sig[CRYPTO_BYTES_D],
     sig[i] = c[i];
   sig += SEEDBYTES_D;
 
-  for(i = 0; i < L; ++i)
+  for(i = 0; i < L_D; ++i)
     polyz_pack(sig + i*POLYZ_PACKEDBYTES, &z->vec[i]);
-  sig += L*POLYZ_PACKEDBYTES;
+  sig += L_D*POLYZ_PACKEDBYTES;
 
   /* Encode h */
-  for(i = 0; i < OMEGA + K; ++i)
+  for(i = 0; i < OMEGA + K_D; ++i)
     sig[i] = 0;
 
   k = 0;
-  for(i = 0; i < K; ++i) {
+  for(i = 0; i < K_D; ++i) {
     for(j = 0; j < N_D; ++j)
       if(h->vec[i].coeffs[j] != 0)
         sig[k++] = j;
@@ -206,13 +206,13 @@ int unpack_sig(uint8_t c[SEEDBYTES_D],
     c[i] = sig[i];
   sig += SEEDBYTES_D;
 
-  for(i = 0; i < L; ++i)
+  for(i = 0; i < L_D; ++i)
     polyz_unpack(&z->vec[i], sig + i*POLYZ_PACKEDBYTES);
-  sig += L*POLYZ_PACKEDBYTES;
+  sig += L_D*POLYZ_PACKEDBYTES;
 
   /* Decode h */
   k = 0;
-  for(i = 0; i < K; ++i) {
+  for(i = 0; i < K_D; ++i) {
     for(j = 0; j < N_D; ++j)
       h->vec[i].coeffs[j] = 0;
 
