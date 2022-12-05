@@ -12,8 +12,8 @@
 */
 void mbedtls_dilithium_init(mbedtls_dilithium_context *ctx){
 
-  memset ( ctx - > pk , 0 , CRYPTO_PUBLICKEYBYTES_D_D ) ;
-  memset ( ctx - > sk , 0 , CRYPTO_SECRETKEYBYTES_D_D ) ;
+  memset ( ctx - > pk , 0 , CRYPTO_PUBLICKEYBYTES_D ) ;
+  memset ( ctx - > sk , 0 , CRYPTO_SECRETKEYBYTES_D ) ;
 }
 
 /*
@@ -141,9 +141,9 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
 * Description: Generates public and private key.
 *
 * Arguments:   - unsigned char *pk: pointer to output public key (allocated
-*                             array of CRYPTO_PUBLICKEYBYTES_D_D bytes)
+*                             array of CRYPTO_PUBLICKEYBYTES_D bytes)
 *              - unsigned char *sk: pointer to output private key (allocated
-*                             array of CRYPTO_SECRETKEYBYTES_D_D bytes)
+*                             array of CRYPTO_SECRETKEYBYTES_D bytes)
 *
 * Returns 0 (success)
 **************************************************/
@@ -185,7 +185,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
   pack_pk(pk, rho, &t1);
 
   /* Compute H(rho, t1) and write secret key */
-  shake256(tr, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D_D);
+  shake256(tr, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D);
   pack_sk(sk, rho, tr, key, &t0, &s1, &s2);
 
   return 0;
@@ -196,7 +196,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
 *
 * Description: Computes signature.
 *
-* Arguments:   - unsigned char *sig:   pointer to output signature (of length CRYPTO_BYTES_D_D)
+* Arguments:   - unsigned char *sig:   pointer to output signature (of length CRYPTO_BYTES_D)
 *              - size_t *siglen: pointer to output length of signature
 *              - unsigned char *m:     pointer to message to be signed
 *              - size_t mlen:    length of message
@@ -300,7 +300,7 @@ rej:
 
   /* Write signature */
   pack_sig(sig, sig, &z, &h);
-  *siglen = CRYPTO_BYTES_D_D;
+  *siglen = CRYPTO_BYTES_D;
   return 0;
 }
 
@@ -310,7 +310,7 @@ rej:
 * Description: Compute signed message.
 *
 * Arguments:   - unsigned char *sm: pointer to output signed message (allocated
-*                             array with CRYPTO_BYTES_D_D + mlen bytes),
+*                             array with CRYPTO_BYTES_D + mlen bytes),
 *                             can be equal to m
 *              - size_t *smlen: pointer to output length of signed
 *                               message
@@ -329,8 +329,8 @@ int crypto_sign_d(unsigned char *sm,
   size_t i;
 
   for(i = 0; i < mlen; ++i)
-    sm[CRYPTO_BYTES_D_D + mlen - 1 - i] = m[mlen - 1 - i];
-  crypto_sign_signature(sm, smlen, sm + CRYPTO_BYTES_D_D, mlen, sk);
+    sm[CRYPTO_BYTES_D + mlen - 1 - i] = m[mlen - 1 - i];
+  crypto_sign_signature(sm, smlen, sm + CRYPTO_BYTES_D, mlen, sk);
   *smlen += mlen;
   return 0;
 }
@@ -363,9 +363,9 @@ int crypto_sign_verify_d(const unsigned char *sig,
   poly cp;
   polyvecl mat[K], z;
   polyveck t1, w1, h;
-  keccak_state state;
+  uint32_t state[8];
 
-  if(siglen != CRYPTO_BYTES_D_D)
+  if(siglen != CRYPTO_BYTES_D)
     return -1;
 
   unpack_pk(rho, &t1, pk);
@@ -375,7 +375,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
     return -1;
 
   /* Compute CRH(H(rho, t1), msg) */
-  shake256(mu, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D_D);
+  shake256(mu, SEEDBYTES_D, pk, CRYPTO_PUBLICKEYBYTES_D);
   shake256_init(&state);
   shake256_absorb(&state, mu, SEEDBYTES_D);
   shake256_absorb(&state, m, mlen);
@@ -438,16 +438,16 @@ int crypto_sign_open_d(unsigned char *m,
 {
   size_t i;
 
-  if(smlen < CRYPTO_BYTES_D_D)
+  if(smlen < CRYPTO_BYTES_D)
     goto badsig;
 
-  *mlen = smlen - CRYPTO_BYTES_D_D;
-  if(crypto_sign_verify(sm, CRYPTO_BYTES_D_D, sm + CRYPTO_BYTES_D_D, *mlen, pk))
+  *mlen = smlen - CRYPTO_BYTES_D;
+  if(crypto_sign_verify(sm, CRYPTO_BYTES_D, sm + CRYPTO_BYTES_D, *mlen, pk))
     goto badsig;
   else {
     /* All good, copy msg, return 0 */
     for(i = 0; i < *mlen; ++i)
-      m[i] = sm[CRYPTO_BYTES_D_D + i];
+      m[i] = sm[CRYPTO_BYTES_D + i];
     return 0;
   }
 

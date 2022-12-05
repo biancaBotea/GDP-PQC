@@ -4,6 +4,7 @@ option(LINK_WITH_PTHREAD "Explicitly link mbed TLS library to pthread." OFF)
 
 set(src_crypto
     aes.c
+    aes256ctr.c
     aesni.c
     arc4.c
     aria.c
@@ -22,6 +23,16 @@ set(src_crypto
     ctr_drbg.c
     des.c
     dhm.c
+    dilithium.c
+    dilithium_ntt.c
+    dilithium_packing.c
+    dilithium_poly.c
+    dilithium_polyvec.c
+    dilithium_reduce.c
+    dilithium_rng.c
+    dilithium_rounding.c
+    dilithium_symmetric-aes.c
+    dilithium_symmetric-shake.c
     ecdh.c
     ecdsa.c
     ecjpake.c
@@ -34,6 +45,15 @@ set(src_crypto
     havege.c
     hkdf.c
     hmac_drbg.c
+    kyber_cbd.c
+    kyber_indcpa.c
+    kyber_kem.c
+    kyber_ntt.c
+    kyber_poly.c
+    kyber_polyvec.c
+    kyber_precomp.c
+    kyber_reduce.c
+    kyber_verify.c
     md.c
     md2.c
     md4.c
@@ -59,6 +79,7 @@ set(src_crypto
     sha1.c
     sha256.c
     sha512.c
+    shake256.c
     threading.c
     timing.c
     version.c
