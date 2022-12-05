@@ -1,5 +1,5 @@
-#ifndef DIL_DITHIUM_H
-#define DIL_DITHIUM_H
+#ifndef DILITHIUM_H
+#define DILITHIUM_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -10,8 +10,8 @@
 
 typedef struct mbedtls_dilithium_context
 {
-	unsigned char pk[CRYPTO_PUBL_DICK_DEYBYTES_D];
-	unsigned char sk[CRYPTO_SECRETK_DEYBYTES_D];
+	unsigned char pk[CRYPTO_PUBLICKEYBYTES_D];
+	unsigned char sk[CRYPTO_SECRETKEYBYTES_D];
 }mbedtls_dilithium_context;
 
 
@@ -77,28 +77,28 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
 
 
 
-//#define challenge DIL_DITHIUM_NAMESPACE(challenge)
+//#define challenge DILITHIUM_NAMESPACE(challenge)
 void challenge(poly *c, const unsigned char seed[SEEDBYTES_D]);
 
-//#define crypto_sign_keypair DIL_DITHIUM_NAMESPACE(keypair)
+//#define crypto_sign_keypair DILITHIUM_NAMESPACE(keypair)
 int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk);
 
-//#define crypto_sign_signature DIL_DITHIUM_NAMESPACE(signature)
+//#define crypto_sign_signature DILITHIUM_NAMESPACE(signature)
 int crypto_sign_signature_d(unsigned char *sig, size_t *siglen,
                           const unsigned char *m, size_t mlen,
                           const unsigned char *sk);
 
-//#define crypto_sign DIL_DITHIUM_NAMESPACETOP
+//#define crypto_sign DILITHIUM_NAMESPACETOP
 int crypto_sign_d(unsigned char *sm, size_t *smlen,
                 const unsigned char *m, size_t mlen,
                 const unsigned char *sk);
 
-//#define crypto_sign_verify DIL_DITHIUM_NAMESPACE(verify)
+//#define crypto_sign_verify DILITHIUM_NAMESPACE(verify)
 int crypto_sign_verify_d(const unsigned char *sig, size_t siglen,
                        const unsigned char *m, size_t mlen,
                        const unsigned char *pk);
 
-//#define crypto_sign_open DIL_DITHIUM_NAMESPACE(open)
+//#define crypto_sign_open DILITHIUM_NAMESPACE(open)
 int crypto_sign_open_d(unsigned char *m, size_t *mlen,
                      const unsigned char *sm, size_t smlen,
                      const unsigned char *pk);
