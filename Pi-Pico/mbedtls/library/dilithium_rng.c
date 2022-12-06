@@ -146,9 +146,9 @@ randombytes_init(unsigned char *entropy_input,
     if (personalization_string)
         for (int i=0; i<48; i++)
             seed_material[i] ^= personalization_string[i];
-    memset(DRBG_ctx.K_D_Dey, 0x00, 32);
+    memset(DRBG_ctx.Key, 0x00, 32);
     memset(DRBG_ctx.V, 0x00, 16);
-    AES256_CTR_DRBG_Update(seed_material, DRBG_ctx.K_D_Dey, DRBG_ctx.V);
+    AES256_CTR_DRBG_Update(seed_material, DRBG_ctx.Key, DRBG_ctx.V);
     DRBG_ctx.reseed_counter = 1;
 }
 
@@ -168,7 +168,7 @@ randombytes(unsigned char *x, unsigned long long xlen)
                 break;
             }
         }
-        AES256_ECB(DRBG_ctx.K_D_Dey, DRBG_ctx.V, block);
+        AES256_ECB(DRBG_ctx.Key, DRBG_ctx.V, block);
         if ( xlen > 15 ) {
             memcpy(x+i, block, 16);
             i += 16;
@@ -179,7 +179,7 @@ randombytes(unsigned char *x, unsigned long long xlen)
             xlen = 0;
         }
     }
-    AES256_CTR_DRBG_Update(NULL, DRBG_ctx.K_D_Dey, DRBG_ctx.V);
+    AES256_CTR_DRBG_Update(NULL, DRBG_ctx.Key, DRBG_ctx.V);
     DRBG_ctx.reseed_counter++;
     
     return RNG_SUCCESS;

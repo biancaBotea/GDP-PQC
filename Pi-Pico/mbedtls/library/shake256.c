@@ -138,3 +138,4 @@ int mbedtls_shake256_ret( const unsigned char *input,
     shake256_dilithium(output, 64, input, (unsigned long long) ctx->ilen);
     return( 0 );
 }
+#endif

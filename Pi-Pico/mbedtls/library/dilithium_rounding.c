@@ -6,7 +6,7 @@
 * Name:        power2round
 *
 * Description: For finite field element a, compute a0, a1 such that
-*              a mod^+ Q_D = a1*2^D + a0 with -2^{D-1} < a0 <= 2^{D-1}.
+*              a mod^+ Q_D = a1*2^D_D + a0 with -2^{D_D-1} < a0 <= 2^{D-1}.
 *              Assumes a to be standard representative.
 *
 * Arguments:   - int32_t a: input element
@@ -17,8 +17,8 @@
 int32_t power2round(int32_t *a0, int32_t a)  {
   int32_t a1;
 
-  a1 = (a + (1 << (D-1)) - 1) >> D;
-  *a0 = a - (a1 << D);
+  a1 = (a + (1 << (D_D-1)) - 1) >> D_D;
+  *a0 = a - (a1 << D_D);
   return a1;
 }
 
