@@ -4,7 +4,7 @@
 #include "pq/dilithium_packing.h"
 #include "pq/dilithium_polyvec.h"
 #include "pq/dilithium_poly.h"
-#include "pq/pq/dilithium_fips202.h"
+#include "pq/dilithium_fips202.h"
 
 
 /*
