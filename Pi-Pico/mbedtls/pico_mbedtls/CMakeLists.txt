@@ -48,6 +48,7 @@ if (EXISTS ${PICO_MBEDTLS_PATH}/${MBEDTLS_TEST_PATH})
         dilithium_rounding.c
         dilithium_symmetric-aes.c
         dilithium_symmetric-shake.c
+        dilithium_fips202.c
         ecdh.c
         ecdsa.c
         ecjpake.c
@@ -128,7 +129,7 @@ if (EXISTS ${PICO_MBEDTLS_PATH}/${MBEDTLS_TEST_PATH})
         spx_fors.c
         spx_hash_address.c
         spx_hash_sha256.c
-        spx_hash_sahke256.c
+        spx_hash_shake256.c
         spx_utils.c
         spx_wots.c
         threading.c

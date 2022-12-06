@@ -33,6 +33,8 @@ set(src_crypto
     dilithium_rounding.c
     dilithium_symmetric-aes.c
     dilithium_symmetric-shake.c
+    dilithium_fips202.c
+    fips202.c
     ecdh.c
     ecdsa.c
     ecjpake.c
@@ -80,6 +82,13 @@ set(src_crypto
     sha256.c
     sha512.c
     shake256.c
+    spx.c
+    spx_fors.c
+    spx_hash_address.c
+    spx_hash_sha256.c
+    spx_hash_shake256.c
+    spx_utils.c
+    spx_wots.c
     threading.c
     timing.c
     version.c
@@ -160,16 +169,28 @@ if(USE_STATIC_MBEDTLS_LIBRARY AND USE_SHARED_MBEDTLS_LIBRARY)
     set(mbedtls_static_target "mbedtls_static")
     set(mbedx509_static_target "mbedx509_static")
     set(mbedcrypto_static_target "mbedcrypto_static")
+    set(crypto_static_target "crypto_static")
+    set(ssl_static_target "ssl_static")
 elseif(USE_STATIC_MBEDTLS_LIBRARY)
     set(mbedtls_static_target "mbedtls")
     set(mbedx509_static_target "mbedx509")
     set(mbedcrypto_static_target "mbedcrypto")
+    set(crypto_static_target "crypto")
+    set(ssl_static_target "ssl")
 endif()
 
 if(USE_STATIC_MBEDTLS_LIBRARY)
     add_library(${mbedcrypto_static_target} STATIC ${src_crypto})
     set_target_properties(${mbedcrypto_static_target} PROPERTIES OUTPUT_NAME mbedcrypto)
     target_link_libraries(${mbedcrypto_static_target} ${libs})
+    
+    add_library(${crypto_static_target} STATIC ${src_crypto})
+    set_target_properties(${crypto_static_target} PROPERTIES OUTPUT_NAME crypto)
+    target_link_libraries(${crypto_static_target} ${libs})
+    
+    add_library(${ssl_static_target} STATIC ${src_crypto})
+    set_target_properties(${ssl_static_target} PROPERTIES OUTPUT_NAME ssl)
+    target_link_libraries(${ssl_static_target} ${libs})
 
     add_library(${mbedx509_static_target} STATIC ${src_x509})
     set_target_properties(${mbedx509_static_target} PROPERTIES OUTPUT_NAME mbedx509)
@@ -196,13 +217,22 @@ if(USE_SHARED_MBEDTLS_LIBRARY)
     add_library(mbedtls SHARED ${src_tls})
     set_target_properties(mbedtls PROPERTIES VERSION 2.16.7 SOVERSION 12)
     target_link_libraries(mbedtls ${libs} mbedx509)
+    
+    add_library(crypto SHARED ${src_crypto})
+    set_target_properties(crypto PROPERTIES VERSION 2.16.7 SOVERSION 3)
+    target_link_libraries(crypto ${libs})
+    
+    add_library(ssl SHARED ${src_crypto})
+    set_target_properties(ssl PROPERTIES VERSION 2.16.7 SOVERSION 3)
+    target_link_libraries(ssl ${libs})
 
-    install(TARGETS mbedtls mbedx509 mbedcrypto
+    install(TARGETS mbedtls mbedx509 mbedcrypto crypto ssl
             DESTINATION ${LIB_INSTALL_DIR}
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(USE_SHARED_MBEDTLS_LIBRARY)
 
-add_custom_target(lib DEPENDS mbedcrypto mbedx509 mbedtls)
+
+add_custom_target(lib DEPENDS mbedcrypto mbedx509 mbedtls crypto ssl)
 if(USE_STATIC_MBEDTLS_LIBRARY AND USE_SHARED_MBEDTLS_LIBRARY)
-    add_dependencies(lib mbedcrypto_static mbedx509_static mbedtls_static)
+    add_dependencies(lib mbedcrypto_static mbedx509_static mbedtls_static crypto_static ssl_static)
 endif()

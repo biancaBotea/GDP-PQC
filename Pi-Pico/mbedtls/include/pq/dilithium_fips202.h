@@ -1,8 +1,12 @@
 #ifndef FIPS202_H
 #define FIPS202_H
 
-#include <stddef.h>
-#include <stdint.h>
+#if defined(MBEDTLS_PLATFORM_C)
+#include "mbedtls/platform.h"
+#else
+#include <stdlib.h>
+#include <string.h>
+#endif
 
 #define SHAKE128_RATE 168
 #define SHAKE256_RATE 136
