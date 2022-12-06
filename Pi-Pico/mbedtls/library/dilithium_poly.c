@@ -3,7 +3,7 @@
 #include "pq/dilithium_poly.h"
 #include "pq/dilithium_ntt.h"
 #include "pq/dilithium_reduce.h"
-#include "pq/dilithium_rounding.h"
+#include "pq/dilithium_dilithium_rounding.h"
 #include "pq/dilithium_symmetric.h"
 
 #ifdef DBENCH
@@ -54,7 +54,7 @@ void poly_caddq(poly *a) {
 }
 
 /*************************************************
-* Name:        poly_add
+* Name:        poly_add_D
 *
 * Description: Add polynomials. No modular reduction is performed.
 *
@@ -62,7 +62,7 @@ void poly_caddq(poly *a) {
 *              - const poly *a: pointer to first summand
 *              - const poly *b: pointer to second summand
 **************************************************/
-void poly_add(poly *c, const poly *a, const poly *b)  {
+void poly_add_D(poly *c, const poly *a, const poly *b)  {
   unsigned int i;
   DBENCH_START();
 
@@ -73,7 +73,7 @@ void poly_add(poly *c, const poly *a, const poly *b)  {
 }
 
 /*************************************************
-* Name:        poly_sub
+* Name:        poly_sub_D
 *
 * Description: Subtract polynomials. No modular reduction is
 *              performed.
@@ -83,7 +83,7 @@ void poly_add(poly *c, const poly *a, const poly *b)  {
 *              - const poly *b: pointer to second input polynomial to be
 *                               subtraced from first input polynomial
 **************************************************/
-void poly_sub(poly *c, const poly *a, const poly *b) {
+void poly_sub_D(poly *c, const poly *a, const poly *b) {
   unsigned int i;
   DBENCH_START();
 
@@ -112,17 +112,17 @@ void poly_shiftl(poly *a) {
 }
 
 /*************************************************
-* Name:        poly_ntt
+* Name:        poly_ntt_D
 *
 * Description: Inplace forward NTT. Coefficients can grow by
 *              8*Q_D in absolute value.
 *
 * Arguments:   - poly *a: pointer to input/output polynomial
 **************************************************/
-void poly_ntt(poly *a) {
+void poly_ntt_D(poly *a) {
   DBENCH_START();
 
-  ntt(a->coeffs);
+  ntt_D(a->coeffs);
 
   DBENCH_STOP(*tmul);
 }
@@ -191,9 +191,9 @@ void poly_power2round(poly *a1, poly *a0, const poly *a) {
 * Name:        poly_decompose
 *
 * Description: For all coefficients c of the input polynomial,
-*              compute high and low bits c0, c1 such c mod Q_D = c1*ALPHA + c0
-*              with -Agit PHA/2 < c0 <= ALPHA/2 except c1 = (Q_D-1)/ALPHA where we
-*              set c1 = 0 and -ALPHA/2 <= c0 = c mod Q_D - Q_D < 0.
+*              compute high and low bits c0, c1 such c mod Q_D = c1*AL_D_DPHA + c0
+*              with -AL_D_DPHA/2 < c0 <= AL_D_DPHA/2 except c1 = (Q_D-1)/AL_D_DPHA where we
+*              set c1 = 0 and -AL_D_DPHA/2 <= c0 = c mod Q_D - Q_D < 0.
 *              Assumes coefficients to be standard representatives.
 *
 * Arguments:   - poly *a1: pointer to output polynomial with coefficients c1
@@ -335,24 +335,24 @@ static unsigned int rej_uniform(int32_t *a,
 *
 * Description: Sample polynomial with uniformly random coefficients
 *              in [0,Q_D-1] by performing rejection sampling on the
-*              output stream of SHAKE256(seed|nonce) or AES256CTR(seed,nonce).
+*              output stream of SHAK_D_DE256(seed|nonce) or AES256CTR(seed,nonce).
 *
 * Arguments:   - poly *a: pointer to output polynomial
-*              - const unsigned char seed[]: byte array with seed of length SEEDBYTES_D
+*              - const unsigned char seed[]: byte array with seed of length SEEDBYTES
 *              - uint16_t nonce: 2-byte nonce
 **************************************************/
-#define POLY_UNIFORM_NBLOCKS ((768 + STREAM128_BLOCKBYTES - 1)/STREAM128_BLOCKBYTES)
+#define POL_D_DY_UNIFORM_NBL_D_DOCK_D_DS ((768 + STREAM128_BL_D_DOCK_D_DBYTES - 1)/STREAM128_BL_D_DOCK_D_DBYTES)
 void poly_uniform(poly *a,
-                  const unsigned char seed[SEEDBYTES_D],
+                  const unsigned char seed[SEEDBYTES],
                   uint16_t nonce)
 {
   unsigned int i, ctr, off;
-  unsigned int buflen = POLY_UNIFORM_NBLOCKS*STREAM128_BLOCKBYTES;
-  unsigned char buf[POLY_UNIFORM_NBLOCKS*STREAM128_BLOCKBYTES + 2];
+  unsigned int buflen = POL_D_DY_UNIFORM_NBL_D_DOCK_D_DS*STREAM128_BL_D_DOCK_D_DBYTES;
+  unsigned char buf[POL_D_DY_UNIFORM_NBL_D_DOCK_D_DS*STREAM128_BL_D_DOCK_D_DBYTES + 2];
   stream128_state state;
 
   stream128_init(&state, seed, nonce);
-  stream128_squeezeblocks(buf, POLY_UNIFORM_NBLOCKS, &state);
+  stream128_squeezeblocks(buf, POL_D_DY_UNIFORM_NBL_D_DOCK_D_DS, &state);
 
   ctr = rej_uniform(a->coeffs, N_D, buf, buflen);
 
@@ -362,7 +362,7 @@ void poly_uniform(poly *a,
       buf[i] = buf[buflen - off + i];
 
     stream128_squeezeblocks(buf + off, 1, &state);
-    buflen = STREAM128_BLOCKBYTES + off;
+    buflen = STREAM128_BL_D_DOCK_D_DBYTES + off;
     ctr += rej_uniform(a->coeffs + ctr, N_D - ctr, buf, buflen);
   }
 }
@@ -421,34 +421,34 @@ static unsigned int rej_eta(int32_t *a,
 *
 * Description: Sample polynomial with uniformly random coefficients
 *              in [-ETA,ETA] by performing rejection sampling on the
-*              output stream from SHAKE256(seed|nonce) or AES256CTR(seed,nonce).
+*              output stream from SHAK_D_DE256(seed|nonce) or AES256CTR(seed,nonce).
 *
 * Arguments:   - poly *a: pointer to output polynomial
 *              - const unsigned char seed[]: byte array with seed of length CRHBYTES
 *              - uint16_t nonce: 2-byte nonce
 **************************************************/
 #if ETA == 2
-#define POLY_UNIFORM_ETA_NBLOCKS ((136 + STREAM256_BLOCKBYTES - 1)/STREAM256_BLOCKBYTES)
+#define POL_D_DY_UNIFORM_ETA_NBL_D_DOCK_D_DS ((136 + STREAM256_BL_D_DOCK_D_DBYTES - 1)/STREAM256_BL_D_DOCK_D_DBYTES)
 #elif ETA == 4
-#define POLY_UNIFORM_ETA_NBLOCKS ((227 + STREAM256_BLOCKBYTES - 1)/STREAM256_BLOCKBYTES)
+#define POL_D_DY_UNIFORM_ETA_NBL_D_DOCK_D_DS ((227 + STREAM256_BL_D_DOCK_D_DBYTES - 1)/STREAM256_BL_D_DOCK_D_DBYTES)
 #endif
 void poly_uniform_eta(poly *a,
                       const unsigned char seed[CRHBYTES],
                       uint16_t nonce)
 {
   unsigned int ctr;
-  unsigned int buflen = POLY_UNIFORM_ETA_NBLOCKS*STREAM256_BLOCKBYTES;
-  unsigned char buf[POLY_UNIFORM_ETA_NBLOCKS*STREAM256_BLOCKBYTES];
+  unsigned int buflen = POL_D_DY_UNIFORM_ETA_NBL_D_DOCK_D_DS*STREAM256_BL_D_DOCK_D_DBYTES;
+  unsigned char buf[POL_D_DY_UNIFORM_ETA_NBL_D_DOCK_D_DS*STREAM256_BL_D_DOCK_D_DBYTES];
   stream256_state state;
 
   stream256_init(&state, seed, nonce);
-  stream256_squeezeblocks(buf, POLY_UNIFORM_ETA_NBLOCKS, &state);
+  stream256_squeezeblocks(buf, POL_D_DY_UNIFORM_ETA_NBL_D_DOCK_D_DS, &state);
 
   ctr = rej_eta(a->coeffs, N_D, buf, buflen);
 
   while(ctr < N_D) {
     stream256_squeezeblocks(buf, 1, &state);
-    ctr += rej_eta(a->coeffs + ctr, N_D - ctr, buf, STREAM256_BLOCKBYTES);
+    ctr += rej_eta(a->coeffs + ctr, N_D - ctr, buf, STREAM256_BL_D_DOCK_D_DBYTES);
   }
 }
 
@@ -457,22 +457,22 @@ void poly_uniform_eta(poly *a,
 *
 * Description: Sample polynomial with uniformly random coefficients
 *              in [-(GAMMA1 - 1), GAMMA1] by unpacking output stream
-*              of SHAKE256(seed|nonce) or AES256CTR(seed,nonce).
+*              of SHAK_D_DE256(seed|nonce) or AES256CTR(seed,nonce).
 *
 * Arguments:   - poly *a: pointer to output polynomial
 *              - const unsigned char seed[]: byte array with seed of length CRHBYTES
 *              - uint16_t nonce: 16-bit nonce
 **************************************************/
-#define POLY_UNIFORM_GAMMA1_NBLOCKS ((POLYZ_PACKEDBYTES + STREAM256_BLOCKBYTES - 1)/STREAM256_BLOCKBYTES)
+#define POL_D_DY_UNIFORM_GAMMA1_NBL_D_DOCK_D_DS ((POL_D_DYZ_PACK_D_DEDBYTES + STREAM256_BL_D_DOCK_D_DBYTES - 1)/STREAM256_BL_D_DOCK_D_DBYTES)
 void poly_uniform_gamma1(poly *a,
                          const unsigned char seed[CRHBYTES],
                          uint16_t nonce)
 {
-  unsigned char buf[POLY_UNIFORM_GAMMA1_NBLOCKS*STREAM256_BLOCKBYTES];
+  unsigned char buf[POL_D_DY_UNIFORM_GAMMA1_NBL_D_DOCK_D_DS*STREAM256_BL_D_DOCK_D_DBYTES];
   stream256_state state;
 
   stream256_init(&state, seed, nonce);
-  stream256_squeezeblocks(buf, POLY_UNIFORM_GAMMA1_NBLOCKS, &state);
+  stream256_squeezeblocks(buf, POL_D_DY_UNIFORM_GAMMA1_NBL_D_DOCK_D_DS, &state);
   polyz_unpack(a, buf);
 }
 
@@ -481,19 +481,19 @@ void poly_uniform_gamma1(poly *a,
 *
 * Description: Implementation of H. Samples polynomial with TAU nonzero
 *              coefficients in {-1,1} using the output stream of
-*              SHAKE256(seed).
+*              SHAK_D_DE256(seed).
 *
 * Arguments:   - poly *c: pointer to output polynomial
-*              - const unsigned char mu[]: byte array containing seed of length SEEDBYTES_D
+*              - const unsigned char mu[]: byte array containing seed of length SEEDBYTES
 **************************************************/
-void poly_challenge(poly *c, const unsigned char seed[SEEDBYTES_D]) {
+void poly_challenge(poly *c, const unsigned char seed[SEEDBYTES]) {
   unsigned int i, b, pos;
   uint64_t signs;
-  unsigned char buf[SHAKE256_RATE];
+  unsigned char buf[SHAK_D_DE256_RATE];
   keccak_state state;
 
   shake256_init_d(&state);
-  shake256_absorb_d(&state, seed, SEEDBYTES_D);
+  shake256_absorb_d(&state, seed, SEEDBYTES);
   shake256_finalize_d(&state);
   shake256_squeezeblocks_d(buf, 1, &state);
 
@@ -506,7 +506,7 @@ void poly_challenge(poly *c, const unsigned char seed[SEEDBYTES_D]) {
     c->coeffs[i] = 0;
   for(i = N_D-TAU; i < N_D; ++i) {
     do {
-      if(pos >= SHAKE256_RATE) {
+      if(pos >= SHAK_D_DE256_RATE) {
         shake256_squeezeblocks_d(buf, 1, &state);
         pos = 0;
       }
@@ -526,7 +526,7 @@ void poly_challenge(poly *c, const unsigned char seed[SEEDBYTES_D]) {
 * Description: Bit-pack polynomial with coefficients in [-ETA,ETA].
 *
 * Arguments:   - unsigned char *r: pointer to output byte array with at least
-*                            POLYETA_PACKEDBYTES bytes
+*                            POL_D_DYETA_PACK_D_DEDBYTES bytes
 *              - const poly *a: pointer to input polynomial
 **************************************************/
 void polyeta_pack(unsigned char *r, const poly *a) {
@@ -611,7 +611,7 @@ void polyeta_unpack(poly *r, const unsigned char *a) {
 *              Input coefficients are assumed to be standard representatives.
 *
 * Arguments:   - unsigned char *r: pointer to output byte array with at least
-*                            POLYT1_PACKEDBYTES bytes
+*                            POL_D_DYT1_PACK_D_DEDBYTES bytes
 *              - const poly *a: pointer to input polynomial
 **************************************************/
 void polyt1_pack(unsigned char *r, const poly *a) {
@@ -658,7 +658,7 @@ void polyt1_unpack(poly *r, const unsigned char *a) {
 * Description: Bit-pack polynomial t0 with coefficients in ]-2^{D_D-1}, 2^{D_D-1}].
 *
 * Arguments:   - unsigned char *r: pointer to output byte array with at least
-*                            POLYT0_PACKEDBYTES bytes
+*                            POL_D_DYT0_PACK_D_DEDBYTES bytes
 *              - const poly *a: pointer to input polynomial
 **************************************************/
 void polyt0_pack(unsigned char *r, const poly *a) {
@@ -770,7 +770,7 @@ void polyt0_unpack(poly *r, const unsigned char *a) {
 *              in [-(GAMMA1 - 1), GAMMA1].
 *
 * Arguments:   - unsigned char *r: pointer to output byte array with at least
-*                            POLYZ_PACKEDBYTES bytes
+*                            POL_D_DYZ_PACK_D_DEDBYTES bytes
 *              - const poly *a: pointer to input polynomial
 **************************************************/
 void polyz_pack(unsigned char *r, const poly *a) {
@@ -882,7 +882,7 @@ void polyz_unpack(poly *r, const unsigned char *a) {
 *              Input coefficients are assumed to be standard representatives.
 *
 * Arguments:   - unsigned char *r: pointer to output byte array with at least
-*                            POLYW1_PACKEDBYTES bytes
+*                            POL_D_DYW1_PACK_D_DEDBYTES bytes
 *              - const poly *a: pointer to input polynomial
 **************************************************/
 void polyw1_pack(unsigned char *r, const poly *a) {

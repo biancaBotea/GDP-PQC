@@ -68,7 +68,7 @@ void polyvecl_add(polyvecl *w, const polyvecl *u, const polyvecl *v) {
   unsigned int i;
 
   for(i = 0; i < L_D; ++i)
-    poly_add(&w->vec[i], &u->vec[i], &v->vec[i]);
+    poly_add_D(&w->vec[i], &u->vec[i], &v->vec[i]);
 }
 
 /*************************************************
@@ -83,7 +83,7 @@ void polyvecl_ntt(polyvecl *v) {
   unsigned int i;
 
   for(i = 0; i < L_D; ++i)
-    poly_ntt(&v->vec[i]);
+    poly_ntt_D(&v->vec[i]);
 }
 
 void polyvecl_invntt_tomont(polyvecl *v) {
@@ -121,7 +121,7 @@ void polyvecl_pointwise_acc_montgomery(poly *w,
   poly_pointwise_montgomery(w, &u->vec[0], &v->vec[0]);
   for(i = 1; i < L_D; ++i) {
     poly_pointwise_montgomery(&t, &u->vec[i], &v->vec[i]);
-    poly_add(w, w, &t);
+    poly_add_D(w, w, &t);
   }
 }
 
@@ -202,7 +202,7 @@ void polyveck_add(polyveck *w, const polyveck *u, const polyveck *v) {
   unsigned int i;
 
   for(i = 0; i < K_D; ++i)
-    poly_add(&w->vec[i], &u->vec[i], &v->vec[i]);
+    poly_add_D(&w->vec[i], &u->vec[i], &v->vec[i]);
 }
 
 /*************************************************
@@ -220,7 +220,7 @@ void polyveck_sub(polyveck *w, const polyveck *u, const polyveck *v) {
   unsigned int i;
 
   for(i = 0; i < K_D; ++i)
-    poly_sub(&w->vec[i], &u->vec[i], &v->vec[i]);
+    poly_sub_D(&w->vec[i], &u->vec[i], &v->vec[i]);
 }
 
 /*************************************************
@@ -250,7 +250,7 @@ void polyveck_ntt(polyveck *v) {
   unsigned int i;
 
   for(i = 0; i < K_D; ++i)
-    poly_ntt(&v->vec[i]);
+    poly_ntt_D(&v->vec[i]);
 }
 
 /*************************************************

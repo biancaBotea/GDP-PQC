@@ -13,15 +13,15 @@ void poly_reduce(poly *a);
 //#define poly_caddq DILITHIUM_NAMESPACE(poly_caddq)
 void poly_caddq(poly *a);
 
-//#define poly_add DILITHIUM_NAMESPACE(poly_add)
-void poly_add(poly *c, const poly *a, const poly *b);
-//#define poly_sub DILITHIUM_NAMESPACE(poly_sub)
-void poly_sub(poly *c, const poly *a, const poly *b);
+//#define poly_add_D DILITHIUM_NAMESPACE(poly_add_D)
+void poly_add_D(poly *c, const poly *a, const poly *b);
+//#define poly_sub_D DILITHIUM_NAMESPACE(poly_sub_D)
+void poly_sub_D(poly *c, const poly *a, const poly *b);
 //#define poly_shiftl DILITHIUM_NAMESPACE(poly_shiftl)
 void poly_shiftl(poly *a);
 
-//#define poly_ntt DILITHIUM_NAMESPACE(poly_ntt)
-void poly_ntt(poly *a);
+//#define poly_ntt_D DILITHIUM_NAMESPACE(poly_ntt_D)
+void poly_ntt_D(poly *a);
 //#define poly_invntt_tomont DILITHIUM_NAMESPACE(poly_invntt_tomont)
 void poly_invntt_tomont(poly *a);
 //#define poly_pointwise_montgomery DILITHIUM_NAMESPACE(poly_pointwise_montgomery)

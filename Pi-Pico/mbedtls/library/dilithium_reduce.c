@@ -3,7 +3,7 @@
 #include "pq/dilithium_reduce.h"
 
 /*************************************************
-* Name:        montgomery_reduce
+* Name:        montgomery_reduce_D
 *
 * Description: For finite field element a with -2^{31}Q_D <= a <= Q_D*2^31,
 *              compute r \equiv a*2^{-32} (mod Q_D) such that -Q_D < r < Q_D.
@@ -12,7 +12,7 @@
 *
 * Returns r.
 **************************************************/
-int32_t montgomery_reduce(int64_t a) {
+int32_t montgomery_reduce_D(int64_t a) {
   int32_t t;
 
   t = (int64_t)(int32_t)a*QINV;
@@ -53,7 +53,7 @@ int32_t caddq(int32_t a) {
 }
 
 /*************************************************
-* Name:        freeze
+* Name:        freeze_D
 *
 * Description: For finite field element a, compute standard
 *              representative r = a mod^+ Q_D.
@@ -62,7 +62,7 @@ int32_t caddq(int32_t a) {
 *
 * Returns r.
 **************************************************/
-int32_t freeze(int32_t a) {
+int32_t freeze_D(int32_t a) {
   a = reduce32(a);
   a = caddq(a);
   return a;

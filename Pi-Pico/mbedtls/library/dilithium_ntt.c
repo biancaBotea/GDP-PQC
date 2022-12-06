@@ -39,14 +39,14 @@ static const int32_t zetas[N_D] = {
 };
 
 /*************************************************
-* Name:        ntt
+* Name:        ntt_D
 *
 * Description: Forward NTT, in-place. No modular reduction is performed after
 *              additions or subtractions. Output vector is in bitreversed order.
 *
 * Arguments:   - uint32_t p[N_D]: input/output coefficient array
 **************************************************/
-void ntt(int32_t a[N_D]) {
+void ntt_D(int32_t a[N_D]) {
   unsigned int len, start, j, k;
   int32_t zeta, t;
 
@@ -55,7 +55,7 @@ void ntt(int32_t a[N_D]) {
     for(start = 0; start < N_D; start = j + len) {
       zeta = zetas[++k];
       for(j = start; j < start + len; ++j) {
-        t = montgomery_reduce((int64_t)zeta * a[j + len]);
+        t = montgomery_reduce_D((int64_t)zeta * a[j + len]);
         a[j + len] = a[j] - t;
         a[j] = a[j] + t;
       }
@@ -87,12 +87,12 @@ void invntt_tomont(int32_t a[N_D]) {
         t = a[j];
         a[j] = t + a[j + len];
         a[j + len] = t - a[j + len];
-        a[j + len] = montgomery_reduce((int64_t)zeta * a[j + len]);
+        a[j + len] = montgomery_reduce_D((int64_t)zeta * a[j + len]);
       }
     }
   }
 
   for(j = 0; j < N_D; ++j) {
-    a[j] = montgomery_reduce((int64_t)f * a[j]);
+    a[j] = montgomery_reduce_D((int64_t)f * a[j]);
   }
 }
