@@ -5,6 +5,8 @@
 #include "pq/dilithium_polyvec.h"
 #include "pq/dilithium_poly.h"
 #include "pq/dilithium_fips202.h"
+#include "mbedtls/md.h"
+#include "mbedtls/platform.h"
 
 
 /*
@@ -147,7 +149,8 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
 *
 * Returns 0 (success)
 **************************************************/
-int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
+int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk,
+      int(*f_rng)(void *, unsigned char *, size_t), void *p_rng) {
   unsigned char seedbuf[2*SEEDBYTES_D + CRHBYTES];
   unsigned char tr[SEEDBYTES_D];
   const unsigned char *rho, *rhoprime, *key;
@@ -156,7 +159,7 @@ int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk) {
   polyveck s2, t1, t0;
 
   /* Get randomness for rho, rhoprime and key */
-  randombytes(seedbuf, SEEDBYTES_D);
+  f_rng(p_rng, seedbuf, SEEDBYTES_D);
   shake256_d(seedbuf, 2*SEEDBYTES_D + CRHBYTES, seedbuf, SEEDBYTES_D);
   rho = seedbuf;
   rhoprime = rho + SEEDBYTES_D;
@@ -267,7 +270,7 @@ rej:
   shake256_finalize_d(&state);
   shake256_squeeze_d(sig, SEEDBYTES_D, &state);
   poly_challenge(&cp, sig);
-  poly_ntt(&cp);
+  poly_ntt_D(&cp);
 
   /* Compute z, reject if it reveals secret */
   polyvecl_pointwise_poly_montgomery(&z, &cp, &s1);
@@ -389,7 +392,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
   polyvecl_ntt(&z);
   polyvec_matrix_pointwise_montgomery(&w1, mat, &z);
 
-  poly_ntt(&cp);
+  poly_ntt_D(&cp);
   polyveck_shiftl(&t1);
   polyveck_ntt(&t1);
   polyveck_pointwise_poly_montgomery(&t1, &cp, &t1);

@@ -29,7 +29,6 @@ set(src_crypto
     dilithium_poly.c
     dilithium_polyvec.c
     dilithium_reduce.c
-    dilithium_rng.c
     dilithium_rounding.c
     dilithium_symmetric-aes.c
     dilithium_symmetric-shake.c
@@ -94,6 +93,10 @@ set(src_crypto
     version.c
     version_features.c
     xtea.c
+)
+
+set(src_ssl
+    dilithium_rng.c
 )
 
 set(src_x509
@@ -184,11 +187,11 @@ if(USE_STATIC_MBEDTLS_LIBRARY)
     set_target_properties(${mbedcrypto_static_target} PROPERTIES OUTPUT_NAME mbedcrypto)
     target_link_libraries(${mbedcrypto_static_target} ${libs})
     
-    add_library(${crypto_static_target} STATIC ${src_crypto})
+    add_library(${crypto_static_target} STATIC ${src_ssl})
     set_target_properties(${crypto_static_target} PROPERTIES OUTPUT_NAME crypto)
     target_link_libraries(${crypto_static_target} ${libs})
     
-    add_library(${ssl_static_target} STATIC ${src_crypto})
+    add_library(${ssl_static_target} STATIC ${src_ssl})
     set_target_properties(${ssl_static_target} PROPERTIES OUTPUT_NAME ssl)
     target_link_libraries(${ssl_static_target} ${libs})
 
@@ -200,7 +203,7 @@ if(USE_STATIC_MBEDTLS_LIBRARY)
     set_target_properties(${mbedtls_static_target} PROPERTIES OUTPUT_NAME mbedtls)
     target_link_libraries(${mbedtls_static_target} ${libs} ${mbedx509_static_target})
 
-    install(TARGETS ${mbedtls_static_target} ${mbedx509_static_target} ${mbedcrypto_static_target}
+    install(TARGETS ${mbedtls_static_target} ${mbedx509_static_target} ${mbedcrypto_static_target} ${crypto_static_target} ${ssl_static_target}
             DESTINATION ${LIB_INSTALL_DIR}
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(USE_STATIC_MBEDTLS_LIBRARY)
@@ -218,11 +221,11 @@ if(USE_SHARED_MBEDTLS_LIBRARY)
     set_target_properties(mbedtls PROPERTIES VERSION 2.16.7 SOVERSION 12)
     target_link_libraries(mbedtls ${libs} mbedx509)
     
-    add_library(crypto SHARED ${src_crypto})
+    add_library(crypto SHARED ${src_ssl})
     set_target_properties(crypto PROPERTIES VERSION 2.16.7 SOVERSION 3)
     target_link_libraries(crypto ${libs})
     
-    add_library(ssl SHARED ${src_crypto})
+    add_library(ssl SHARED ${src_ssl})
     set_target_properties(ssl PROPERTIES VERSION 2.16.7 SOVERSION 3)
     target_link_libraries(ssl ${libs})
 

@@ -6,6 +6,7 @@
 #include "pq/dilithium_params.h"
 #include "pq/dilithium_poly.h"
 #include "pq/dilithium_polyvec.h"
+#include "mbedtls/md.h"
 
 
 typedef struct mbedtls_dilithium_context
@@ -81,7 +82,8 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
 void challenge(poly *c, const unsigned char seed[SEEDBYTES_D]);
 
 //#define crypto_sign_keypair DILITHIUM_NAMESPACE(keypair)
-int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk);
+int crypto_sign_keypair_d(unsigned char *pk, unsigned char *sk,
+      int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
 
 //#define crypto_sign_signature DILITHIUM_NAMESPACE(signature)
 int crypto_sign_signature_d(unsigned char *sig, size_t *siglen,
