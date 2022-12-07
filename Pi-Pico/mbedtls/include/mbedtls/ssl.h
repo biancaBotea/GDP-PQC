@@ -317,6 +317,10 @@
 
 /* Experimental SPHINCS */
 #define MBEDTLS_SSL_SIG_SPHINCS				 4
+
+/* Experimental DILITHIUM */
+#define MBEDTLS_SSL_SIG_DILITHIUM			 2
+
 /*
  * Client Certificate Types
  * RFC 5246 section 7.4.4 plus RFC 4492 section 5.5
@@ -443,7 +447,8 @@ union mbedtls_ssl_premaster_secret
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
     unsigned char _pms_ecjpake[32];     /* Thread spec: SHA-256 output */
 #endif
-#if defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)     || \
+#if defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)        || \
+    defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)      || \
     defined(MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED)
 	unsigned char _pms_kyber[32];
 #endif
@@ -1085,6 +1090,8 @@ struct mbedtls_pq_performance
     uint32_t kyber_dec;
     uint32_t sphincs_sign;
     uint32_t sphincs_verify;
+    uint32_t dilithium_sign;
+    uint32_t dilithium_verify;
     uint32_t hashs;
 };
 
