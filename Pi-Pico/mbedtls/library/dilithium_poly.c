@@ -3,7 +3,7 @@
 #include "pq/dilithium_poly.h"
 #include "pq/dilithium_ntt.h"
 #include "pq/dilithium_reduce.h"
-#include "pq/dilithium_dilithium_rounding.h"
+#include "pq/dilithium_rounding.h"
 #include "pq/dilithium_symmetric.h"
 
 #ifdef DBENCH
@@ -160,7 +160,7 @@ void poly_pointwise_montgomery(poly *c, const poly *a, const poly *b) {
   DBENCH_START();
 
   for(i = 0; i < N_D; ++i)
-    c->coeffs[i] = montgomery_reduce((int64_t)a->coeffs[i] * b->coeffs[i]);
+    c->coeffs[i] = montgomery_reduce_D((int64_t)a->coeffs[i] * b->coeffs[i]);
 
   DBENCH_STOP(*tmul);
 }
