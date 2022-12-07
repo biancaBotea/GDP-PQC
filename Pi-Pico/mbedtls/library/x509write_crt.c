@@ -420,31 +420,31 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
 
 
 
-/*#if defined(MBEDTLS_DILITHIUM_C)
-    unsigned char sig[MBEDTLS_DILITHIUM_MAX_SIZE];
-#else
-    unsigned char sig[SIGNATURE_MAX_SIZE];
+#if defined(MBEDTLS_DILITHIUM_C)
+    //unsigned char sig[MBEDTLS_DILITHIUM_MAX_SIZE];
+
+    unsigned char sig_d[SIGNATURE_MAX_SIZE];
 #endif
-    size_t sub_len = 0, pub_len = 0, sig_and_oid_len = 0, sig_len;
+   /* size_t sub_len = 0, pub_len = 0, sig_and_oid_len = 0, sig_len;
     size_t len = 0;
     mbedtls_pk_type_t pk_alg;
-
+*/
     /*
      * Prepare data to be signed at the end of the target buffer
      */
-  //  c = buf + size; 
+    //c = buf + size; 
 
     /* Signature algorithm needed in TBS, and later for actual signature */
 
     /* There's no direct way of extracting a signature algorithm
      * (represented as an element of mbedtls_pk_type_t) from a PK instance. */
-    /*if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_RSA ) )
+    if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_RSA ) )
         pk_alg = MBEDTLS_PK_RSA;
     else if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_ECDSA ) )
-        pk_alg = MBEDTLS_PK_ECDSA; */
+        pk_alg = MBEDTLS_PK_ECDSA;
 #if defined(MBEDTLS_DILITHIUM_C)
-  else if (mbedtls_pk_can_do(ctx->issuer_key, MBEDTLS_PK_DILITHIUM))
-    pk_alg = MBEDTLS_PK_DILITHIUM;
+    else if (mbedtls_pk_can_do(ctx->issuer_key, MBEDTLS_PK_DILITHIUM))
+        pk_alg = MBEDTLS_PK_DILITHIUM;
 #endif /* MBEDTLS_DILITHIUM_C */
 
 
@@ -573,7 +573,7 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
     }
 
     if( ( ret = mbedtls_pk_sign( ctx->issuer_key, ctx->md_alg,
-                                 hash, 0, sig, &sig_len,
+                                 hash, 0, sig_d, &sig_len,
                                  f_rng, p_rng ) ) != 0 )
     {
         return( ret );
@@ -589,7 +589,7 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
      * into the CRT buffer. */
     c2 = buf + size;
     MBEDTLS_ASN1_CHK_ADD( sig_and_oid_len, mbedtls_x509_write_sig( &c2, c,
-                                        sig_oid, sig_oid_len, sig, sig_len ) );
+                                        sig_oid, sig_oid_len, sig_d, sig_len ) );
 
     /*
      * Memory layout after this step:

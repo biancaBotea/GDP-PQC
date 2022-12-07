@@ -260,6 +260,16 @@ static int x509_profile_check_key( const mbedtls_x509_crt_profile *profile,
 		return( -1 );
 	}
 #endif
+
+#if defined(MBEDTLS_DILITHIUM_C)
+	if (pk_alg == MBEDTLS_PK_DILITHIUM)
+	{
+		if (mbedtls_pk_get_bitlen(pk) >= 0)
+			return( 0 );
+		
+		return( -1 );
+	}
+#endif
 	
 	return( -1 );
 }
