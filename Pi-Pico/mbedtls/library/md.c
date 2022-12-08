@@ -89,6 +89,10 @@ static const int supported_digests[] = {
         MBEDTLS_MD_SHA224,
 #endif
 
+#if defined(MBEDTLS_SHAKE256_C)
+        MBEDTLS_MD_SHAKE256,
+#endif
+
 #if defined(MBEDTLS_SHA1_C)
         MBEDTLS_MD_SHA1,
 #endif
@@ -154,6 +158,10 @@ const mbedtls_md_info_t *mbedtls_md_info_from_string( const char *md_name )
         return mbedtls_md_info_from_type( MBEDTLS_MD_SHA384 );
     if( !strcmp( "SHA512", md_name ) )
         return mbedtls_md_info_from_type( MBEDTLS_MD_SHA512 );
+#endif
+#if defined(MBEDTLS_SHAKE256_C)
+    if( !strcmp( "SHAKE256", md_name ) )
+        return mbedtls_md_info_from_type( MBEDTLS_MD_SHAKE256 );
 #endif
     return( NULL );
 }

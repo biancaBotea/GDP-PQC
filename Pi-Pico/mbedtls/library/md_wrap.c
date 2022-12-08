@@ -618,7 +618,7 @@ const mbedtls_md_info_t mbedtls_shake256_info = {
     "SHAKE256",
     // 32, 
     // 64,
-    63, 
+    64, 
     136,
     sha256_starts_wrap,
     sha224_update_wrap,
