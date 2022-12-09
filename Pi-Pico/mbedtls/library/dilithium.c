@@ -62,17 +62,16 @@ size_t mbedtls_dilithium_get_len( const mbedtls_dilithium_context *ctx ){
 *                  or an error code on failure.
 */
 int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
-  //mbedtls_md_type_t md_alg,
-  const unsigned char *hash, size_t hlen,
-  unsigned char *sig, size_t *slen,
-  int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
+      const unsigned char *hash, size_t hlen,
+      unsigned char *sig, size_t *slen,
+      int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
 {
   int ret = 0;
-  unsigned char skey[2 * N_D];
+  unsigned char skey[CRYPTO_SECRETKEYBYTES_D];
   unsigned char optrand[N_D];
   unsigned long long ull_slen = 0;
 
-  mbedtls_mpi_write_binary(&ctx->sk, skey + 0 * N_D, N_D);
+  mbedtls_mpi_write_binary(&ctx->sk, skey, N_D);
   mbedtls_mpi_write_binary(&ctx->pk, skey + 1 * N_D, N_D);
   // mbedtls_mpi_write_binary(&ctx->key.pk_seed, sk + 2 * SPX_N, SPX_N);
   // mbedtls_mpi_write_binary(&ctx->key.root, sk + 3 * SPX_N, SPX_N);
@@ -90,7 +89,7 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
   if ((ret = f_rng(p_rng, optrand, N_D)) != 0)
     return ret;
 
-  ret = crypto_sign_d(sig, &ull_slen, hash, hlen, skey);
+  ret = crypto_sign_d(sig, &ull_slen, hash, hlen, skey, f_rng, p_rng);
   *slen = (size_t)ull_slen;
 
   return (0);
@@ -117,13 +116,12 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
   const unsigned char *hash, size_t hlen,
   const unsigned char *sig, size_t slen)
 {
-  unsigned char pkey[2 * N_D];
+  unsigned char pkey[CRYPTO_PUBLICKEYBYTES_D];
 
-  mbedtls_mpi_write_binary(&ctx->pk, pkey + 1 * N_D, N_D);
-
-  //mbedtls_mpi_write_file("Root:    ", &ctx->key.root, 16, NULL);
-  //mbedtls_mpi_write_file("PK_D_Seed: ", &ctx->key.pk_seed, 16, NULL);
-
+  mbedtls_mpi_write_binary(&ctx->pk, pkey, N_D);
+  
+  // mbedtls_mpi_write_file("PK: ", &ctx->pk, 16, NULL);
+  
   // sphincs_md_info_t *md;
   // if (ctx->key.md_alg == MBEDTLS_MD_SHA256)
   // {
@@ -211,7 +209,9 @@ int crypto_sign_signature_d(unsigned char *sig,
                           size_t *siglen,
                           const unsigned char *m,
                           size_t mlen,
-                          const unsigned char *sk)
+                          const unsigned char *sk,
+                          int(*f_rng)(void *, unsigned char *, size_t), 
+                          void *p_rng)
 {
   unsigned int n;
   unsigned char seedbuf[3*SEEDBYTES_D + 2*CRHBYTES];
@@ -237,7 +237,7 @@ int crypto_sign_signature_d(unsigned char *sig,
   shake256_squeeze_d(mu, CRHBYTES, &state);
 
 #ifdef DILITHIUM_RANDOMIZED_SIGNING
-  randombytes(rhoprime, CRHBYTES);
+  f_rng(p_rng, rhoprime, CRHBYTES);
 #else
   shake256_d(rhoprime, CRHBYTES, key, SEEDBYTES_D + CRHBYTES);
 #endif
@@ -327,13 +327,15 @@ int crypto_sign_d(unsigned char *sm,
                 size_t *smlen,
                 const unsigned char *m,
                 size_t mlen,
-                const unsigned char *sk)
+                const unsigned char *sk,
+	              int(*f_rng)(void *, unsigned char *, size_t), 
+                void *p_rng)
 {
   size_t i;
 
   for(i = 0; i < mlen; ++i)
     sm[CRYPTO_BYTES_D + mlen - 1 - i] = m[mlen - 1 - i];
-  crypto_sign_signature_d(sm, smlen, sm + CRYPTO_BYTES_D, mlen, sk);
+  crypto_sign_signature_d(sm, smlen, sm + CRYPTO_BYTES_D, mlen, sk, f_rng, p_rng);
   *smlen += mlen;
   return 0;
 }
