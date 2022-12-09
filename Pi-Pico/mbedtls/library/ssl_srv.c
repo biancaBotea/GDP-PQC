@@ -3193,6 +3193,9 @@ static int ssl_prepare_server_key_exchange( mbedtls_ssl_context *ssl,
 #if defined(MBEDTLS_SSL_SPHINCS)
 				ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS ||
 #endif /* MBEDTLS_SSL_SPHINCS */
+#if defined(MBEDTLS_SSL_DILITHIUM)
+				ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM ||
+#endif /* MBEDTLS_SSL_DILITHIUM */
 				ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA)
 		{
             /* B: Default hash SHA1 */
@@ -3326,6 +3329,7 @@ static int ssl_prepare_server_key_exchange( mbedtls_ssl_context *ssl,
 #if defined(MBEDTLS_PEFORMANCE)
         ssl->performance->sphincs_sign = cryptotime;
         ssl->performance->hashs = hash_calls;
+        ssl->performance->dilithium_sign = cryptotime;
 #endif
     }
 #endif /* MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED */
@@ -3861,13 +3865,17 @@ static int ssl_parse_client_key_exchange( mbedtls_ssl_context *ssl )
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||                   \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED) ||                      \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED) ||					   \
-	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED)
+	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED) ||                 \
+    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED)
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_RSA ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_RSA ||
 #if defined(MBEDTLS_SSL_SPHINCS)
 		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS ||
 #endif /* MBEDTLS_SSL_SPHINCS */
+#if defined(MBEDTLS_SSL_DILITHIUM)
+		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM ||
+#endif /* MBEDTLS_SSL_DILITHIUM */
 		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA )
     {
         CRYPTOTIME_START
@@ -3901,11 +3909,14 @@ static int ssl_parse_client_key_exchange( mbedtls_ssl_context *ssl )
           MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED ||
-		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED */
+		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED ||
+          MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED)	||	\
-    defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)
+    defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED) ||	\
+    defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)
 		if (ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS ||
+            ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM ||
 			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA)
 		{
 		    CRYPTOTIME_START
@@ -3927,6 +3938,8 @@ static int ssl_parse_client_key_exchange( mbedtls_ssl_context *ssl )
 				return(MBEDTLS_ERR_SSL_BAD_HS_CLIENT_KEY_EXCHANGE_CS);
 			}
 			CRYPTOTIME_STOP
+        
+    
 #if defined(MBEDTLS_PEFORMANCE)
 			ssl->performance->kyber_dec = cryptotime;
 #endif
@@ -3935,7 +3948,10 @@ static int ssl_parse_client_key_exchange( mbedtls_ssl_context *ssl )
 		}
 		else
 #endif /* MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED	||
-	      MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED */
+	      MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED ||
+	      MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED */
+ 
+          
 #if defined(MBEDTLS_KEY_EXCHANGE_PSK_ENABLED)
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_PSK )
     {
@@ -4111,7 +4127,8 @@ static int ssl_parse_client_key_exchange( mbedtls_ssl_context *ssl )
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)&& \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)&& \
-    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)
+    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)&& \
+    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)
 static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
 {
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =

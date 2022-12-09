@@ -4,7 +4,7 @@
 #include MBEDTLS_CONFIG_FILE
 #endif
 
-#if defined(MBEDTLS_shake256_C)
+#if defined(MBEDTLS_SHAKE256_C)
 
 #include "mbedtls/shake256.h"
 #include "mbedtls/platform_util.h"
@@ -78,7 +78,7 @@ void mbedtls_shake256_free( mbedtls_shake256_context *ctx )
 }
 
 /*
- * SHA-256 context setup
+ * SHAKE-256 context setup
  */
 int mbedtls_shake256_starts_ret( mbedtls_shake256_context *ctx)
 {
@@ -90,7 +90,7 @@ int mbedtls_shake256_starts_ret( mbedtls_shake256_context *ctx)
 }
 
 /*
- * SHA-256 process buffer
+ * SHAKE-256 process buffer
  */
 int mbedtls_shake256_update_ret( mbedtls_shake256_context *ctx,
                                const unsigned char *input,
@@ -103,7 +103,7 @@ int mbedtls_shake256_update_ret( mbedtls_shake256_context *ctx,
     if( ilen == 0 )
         return( 0 );
 
-    *(& ctx - > buffer + ctx - > buff_len ) = ( unsigned char *) malloc ( ilen ) ;
+    *(& ctx -> buffer + ctx -> buff_len ) = ( unsigned char *) malloc ( ilen ) ;
     memcpy( (ctx->buffer + ctx->buff_len), input, ilen);
     ctx->buff_len += ilen;
 
@@ -126,16 +126,14 @@ int mbedtls_shake256_finish_ret( mbedtls_shake256_context *ctx,
 }
 
 /*
- * output = SHA-512( input buffer )
+ * output = SHAKE-512( input buffer )
  */
 int mbedtls_shake256_ret( const unsigned char *input,
                     size_t ilen,
                     unsigned char output[64])
 {
-    if( ilen == 0 )
-        return( 0 );
 
-    shake256_dilithium(output, 64, input, (unsigned long long) ctx->ilen);
+    shake256_dilithium(output, 64, input, (unsigned long long) ilen);
     return( 0 );
 }
 #endif

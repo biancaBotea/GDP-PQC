@@ -206,7 +206,7 @@
 #include "mbedtls/ripemd160.h"
 #endif
 
-#if defined(MBEDTLS_RSA_C)
+#if defined(MBEDTLS_RSA_C)MBEDTLS_ERR_PEM_BAD_INPUT_DATA
 #include "mbedtls/rsa.h"
 #endif
 
@@ -216,6 +216,10 @@
 
 #if defined(MBEDTLS_SHA256_C)
 #include "mbedtls/sha256.h"
+#endif
+
+#if defined(MBEDTLS_SHAKE256_C)
+#include "mbedtls/shake256.h"
 #endif
 
 #if defined(MBEDTLS_SHA512_C)

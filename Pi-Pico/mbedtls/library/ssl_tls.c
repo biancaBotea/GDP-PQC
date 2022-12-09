@@ -10,6 +10,7 @@
  *  **********
  *  Apache License 2.0:
  *
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -72,12 +73,14 @@
 #include "mbedtls/ssl.h"
 #include "mbedtls/ssl_internal.h"
 #include "mbedtls/platform_util.h"
+//#include "mbedtls/shake256.h"
 
 #include <string.h>
 
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
 #include "mbedtls/oid.h"
 #endif
+
 
 /* Performance init */
 #include "mbedtls/timing.h"
@@ -592,6 +595,17 @@ static int tls_prf_sha256( const unsigned char *secret, size_t slen,
                              label, random, rlen, dstbuf, dlen ) );
 }
 #endif /* MBEDTLS_SHA256_C */
+/*
+#if defined(MBEDTLS_SHAKE256_C)
+static int tls_prf_shake256( const unsigned char *secret, size_t slen,
+                           const char *label,
+                           const unsigned char *random, size_t rlen,
+                           unsigned char *dstbuf, size_t dlen )
+{
+    return( tls_prf_generic( MBEDTLS_MD_SHAKE256, secret, slen,
+                             label, random, rlen, dstbuf, dlen ) );
+}
+#endif  MBEDTLS_SHAKE256_C */
 
 #if defined(MBEDTLS_SHA512_C)
 static int tls_prf_sha384( const unsigned char *secret, size_t slen,
@@ -628,6 +642,12 @@ static void ssl_update_checksum_sha256( mbedtls_ssl_context *, const unsigned ch
 static void ssl_calc_verify_tls_sha256( mbedtls_ssl_context *,unsigned char * );
 static void ssl_calc_finished_tls_sha256( mbedtls_ssl_context *,unsigned char *, int );
 #endif
+/*
+#if defined(MBEDTLS_SHAKE256_C)
+static void ssl_update_checksum_shake256( mbedtls_ssl_context *, const unsigned char *, size_t );
+static void ssl_calc_verify_tls_shake256( mbedtls_ssl_context *,unsigned char * );
+static void ssl_calc_finished_tls_shake256( mbedtls_ssl_context *,unsigned char *, int );
+#endif */
 
 #if defined(MBEDTLS_SHA512_C)
 static void ssl_update_checksum_sha384( mbedtls_ssl_context *, const unsigned char *, size_t );
@@ -713,6 +733,15 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
     }
     else
 #endif
+/*#if defined(MBEDTLS_SHAKE256_C)
+    if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_3 )
+    {
+        handshake->tls_prf = tls_prf_shake256;
+        handshake->calc_verify = ssl_calc_verify_tls_shake256;
+        handshake->calc_finished = ssl_calc_finished_tls_shake256;
+    }
+    else
+#endif */
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
@@ -1242,6 +1271,27 @@ void ssl_calc_verify_tls_sha256( mbedtls_ssl_context *ssl, unsigned char hash[32
     return;
 }
 #endif /* MBEDTLS_SHA256_C */
+
+/*#if defined(MBEDTLS_SHAKE256_C)
+void ssl_calc_verify_tls_shake256( mbedtls_ssl_context *ssl, unsigned char hash[32] )
+{
+    mbedtls_shake256_context shake256;
+
+    mbedtls_shake256_init( &shake256 );
+
+    MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> calc verify shake256" ) );
+
+   // mbedtls_shake256_clone( &shake256, &ssl->handshake->fin_shake256 );
+    mbedtls_shake256_finish_ret( &shake256, hash );
+
+    MBEDTLS_SSL_DEBUG_BUF( 3, "calculated verify result", hash, 32 );
+    MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc verify" ) );
+
+    mbedtls_shake256_free( &shake256 );
+
+    return;
+}
+#endif  MBEDTLS_SHAKE256_C */
 
 #if defined(MBEDTLS_SHA512_C)
 void ssl_calc_verify_tls_sha384( mbedtls_ssl_context *ssl, unsigned char hash[48] )
@@ -5459,7 +5509,8 @@ int mbedtls_ssl_send_alert_message( mbedtls_ssl_context *ssl,
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED)    && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)  && \
-    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)
+    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)  && \
+    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)
 /* No certificate support -> dummy functions */
 int mbedtls_ssl_write_certificate( mbedtls_ssl_context *ssl )
 {
@@ -5589,6 +5640,15 @@ int mbedtls_ssl_write_certificate( mbedtls_ssl_context *ssl )
         }
 #endif /* MBEDTLS_SSL_SPHINCS */
 
+#if !defined(MBEDTLS_SSL_DILITHIUM)
+        if( n > MBEDTLS_SSL_OUT_CONTENT_LEN - 3 - i )
+        {
+            MBEDTLS_SSL_DEBUG_MSG( 1, ( "certificate too large, %d > %d",
+                           i + 3 + n, MBEDTLS_SSL_OUT_CONTENT_LEN ) );
+            return( MBEDTLS_ERR_SSL_CERTIFICATE_TOO_LARGE );
+        }
+#endif /* MBEDTLS_SSL_DILITHIUM */
+
         ssl->out_msg[i    ] = (unsigned char)( n >> 16 );
         ssl->out_msg[i + 1] = (unsigned char)( n >>  8 );
         ssl->out_msg[i + 2] = (unsigned char)( n       );
@@ -5704,6 +5764,11 @@ static int ssl_parse_certificate_chain( mbedtls_ssl_context *ssl )
      * Same message structure as in mbedtls_ssl_write_certificate()
      */
 #if defined(MBEDTLS_SSL_SPHINCS)
+    n = (ssl->in_msg[i] << 16) | ( ssl->in_msg[i+1] << 8 ) | ssl->in_msg[i+2];
+#else
+	n = (ssl->in_msg[i + 1] << 8) | ssl->in_msg[i + 2];
+#endif
+#if defined(MBEDTLS_SSL_DILITHIUM)
     n = (ssl->in_msg[i] << 16) | ( ssl->in_msg[i+1] << 8 ) | ssl->in_msg[i+2];
 #else
 	n = (ssl->in_msg[i + 1] << 8) | ssl->in_msg[i + 2];
@@ -6186,6 +6251,11 @@ void mbedtls_ssl_optimize_checksum( mbedtls_ssl_context *ssl,
         ssl->handshake->update_checksum = ssl_update_checksum_sha256;
     else
 #endif
+/*#if defined(MBEDTLS_SHAKE256_C)
+    if( ciphersuite_info->mac != MBEDTLS_MD_SHA384 )
+        ssl->handshake->update_checksum = ssl_update_checksum_shake256;
+    else
+#endif */
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
@@ -6204,6 +6274,9 @@ void mbedtls_ssl_reset_checksum( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_SHA256_C)
     mbedtls_sha256_starts_ret( &ssl->handshake->fin_sha256, 0 );
 #endif
+/*#if defined(MBEDTLS_SHAKE256_C)
+    mbedtls_shake256_starts_ret( &ssl->handshake->fin_shake256);
+#endif */
 #if defined(MBEDTLS_SHA512_C)
     mbedtls_sha512_starts_ret( &ssl->handshake->fin_sha512, 1 );
 #endif
@@ -6449,6 +6522,46 @@ static void ssl_calc_finished_tls_sha256(
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc  finished" ) );
 }
 #endif /* MBEDTLS_SHA256_C */
+/*
+#if defined(MBEDTLS_SHAKE256_C)
+static void ssl_calc_finished_tls_shake256(
+                mbedtls_ssl_context *ssl, unsigned char *buf, int from )
+{
+    int len = 12;
+    const char *sender;
+    mbedtls_shake256_context shake256;
+    unsigned char padbuf[32];
+
+    mbedtls_ssl_session *session = ssl->session_negotiate;
+    if( !session )
+        session = ssl->session;
+
+    mbedtls_shake256_init( &shake256 );
+
+    MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> calc  finished tls shake256" ) );
+
+   // mbedtls_shake256_clone( &shake256, &ssl->handshake->fin_shake256 );
+
+   
+
+    sender = ( from == MBEDTLS_SSL_IS_CLIENT )
+             ? "client finished"
+             : "server finished";
+
+    mbedtls_shake256_finish_ret( &shake256, padbuf );
+
+    ssl->handshake->tls_prf( session->master, 48, sender,
+                             padbuf, 32, buf, len );
+
+    MBEDTLS_SSL_DEBUG_BUF( 3, "calc finished result", buf, len );
+
+    mbedtls_shake256_free( &shake256 );
+
+    mbedtls_platform_zeroize(  padbuf, sizeof(  padbuf ) );
+
+    MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc  finished" ) );
+}
+#endif  MBEDTLS_SHAKE256_C */
 
 #if defined(MBEDTLS_SHA512_C)
 static void ssl_calc_finished_tls_sha384(
@@ -6810,6 +6923,10 @@ static void ssl_handshake_params_init( mbedtls_ssl_handshake_params *handshake )
     mbedtls_sha256_init(   &handshake->fin_sha256    );
     mbedtls_sha256_starts_ret( &handshake->fin_sha256, 0 );
 #endif
+/*#if defined(MBEDTLS_SHAKE256_C)
+    mbedtls_shake256_init(   &handshake->fin_shake256    );
+    mbedtls_shake256_starts_ret( &handshake->fin_shake256);
+#endif */
 #if defined(MBEDTLS_SHA512_C)
     mbedtls_sha512_init(   &handshake->fin_sha512    );
     mbedtls_sha512_starts_ret( &handshake->fin_sha512, 1 );
@@ -9245,9 +9362,9 @@ static int ssl_preset_default_hashes[] = {
 #if defined(MBEDTLS_SHA1_C) && defined(MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_KEY_EXCHANGE)
     MBEDTLS_MD_SHA1,
 #endif
-#if defined(MBEDTLS_SHAKE256_C)
+/*#if defined(MBEDTLS_SHAKE256_C)
 	MBEDTLS_MD_SHAKE256,
-#endif
+#endif */
     MBEDTLS_MD_NONE
 };
 #endif
@@ -9478,7 +9595,7 @@ void mbedtls_ssl_config_free( mbedtls_ssl_config *conf )
 }
 
 #if defined(MBEDTLS_PK_C) && \
-    ( defined(MBEDTLS_RSA_C) || defined(MBEDTLS_ECDSA_C) || defined(MBEDTLS_SPHINCS_C) )
+    ( defined(MBEDTLS_RSA_C) || defined(MBEDTLS_ECDSA_C) || defined(MBEDTLS_SPHINCS_C) || defined(MBEDTLS_DILITHIUM_C))
 /*
  * Convert between MBEDTLS_PK_XXX and SSL_SIG_XXX
  */
@@ -9496,6 +9613,10 @@ unsigned char mbedtls_ssl_sig_from_pk( mbedtls_pk_context *pk )
 	if (mbedtls_pk_can_do(pk, MBEDTLS_PK_SPHINCS))
 		return(MBEDTLS_SSL_SIG_SPHINCS);
 #endif /* MBEDTLS_SPHINCS_C */
+#if defined(MBEDTLS_DILITHIUM_C)
+	if (mbedtls_pk_can_do(pk, MBEDTLS_PK_DILITHIUM))
+		return(MBEDTLS_SSL_SIG_DILITHIUM);
+#endif /* MBEDTLS_DILITHIUM_C */
 	return( MBEDTLS_SSL_SIG_ANON );
 }
 
@@ -9505,12 +9626,17 @@ unsigned char mbedtls_ssl_sig_from_pk_alg( mbedtls_pk_type_t type )
         case MBEDTLS_PK_RSA:
             return( MBEDTLS_SSL_SIG_RSA );
         case MBEDTLS_PK_ECDSA:
+            return( MBEDTLS_SSL_SIG_ECDSA);
         case MBEDTLS_PK_ECKEY:
             return( MBEDTLS_SSL_SIG_ECDSA );
 #if defined(MBEDTLS_SPHINCS_C)
 		case MBEDTLS_PK_SPHINCS:
 			return( MBEDTLS_SSL_SIG_SPHINCS );
 #endif /* MBEDTLS_SPHINCS_C */
+#if defined(MBEDTLS_DILITHIUM_C)
+		case MBEDTLS_PK_DILITHIUM:
+			return( MBEDTLS_SSL_SIG_DILITHIUM );
+#endif /* MBEDTLS_DILITHIUM_C */
 		default:
             return( MBEDTLS_SSL_SIG_ANON );
     }
@@ -9524,6 +9650,10 @@ mbedtls_pk_type_t mbedtls_ssl_pk_alg_from_sig( unsigned char sig )
         case MBEDTLS_SSL_SIG_RSA:
             return( MBEDTLS_PK_RSA );
 #endif
+#if defined(MBEDTLS_DILITHIUM_C)
+		case MBEDTLS_SSL_SIG_DILITHIUM:
+			return(MBEDTLS_PK_DILITHIUM);
+#endif /* MBEDTLS_DILITHIUM_C */
 #if defined(MBEDTLS_ECDSA_C)
         case MBEDTLS_SSL_SIG_ECDSA:
             return( MBEDTLS_PK_ECDSA );
@@ -9532,6 +9662,7 @@ mbedtls_pk_type_t mbedtls_ssl_pk_alg_from_sig( unsigned char sig )
 		case MBEDTLS_SSL_SIG_SPHINCS:
 			return(MBEDTLS_PK_SPHINCS);
 #endif /* MBEDTLS_SPHINCS_C */
+
 		default:
             return( MBEDTLS_PK_NONE );
     }
@@ -9554,6 +9685,10 @@ mbedtls_md_type_t mbedtls_ssl_sig_hash_set_find( mbedtls_ssl_sig_hash_set_t *set
 #if defined(MBEDTLS_SSL_SPHINCS)
 		case MBEDTLS_PK_SPHINCS:
 			return(set->sphincs);
+#endif
+#if defined(MBEDTLS_SSL_DILITHIUM)
+		case MBEDTLS_PK_DILITHIUM:
+			return(set->dilithium);
 #endif
 		default:
             return( MBEDTLS_MD_NONE );
@@ -9582,6 +9717,12 @@ void mbedtls_ssl_sig_hash_set_add( mbedtls_ssl_sig_hash_set_t *set,
 				set->sphincs = md_alg;
 			break;
 #endif
+#if defined(MBEDTLS_SSL_DILITHIUM)
+		case MBEDTLS_PK_DILITHIUM:
+			if (set->dilithium == MBEDTLS_MD_NONE)
+				set->dilithium = md_alg;
+			break;
+#endif
         default:
             break;
     }
@@ -9593,8 +9734,11 @@ void mbedtls_ssl_sig_hash_set_const_hash( mbedtls_ssl_sig_hash_set_t *set,
 {
     set->rsa   = md_alg;
     set->ecdsa = md_alg;
-#if defined(MBEDTLS_SSL_SPINCS)
+#if defined(MBEDTLS_SSL_SPHINCS)
     set->sphincs = md_alg;
+#endif
+#if defined(MBEDTLS_SSL_DILITHIUM)
+    set->dilithium = md_alg;
 #endif
 }
 
@@ -9628,10 +9772,10 @@ mbedtls_md_type_t mbedtls_ssl_md_alg_from_hash( unsigned char hash )
         case MBEDTLS_SSL_HASH_SHA512:
             return( MBEDTLS_MD_SHA512 );
 #endif
-#if defined(MBEDTLS_SHAKE256_C)
+/*#if defined(MBEDTLS_SHAKE256_C)
 		case MBEDTLS_SSL_HASH_SHAKE256:
 			return(MBEDTLS_MD_SHAKE256);
-#endif
+#endif*/
         default:
             return( MBEDTLS_MD_NONE );
     }
@@ -9664,10 +9808,10 @@ unsigned char mbedtls_ssl_hash_from_md_alg( int md )
         case MBEDTLS_MD_SHA512:
             return( MBEDTLS_SSL_HASH_SHA512 );
 #endif
-#if defined(MBEDTLS_SHAKE256_C)
+/*#if defined(MBEDTLS_SHAKE256_C)
 		case MBEDTLS_MD_SHAKE256:
 			return( MBEDTLS_SSL_HASH_SHAKE256 );
-#endif
+#endif*/
         default:
             return( MBEDTLS_SSL_HASH_NONE );
     }
@@ -9753,6 +9897,9 @@ int mbedtls_ssl_check_cert_usage( const mbedtls_x509_crt *cert,
             case MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS:
 				usage = MBEDTLS_X509_KU_DIGITAL_SIGNATURE;
                 break;
+            case MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM:
+				usage = MBEDTLS_X509_KU_DIGITAL_SIGNATURE;
+                break;
 
             case MBEDTLS_KEY_EXCHANGE_ECDH_RSA:
             case MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA:
@@ -9767,6 +9914,7 @@ int mbedtls_ssl_check_cert_usage( const mbedtls_x509_crt *cert,
             case MBEDTLS_KEY_EXCHANGE_ECJPAKE:
 			case MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA:
 			case MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS:
+			case MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM:
                 usage = 0;
         }
     }

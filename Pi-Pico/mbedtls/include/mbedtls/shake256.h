@@ -20,8 +20,8 @@ typedef struct mbedtls_shake256_context
 {
 	
 	keccak_state  state;				/*!< The intermediate digest state. */
-	unsigned char buffer[136];  			/*!< The data block being processed. */
-	uint32_t buffer_len[2];          	/*!< The number of Bytes processed. */  
+	unsigned char *buffer;  			/*!< The data block being processed. */
+	uint32_t buff_len;          	/*!< The number of Bytes processed. */  
 
 }mbedtls_shake256_context;
 
