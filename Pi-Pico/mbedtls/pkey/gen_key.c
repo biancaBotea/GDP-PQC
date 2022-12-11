@@ -445,8 +445,9 @@ int main( int argc, char *argv[] )
 #if defined(MBEDTLS_DILITHIUM_C)
 	if (opt.type == MBEDTLS_PK_DILITHIUM)
 	{
-		ret = mbedtls_dilithium_genkey(opt.md_alg, mbedtls_pk_dilithium(key),
-									 mbedtls_ctr_drbg_random, &ctr_drbg);
+		ret = mbedtls_dilithium_genkey(mbedtls_pk_dilithium(key)->pk, 
+                mbedtls_pk_dilithium(key)->sk, buf);
+        mbedtls_printf( " you re here\n" );
 		if (ret != 0)
 		{
 			mbedtls_printf(" failed\n  !  mbedtls_dilithium_genkey returned -0x%04x", -ret);

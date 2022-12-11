@@ -6,7 +6,7 @@
 
 #if defined(MBEDTLS_ASN1_PARSE_C)
 
-#include "mbedtls/asn1.h"
+
 #include "mbedtls/platform_util.h"
 
 #include <string.h>
@@ -48,3 +48,4 @@ int prepare_dilithium_key_formtat ( unsigned char *pk , unsigned char *sk ,
 	//Reutrn num of bytes in buffer
 	return final_buf_bytes_written;
 }
+#endif

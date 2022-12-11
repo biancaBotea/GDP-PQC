@@ -7,6 +7,7 @@
 #include "pq/dilithium_poly.h"
 #include "pq/dilithium_polyvec.h"
 #include "mbedtls/md.h"
+#include "mbedtls/bignum.h"
 
 
 typedef struct mbedtls_dilithium_context
@@ -15,6 +16,16 @@ typedef struct mbedtls_dilithium_context
 	unsigned char sk[CRYPTO_SECRETKEYBYTES_D];
 }mbedtls_dilithium_context;
 
+#if defined(MBEDTLS_ASN1_PARSE_C)
+
+int mbedtls_dilithium_genkey ( unsigned char *pk , unsigned char *sk , 
+	unsigned char *final_buf);
+
+#endif /* MBEDTLS_ASN1_PARSE_C */
+
+/*int mbedtls_dilithium_genkey(mbedtls_dilithium_context *ctx,
+	int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
+*/
 
 /*
 * Initialize context
