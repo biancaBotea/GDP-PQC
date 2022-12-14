@@ -178,11 +178,11 @@ mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const
      * 1. Start the connection
      */
     if (DEBUG_LEVEL >= 1){
-        mbedtls_printf( "  . Connecting to tcp/%s/%s...", SERVER_NAME, SERVER_PORT );
+        mbedtls_printf( "  . Connecting to tcp/%s/%s...", server_ip, SERVER_PORT );
         fflush( stdout );
     }
 
-    if( ( ret = mbedtls_net_connect( &server_fd, SERVER_NAME,
+    if( ( ret = mbedtls_net_connect( &server_fd, server_ip,
                                          SERVER_PORT, MBEDTLS_NET_PROTO_TCP ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );

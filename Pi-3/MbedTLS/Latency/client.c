@@ -42,13 +42,12 @@
 #include "../ssl_client1.h"
 #include "mbedtls/ssl_ciphersuites.h"
 #include "../new_certs.h"
-#include "mbedtls/certs.h"
 #include "mbedtls/ssl.h"
 
-#define TEST_SIZE	50
+#define TEST_SIZE	2
 
 /* application args */
-const char *server_addr = "127.0.0.1";
+const char *server_addr = "192.168.137.206";
 const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256", 
 									"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256",
 									"MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256",
