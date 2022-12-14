@@ -107,7 +107,10 @@ int main( void )
 
 #define HTTP_RESPONSE "Test Response"
 
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
+
+#define PRINT_AT_DEBUG_LEVEL(level, msg) \
+    if (DEBUG_LEVEL >= level) mbedtls_printf(msg)
 
 int stop = 0;
 
@@ -121,7 +124,7 @@ static void my_debug( void *ctx, int level,
     fflush(  (FILE *) ctx  );
 }
 
-int run_server(const char *cert, const char *key, const int cipher_suite, char *MsgToClient)
+mbedtls_pq_performance run_server(const char *cert, const char *key, const int cipher_suite, char *MsgToClient)
 {
     int ret, len;
     mbedtls_net_context listen_fd, client_fd;
@@ -144,7 +147,9 @@ int run_server(const char *cert, const char *key, const int cipher_suite, char *
     mbedtls_ssl_config_init( &conf );
 #if defined(MBEDTLS_PEFORMANCE)
     mbedtls_pq_performance performance;
+    mbedtls_pq_performance avg_performance;
 	ssl.performance = &performance;
+    int handshake_count = 0;
 #endif
 #if defined(MBEDTLS_SSL_CACHE_C)
     mbedtls_ssl_cache_init( &cache );
@@ -161,7 +166,7 @@ int run_server(const char *cert, const char *key, const int cipher_suite, char *
     /*
      * 1. Load the certificates and private RSA key
      */
-    mbedtls_printf( "\n  . Loading the server cert. and key..." );
+    PRINT_AT_DEBUG_LEVEL( 1, "\n  . Loading the server cert. and key..." );
     fflush( stdout );
 
     /*
@@ -190,12 +195,12 @@ int run_server(const char *cert, const char *key, const int cipher_suite, char *
         goto exit;
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL( 1, " ok\n" );
 
     /*
      * 2. Setup the listening TCP socket
      */
-    mbedtls_printf( "  . Bind on https://localhost:4433/ ..." );
+    PRINT_AT_DEBUG_LEVEL( 1, "  . Bind on https://localhost:4433/ ..." );
     fflush( stdout );
 
     if( ( ret = mbedtls_net_bind( &listen_fd, NULL, "4433", MBEDTLS_NET_PROTO_TCP ) ) != 0 )
@@ -204,12 +209,12 @@ int run_server(const char *cert, const char *key, const int cipher_suite, char *
         goto exit;
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL( 1, " ok\n" );
 
     /*
      * 3. Seed the RNG
      */
-    mbedtls_printf( "  . Seeding the random number generator..." );
+    PRINT_AT_DEBUG_LEVEL( 1, "  . Seeding the random number generator..." );
     fflush( stdout );
 
     if( ( ret = mbedtls_ctr_drbg_seed( &ctr_drbg, mbedtls_entropy_func, &entropy,
@@ -220,12 +225,12 @@ int run_server(const char *cert, const char *key, const int cipher_suite, char *
         goto exit;
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL( 1, " ok\n" );
 
     /*
      * 4. Setup stuff
      */
-    mbedtls_printf( "  . Setting up the SSL data...." );
+    PRINT_AT_DEBUG_LEVEL( 1, "  . Setting up the SSL data...." );
     fflush( stdout );
 
     if( ( ret = mbedtls_ssl_config_defaults( &conf,
@@ -261,7 +266,7 @@ int run_server(const char *cert, const char *key, const int cipher_suite, char *
         goto exit;
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL( 1, " ok\n" );
 
 reset:
 #ifdef MBEDTLS_ERROR_C
@@ -280,7 +285,7 @@ reset:
     /*
      * 3. Wait until a client connects
      */
-    mbedtls_printf( "  . Waiting for a remote connection ..." );
+    PRINT_AT_DEBUG_LEVEL( 1, "  . Waiting for a remote connection ..." );
     fflush( stdout );
 
     if( ( ret = mbedtls_net_accept( &listen_fd, &client_fd,
@@ -292,12 +297,12 @@ reset:
 
     mbedtls_ssl_set_bio( &ssl, &client_fd, mbedtls_net_send, mbedtls_net_recv, NULL );
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL( 1, " ok\n" );
 
     /*
      * 5. Handshake
      */
-    mbedtls_printf( "  . Performing the SSL/TLS handshake..." );
+    PRINT_AT_DEBUG_LEVEL( 1, "  . Performing the SSL/TLS handshake..." );
     fflush( stdout );
 	struct mbedtls_timing_hr_time handshaketimer;
 	(void)mbedtls_timing_get_timer(&handshaketimer, 1);
@@ -309,36 +314,51 @@ reset:
             goto reset;
         }
     }
-    mbedtls_printf(" ok\n");
-    mbedtls_printf( "  . Cipher Suite Used: %s\n", mbedtls_ssl_get_ciphersuite( &ssl ) );
+    PRINT_AT_DEBUG_LEVEL( 1, " ok\n");
+
+    if (DEBUG_LEVEL >= 1) {
+        mbedtls_printf( "  . Cipher Suite Used: %s\n", mbedtls_ssl_get_ciphersuite( &ssl ) );
+    }
 
 #if defined(MBEDTLS_PEFORMANCE)
 	ssl.performance->handshake = mbedtls_timing_get_timer(&handshaketimer, 0);
+    handshake_count++;
 	
-	mbedtls_printf( "  . Performance Data: %i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i\n",
-        performance.handshake,
-        performance.sphincs_sign,
-        performance.kyber_dec,
-        performance.kyber_genkey,
-        performance.parse_client_hello,
-        performance.write_server_hello,
-        performance.write_server_certificate,
-        performance.write_server_key_exchange,
-        performance.write_server_hello_done,
-        performance.parse_client_key_exchange,
-        performance.parse_client_change_cipher,
-        performance.parse_client_finish,
-        performance.write_server_change_cipher,
-        performance.write_server_finish,
-        performance.hashs
-	);
+    if (DEBUG_LEVEL >= 1) {
+        mbedtls_printf( "  . Performance Data: %i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i\n",
+            performance.handshake,
+            performance.sphincs_sign,
+            performance.kyber_dec,
+            performance.kyber_genkey,
+            performance.parse_client_hello,
+            performance.write_server_hello,
+            performance.write_server_certificate,
+            performance.write_server_key_exchange,
+            performance.write_server_hello_done,
+            performance.parse_client_key_exchange,
+            performance.parse_client_change_cipher,
+            performance.parse_client_finish,
+            performance.write_server_change_cipher,
+            performance.write_server_finish,
+            performance.hashs
+        );
+    }
+
+    if (handshake_count == 1) {
+				avg_performance = performance;
+			} else {
+				avg_performance.handshake = ((avg_performance.handshake * (handshake_count - 1)) + performance.handshake) / handshake_count;
+				avg_performance.sphincs_sign = ((avg_performance.sphincs_sign * (handshake_count - 1)) + performance.sphincs_sign) / handshake_count;
+				avg_performance.kyber_dec = ((avg_performance.kyber_dec * (handshake_count - 1)) + performance.kyber_dec) / handshake_count;
+				avg_performance.kyber_genkey = ((avg_performance.kyber_genkey * (handshake_count - 1)) + performance.kyber_genkey) / handshake_count;
+			}
 #endif	
     
 
     /*
      * 6. Read the HTTP Request
      */
-    mbedtls_printf( "  < Read from client:" );
+    PRINT_AT_DEBUG_LEVEL(1, "  < Read from client:" );
     fflush( stdout );
 
     do
@@ -375,7 +395,9 @@ reset:
         }
 
         len = ret;
-        mbedtls_printf( " %d bytes read\n  < %s\n", len, (char *) buf );
+        if (DEBUG_LEVEL >= 1) {
+            mbedtls_printf( " %d bytes read\n  < %s\n", len, (char *) buf );
+        }
 
         if( ret > 0 )
             break;
@@ -385,7 +407,7 @@ reset:
     /*
      * 7. Write the 200 Response
      */
-    mbedtls_printf( "  > Write to client:" );
+    PRINT_AT_DEBUG_LEVEL(1, "  > Write to client:" );
     fflush( stdout );
 
     if (stop == 1) {
@@ -410,9 +432,10 @@ reset:
     }
 
     len = ret;
-    mbedtls_printf( " %d bytes written\n  > %s\n", len, (char *) buf );
-
-    mbedtls_printf( "  . Closing the connection..." );
+    if (DEBUG_LEVEL >= 1) {
+        mbedtls_printf( " %d bytes written\n  > %s\n", len, (char *) buf ); 
+    }
+    PRINT_AT_DEBUG_LEVEL(1, "  . Closing the connection..." );
 
     while( ( ret = mbedtls_ssl_close_notify( &ssl ) ) < 0 )
     {
@@ -424,15 +447,16 @@ reset:
         }
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL(1, " ok\n" );
 
     ret = 0;
 
     if (stop == 0) {
-        mbedtls_printf("\n");
+        PRINT_AT_DEBUG_LEVEL(1, "\n");
         goto reset;
     } else {
         stop = 0;
+        handshake_count = 0;
     }
 
 exit:
@@ -464,7 +488,7 @@ exit:
     fflush( stdout ); getchar();
 #endif
 
-    return ret;
+    return avg_performance;
 }
 #endif /* MBEDTLS_BIGNUM_C && MBEDTLS_CERTS_C && MBEDTLS_ENTROPY_C &&
           MBEDTLS_SSL_TLS_C && MBEDTLS_SSL_SRV_C && MBEDTLS_NET_C &&

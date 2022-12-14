@@ -94,7 +94,10 @@ int main( void )
 #define SERVER_NAME "localhost"
 #define GET_REQUEST "GET / HTTP/1.0\r\n\r\n"
 
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
+
+#define PRINT_AT_DEBUG_LEVEL(level, msg) \
+    if (DEBUG_LEVEL >= level) mbedtls_printf(msg)
 
 
 static void my_debug( void *ctx, int level,
@@ -107,7 +110,7 @@ static void my_debug( void *ctx, int level,
     fflush(  (FILE *) ctx  );
 }
 
-int run_client(const char *server_ip, const char *cert, const int cipher_suite, char *MsgToServer)
+mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const int cipher_suite, char *MsgToServer)
 {
     int ret = 1, len;
     int exit_code = MBEDTLS_EXIT_FAILURE;
@@ -140,7 +143,7 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
     ssl.performance = &performance;
 #endif
 
-    mbedtls_printf( "\n  . Seeding the random number generator..." );
+    PRINT_AT_DEBUG_LEVEL( 1, "\n  . Seeding the random number generator..." );
     fflush( stdout );
 
     mbedtls_entropy_init( &entropy );
@@ -152,12 +155,12 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
         goto exit;
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL( 1, " ok\n" );
 
     /*
      * 0. Initialize certificates
      */
-    mbedtls_printf( "  . Loading the CA root certificate ..." );
+    PRINT_AT_DEBUG_LEVEL( 1, "  . Loading the CA root certificate ..." );
     fflush( stdout );
 
     ret = mbedtls_x509_crt_parse(&cacert, (const unsigned char *)cert, strlen(cert)+1);
@@ -167,13 +170,17 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
         goto exit;
     }
 
-    mbedtls_printf( " ok (%d skipped)\n", ret );
+    if (DEBUG_LEVEL >= 1) {
+        mbedtls_printf( " ok (%d skipped)\n", ret );
+    }
 
     /*
      * 1. Start the connection
      */
-    mbedtls_printf( "  . Connecting to tcp/%s/%s...", SERVER_NAME, SERVER_PORT );
-    fflush( stdout );
+    if (DEBUG_LEVEL >= 1){
+        mbedtls_printf( "  . Connecting to tcp/%s/%s...", SERVER_NAME, SERVER_PORT );
+        fflush( stdout );
+    }
 
     if( ( ret = mbedtls_net_connect( &server_fd, SERVER_NAME,
                                          SERVER_PORT, MBEDTLS_NET_PROTO_TCP ) ) != 0 )
@@ -182,12 +189,12 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
         goto exit;
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL(1, " ok\n" );
 
     /*
      * 2. Setup stuff
      */
-    mbedtls_printf( "  . Setting up the SSL/TLS structure..." );
+    PRINT_AT_DEBUG_LEVEL(1, "  . Setting up the SSL/TLS structure..." );
     fflush( stdout );
 
     if( ( ret = mbedtls_ssl_config_defaults( &conf,
@@ -199,7 +206,7 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
         goto exit;
     }
 
-    mbedtls_printf( " ok\n" );
+    PRINT_AT_DEBUG_LEVEL(1, " ok\n" );
 
     /* OPTIONAL is not optimal for security,
      * but makes interop easier in this simplified example */
@@ -225,7 +232,7 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
     /*
      * 4. Handshake
      */
-    mbedtls_printf( "  . Performing the SSL/TLS handshake..." );
+    PRINT_AT_DEBUG_LEVEL(1, "  . Performing the SSL/TLS handshake..." );
     fflush( stdout );
     
     HS_RUNTIME_INIT
@@ -241,32 +248,36 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
     HS_RUNTIME_STOP
     performance.handshake = hs_runtime;
 
-    mbedtls_printf( " ok\n" );
-    mbedtls_printf( "  . Cipher Suite Used: %s\n", mbedtls_ssl_get_ciphersuite( &ssl ) );
+    PRINT_AT_DEBUG_LEVEL(1, " ok\n" );
+    if (DEBUG_LEVEL >= 1) {
+        mbedtls_printf( "  . Cipher Suite Used: %s\n", mbedtls_ssl_get_ciphersuite( &ssl ) );
+    }
 
 #if defined(MBEDTLS_PEFORMANCE)
-	mbedtls_printf("  . Performance Data: %i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i\n",
-	performance.handshake,
-	performance.sphincs_verify,
-	performance.kyber_enc,
-	performance.write_client_hello,
-	performance.parse_server_hello,
-	performance.parse_server_certificate,
-	performance.parse_server_key_exchange,
-	performance.parse_server_hello_done,
-	performance.write_client_key_exchange,
-	performance.write_client_change_cipher,
-	performance.write_client_finish,
-	performance.parse_server_change_cipher,
-	performance.parse_server_finish,
-	performance.hashs
-	);
+    if (DEBUG_LEVEL >= 1) {
+        mbedtls_printf("  . Performance Data: %i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i\n",
+        performance.handshake,
+        performance.sphincs_verify,
+        performance.kyber_enc,
+        performance.write_client_hello,
+        performance.parse_server_hello,
+        performance.parse_server_certificate,
+        performance.parse_server_key_exchange,
+        performance.parse_server_hello_done,
+        performance.write_client_key_exchange,
+        performance.write_client_change_cipher,
+        performance.write_client_finish,
+        performance.parse_server_change_cipher,
+        performance.parse_server_finish,
+        performance.hashs
+        );
+    }
 #endif
 
     /*
      * 5. Verify the server certificate
      */
-    mbedtls_printf( "  . Verifying peer X.509 certificate..." );
+    PRINT_AT_DEBUG_LEVEL(1, "  . Verifying peer X.509 certificate..." );
 
     /* In real life, we probably want to bail out when ret != 0 */
     if( ( flags = mbedtls_ssl_get_verify_result( &ssl ) ) != 0 )
@@ -280,12 +291,12 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
         mbedtls_printf( "%s\n", vrfy_buf );
     }
     else
-        mbedtls_printf( " ok\n" );
+        PRINT_AT_DEBUG_LEVEL(1, " ok\n" );
 
     /*
      * 3. Write the GET request
      */
-    mbedtls_printf( "  > Write to server:" );
+    PRINT_AT_DEBUG_LEVEL(1, "  > Write to server:" );
     fflush( stdout );
 
     len = sprintf( (char *) buf, MsgToServer );
@@ -300,12 +311,14 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
     }
 
     len = ret;
-    mbedtls_printf( " %d bytes written\n  > %s\n", len, (char *) buf );
+    if (DEBUG_LEVEL >= 1) {
+        mbedtls_printf( " %d bytes written\n  > %s\n", len, (char *) buf );
+    }
 
     /*
      * 7. Read the HTTP response
      */
-    mbedtls_printf( "  < Read from server:" );
+    PRINT_AT_DEBUG_LEVEL(1, "  < Read from server:" );
     fflush( stdout );
 
     do
@@ -333,7 +346,9 @@ int run_client(const char *server_ip, const char *cert, const int cipher_suite, 
         }
 
         len = ret;
-        mbedtls_printf( " %d bytes read\n  < %s\n", len, (char *) buf );
+
+        if (DEBUG_LEVEL >= 1)
+            mbedtls_printf( " %d bytes read\n  < %s\n\n", len, (char *) buf );
     }
     while( 1 );
 
@@ -365,7 +380,7 @@ exit:
     fflush( stdout ); getchar();
 #endif
 
-    return exit_code;
+    return performance;
 }
 #endif /* MBEDTLS_BIGNUM_C && MBEDTLS_ENTROPY_C && MBEDTLS_SSL_TLS_C &&
           MBEDTLS_SSL_CLI_C && MBEDTLS_NET_C && MBEDTLS_RSA_C &&

@@ -43,8 +43,9 @@
 #include "mbedtls/ssl_ciphersuites.h"
 #include "../new_certs.h"
 #include "mbedtls/certs.h"
+#include "mbedtls/ssl.h"
 
-#define TEST_DURATION	3
+#define TEST_SIZE	50
 
 /* application args */
 const char *server_addr = "127.0.0.1";
@@ -65,32 +66,39 @@ char * MsgToServer = "Test Message";
 
 
 int main() {
-	// Initialise Time Structure
-	struct timeval begin, end;
-	begin.tv_sec = 0;
-	begin.tv_usec = 0;
-	end.tv_sec = 0;
-	end.tv_usec = 0;
+	printf("Test Configuration:\nServer Address - %s\nRepeats - %d\n\n", server_addr, TEST_SIZE);
 
     for (int i = 0; i < 4; i++) {
-		printf("Cipher Suite: %s\n", cipherSuiteStrings[i]);
+		printf("Testing %s...\n\n", cipherSuiteStrings[i]);
 		
-		// Store the current time of day
-		gettimeofday(&begin, 0);
-		gettimeofday(&end, 0);
-		int counter = 0;
+		//Wait for server to start
+		sleep(2);
+		
+		mbedtls_pq_performance avg_performance;
+		int handshake_count = 0;
 
-		// Loop for a given number of seconds
-		while ((end.tv_sec - begin.tv_sec) < TEST_DURATION) {
-			run_client(server_addr, certs[i], cipherSuites[i], MsgToServer);
-			counter++;
-			gettimeofday(&end, 0);
+		// Loop for a given number of handshakes
+		for (int j = 0; j < TEST_SIZE; j++) {
+			mbedtls_pq_performance new_data = run_client(server_addr, certs[i], cipherSuites[i], MsgToServer);
+			handshake_count++;
+
+			// Calculate new average performance metrics
+			if (handshake_count == 1) {
+				avg_performance = new_data;
+			} else {
+				avg_performance.handshake = ((avg_performance.handshake * (handshake_count - 1)) + new_data.handshake) / handshake_count;
+				avg_performance.sphincs_verify = ((avg_performance.sphincs_verify * (handshake_count - 1)) + new_data.sphincs_verify) / handshake_count;
+				avg_performance.kyber_enc = ((avg_performance.kyber_enc * (handshake_count - 1)) + new_data.kyber_enc) / handshake_count;
+			}
 		}
 
+		// Shutdown the server
 		run_client(server_addr, certs[i], cipherSuites[i], "Shutdown");
 
-		printf("Handshakes Completed: %d\n\n", counter);
-		sleep(5);
+		printf("Performance Measurements:\n");
+		printf("Handshake Latency - %d ms\n", avg_performance.handshake);
+		printf("Certificate Verification - %d ms\n", avg_performance.sphincs_verify);
+		printf("Key Encapsulation - %d ms\n\n", avg_performance.kyber_enc);
 	}
 
   	return 0;

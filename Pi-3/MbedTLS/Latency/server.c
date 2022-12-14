@@ -65,8 +65,18 @@ char * MsgToClient = "Test Response";
 
 int main() {
     for (int i = 0; i < 4; i++) {
-        run_server(certs[i], keys[i], cipherSuites[i], MsgToClient);
+        printf("Testing %s...\n\n", cipherSuiteStrings[i]);
+
+        //Wait for port to become available on slower devices
         sleep(1);
+
+        mbedtls_pq_performance new_data = run_server(certs[i], keys[i], cipherSuites[i], MsgToClient);
+        
+        printf("Performance Measurements:\n");
+		printf("Handshake Latency - %d ms\n", new_data.handshake);
+		printf("Certificate Verification - %d ms\n", new_data.sphincs_sign);
+		printf("Key Encapsulation - %d ms\n", new_data.kyber_dec);
+		printf("Key Generation - %d ms\n\n", new_data.kyber_genkey);
     }
 
     return 0;
