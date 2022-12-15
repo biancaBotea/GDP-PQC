@@ -18,8 +18,8 @@ typedef struct mbedtls_dilithium_context
 
 #if defined(MBEDTLS_ASN1_PARSE_C)
 
-int mbedtls_dilithium_genkey ( unsigned char *pk , unsigned char *sk , 
-	unsigned char *final_buf);
+int mbedtls_dilithium_genkey ( mbedtls_dilithium_context *ctx , 
+	int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
 
 #endif /* MBEDTLS_ASN1_PARSE_C */
 
