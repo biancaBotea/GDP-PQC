@@ -65,6 +65,7 @@
     defined(MBEDTLS_ENTROPY_C) && defined(MBEDTLS_CTR_DRBG_C)
 #include "mbedtls/error.h"
 #include "mbedtls/pk.h"
+#include "mbedtls/pk_internal.h" /* remove this */
 #include "mbedtls/ecdsa.h"
 #include "mbedtls/rsa.h"
 #include "mbedtls/error.h"
@@ -190,21 +191,21 @@ static int write_private_key( mbedtls_pk_context *key, const char *output_file )
 {
     int ret;
     FILE *f;
-    unsigned char output_buf[16000];
+    unsigned char output_buf[160000];
     unsigned char *c = output_buf;
     size_t len = 0;
-
-    memset(output_buf, 0, 16000);
+    printf("\nwriting private key\n");
+    memset(output_buf, 0, 160000);
     if( opt.format == FORMAT_PEM )
     {
-        if( ( ret = mbedtls_pk_write_key_pem( key, output_buf, 16000 ) ) != 0 )
+        if( ( ret = mbedtls_pk_write_key_pem( key, output_buf, 160000 ) ) != 0 )
             return( ret );
 
         len = strlen( (char *) output_buf );
     }
     else
     {
-        if( ( ret = mbedtls_pk_write_key_der( key, output_buf, 16000 ) ) < 0 )
+        if( ( ret = mbedtls_pk_write_key_der( key, output_buf, 160000 ) ) < 0 )
             return( ret );
 
         len = ret;
@@ -230,7 +231,7 @@ int main( int argc, char *argv[] )
     int ret = 1;
     int exit_code = MBEDTLS_EXIT_FAILURE;
     mbedtls_pk_context key;
-    char buf[2048];
+    char buf[1024];
     int i;
     char *p, *q;
     mbedtls_mpi N, P, Q, D, E, DP, DQ, QP;
@@ -401,7 +402,6 @@ int main( int argc, char *argv[] )
         mbedtls_printf( " failed\n  !  mbedtls_pk_setup returned -0x%04x", -ret );
         goto exit;
     }
-
 #if defined(MBEDTLS_RSA_C) && defined(MBEDTLS_GENPRIME)
     if( opt.type == MBEDTLS_PK_RSA )
     {
@@ -445,8 +445,9 @@ int main( int argc, char *argv[] )
 #if defined(MBEDTLS_DILITHIUM_C)
 	if (opt.type == MBEDTLS_PK_DILITHIUM)
 	{
-		ret = mbedtls_dilithium_genkey(mbedtls_pk_dilithium(key)->pk, 
-                mbedtls_pk_dilithium(key)->sk, buf);
+        int pk_length = mbedtls_dilithium_get_len(mbedtls_pk_dilithium(key));
+        printf("pk_length = %d\n", pk_length);
+		ret = mbedtls_dilithium_genkey(mbedtls_pk_dilithium(key), mbedtls_ctr_drbg_random, &ctr_drbg);
         mbedtls_printf( " you're here\n" );
 		if (ret != 0)
 		{
@@ -465,7 +466,7 @@ int main( int argc, char *argv[] )
      * 1.2 Print the key
      */
     mbedtls_printf( " ok\n  . Key information:\n" );
-    mbedtls_printf( " 468\n" );
+    mbedtls_printf( " 476.\n");
 
 #if defined(MBEDTLS_RSA_C)
     if( mbedtls_pk_get_type( &key ) == MBEDTLS_PK_RSA )
@@ -519,7 +520,9 @@ int main( int argc, char *argv[] )
 	{
 		mbedtls_dilithium_context *dilithium = mbedtls_pk_dilithium(key);
 		mbedtls_mpi_write_file("PK: ", &dilithium->pk, 16, NULL);
+        fflush( stdout );
 		mbedtls_mpi_write_file("SK: ", &dilithium->sk, 16, NULL);
+        fflush( stdout );
 	}
     else
 #endif /* MBEDTLS_DILITHIUM_C */
