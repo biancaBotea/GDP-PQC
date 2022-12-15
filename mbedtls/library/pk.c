@@ -184,8 +184,10 @@ int mbedtls_pk_setup( mbedtls_pk_context *ctx, const mbedtls_pk_info_t *info )
     if( ( ctx->pk_ctx = info->ctx_alloc_func() ) == NULL )
         return( MBEDTLS_ERR_PK_ALLOC_FAILED );
 
+    char *name = info->name;
     ctx->pk_info = info;
-
+    char *ctxname = ctx->pk_info->name;
+    printf("\ ctx name = %s\n", ctxname);
     return( 0 );
 }
 
@@ -579,15 +581,9 @@ const char *mbedtls_pk_get_name( const mbedtls_pk_context *ctx )
  */
 mbedtls_pk_type_t mbedtls_pk_get_type( const mbedtls_pk_context *ctx )
 {
-    printf("\n getting pk type\n");
     if( ctx == NULL || ctx->pk_info == NULL ){
-        printf("none pk type\n");
         return( MBEDTLS_PK_NONE );
     }
-    printf("not none pk type\n");
-    char *temp = 
-    if(ctx->pk_info->type == MBEDTLS_PK_DILITHIUM)
-        printf("dilithium pk type\n");
     return( ctx->pk_info->type );
 }
 

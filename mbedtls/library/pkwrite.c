@@ -353,7 +353,7 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
     PK_VALIDATE_RET( buf != NULL );
 
     c = buf + size;
-
+    printf("line 356\n");
 #if defined(MBEDTLS_RSA_C)
     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_RSA )
     {
@@ -532,7 +532,6 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
 
 #if defined (MBEDTLS_DILITHIUM_C)
     if (mbedtls_pk_get_type(key) == MBEDTLS_PK_DILITHIUM){
-
         /*
         * DILITHIUM_key ::= SEQUENCE {
             * SecretKey BIT STRING ,
@@ -540,23 +539,20 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
         * }
     */
         mbedtls_dilithium_context *dilithium = mbedtls_pk_dilithium(*key);
-        unsigned char *buf, *c;
-        size_t len = 0;
-        size_t *final_buf_bytes_written;
-        buf = (unsigned char *) malloc(5000);
-        c = buf + 5000;
 
 
         // Write keys to buffer in ASN .1 format
         MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->pk, 
             CRYPTO_PUBLICKEYBYTES_D * 8));
+        *c = MBEDTLS_ASN1_BIT_STRING;
         MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->sk, 
             CRYPTO_SECRETKEYBYTES_D * 8));
+        *c = MBEDTLS_ASN1_BIT_STRING;
         MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, len));
         MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_tag(&c, buf, 
             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ));
     }
-
+    else
 #endif /* MBEDTLS_DILITHIUM_C */
 
 		return( MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE );
@@ -655,10 +651,18 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
 
 #endif /* MBEDTLS_ECP_C */
 
+#if defined(MBEDTLS_DILITHIUM_C)
+
+#define PUB_DER_MAX_BYTES   1000000 /*change this*/
+#define PRV_DER_MAX_BYTES   1000000
+
+#else
+
 #define PUB_DER_MAX_BYTES   RSA_PUB_DER_MAX_BYTES > ECP_PUB_DER_MAX_BYTES ? \
                             RSA_PUB_DER_MAX_BYTES : ECP_PUB_DER_MAX_BYTES
 #define PRV_DER_MAX_BYTES   RSA_PRV_DER_MAX_BYTES > ECP_PRV_DER_MAX_BYTES ? \
                             RSA_PRV_DER_MAX_BYTES : ECP_PRV_DER_MAX_BYTES
+#endif
 
 int mbedtls_pk_write_pubkey_pem( mbedtls_pk_context *key, unsigned char *buf, size_t size )
 {
@@ -688,16 +692,16 @@ int mbedtls_pk_write_pubkey_pem( mbedtls_pk_context *key, unsigned char *buf, si
 int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_t size )
 {
     int ret;
+    printf("prv der max bytes = %d, size = %d\n", PRV_DER_MAX_BYTES, size);
     unsigned char output_buf[PRV_DER_MAX_BYTES];
     const char *begin, *end;
     size_t olen = 0;
-
     PK_VALIDATE_RET( key != NULL );
     PK_VALIDATE_RET( buf != NULL || size == 0 );
 
     if( ( ret = mbedtls_pk_write_key_der( key, output_buf, sizeof(output_buf) ) ) < 0 )
         return( ret );
-
+        
 #if defined(MBEDTLS_RSA_C)
     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_RSA )
     {
@@ -731,14 +735,16 @@ int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_
     else
 #endif         
 			return( MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE );
-
+    
+    printf("line 742\n");
     if( ( ret = mbedtls_pem_write_buffer( begin, end,
                                   output_buf + sizeof(output_buf) - ret,
                                   ret, buf, size, &olen ) ) != 0 )
     {
+        printf("returning ret\n");
         return( ret );
     }
-
+    printf("returning 0\n");
     return( 0 );
 }
 #endif /* MBEDTLS_PEM_WRITE_C */

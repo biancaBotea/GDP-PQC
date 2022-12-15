@@ -23,9 +23,10 @@
 
 #include <string.h>
 #include "pq/dilithium_params.h"
+#endif /* MBEDTLS_ASN1_PARSE_C */
 
-int mbedtls_dilithium_genkey ( unsigned char *pk , unsigned char *sk , 
-	unsigned char *final_buf){
+/*int mbedtls_dilithium_genkey( mbedtls_dilithium_context *ctx, int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
+{
 
 
 	/* DILITHIUM_key ::= SEQUENCE {
@@ -33,20 +34,22 @@ int mbedtls_dilithium_genkey ( unsigned char *pk , unsigned char *sk ,
 		* PublicKey BIT STRING
 	* }
   */
-
-	unsigned char *buf, *c;
+  /*if (crypto_sign_keypair_d(ctx->pk, ctx->sk, f_rng, p_rng)) {
+		return -1;
+	}
+	/*unsigned char *buf, *c;
 	size_t len = 0;
 	size_t *final_buf_bytes_written;
 	buf = (unsigned char *) malloc(6000);
   int ret = 0;
-	c = buf + 6000;
+	c = buf + 6000;*/
 
-  mbedtls_printf( "\ngenerating key\n" );
+  /*mbedtls_printf( "\ngenerating key\n" );
 	// Write keys to buffer in ASN .1 format
-	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, pk, 
+	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, ctx->pk, 
 		CRYPTO_PUBLICKEYBYTES_D * 8));
   mbedtls_printf( " 48\n" );
-	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, sk, 
+	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, ctx->sk, 
 		CRYPTO_SECRETKEYBYTES_D * 8));
 	mbedtls_printf( " 51\n" );
   MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, len));
@@ -62,42 +65,44 @@ int mbedtls_dilithium_genkey ( unsigned char *pk , unsigned char *sk ,
 	mbedtls_base64_encode(final_buf, final_buf_size + 1, 
 		final_buf_bytes_written, buf, len);
   mbedtls_printf( " 63\n" );
-
-	//Reutrn num of bytes in buffer
+  
 	return ( 0 );
-}
-#endif /* MBEDTLS_ASN1_PARSE_C */
+}*/
+
 
 
 
 
 /* 
  * Generates a Dilithium keypair.
- * 
+ */
 
 int mbedtls_dilithium_genkey(mbedtls_dilithium_context *ctx,
 							int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
 {
 	int ret;
+  printf("CRYPTO_PUBLICKEYBYTES_D = %d, CRYPTO_SECRETKEYBYTES_D = %d\n", CRYPTO_PUBLICKEYBYTES_D, CRYPTO_SECRETKEYBYTES_D);
 	unsigned char pkey[CRYPTO_PUBLICKEYBYTES_D];
-	unsigned char skey[CRYPTO_SECRETKEYBYTES_D];
+	unsigned char skey[CRYPTO_SECRETKEYBYTES_D + CRYPTO_PUBLICKEYBYTES_D];
 
-	 Initialize with random data 
+  //Initialize with random data 
+  printf("Initialising sk with random data\n");
 	do {
-		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->pk, N_D, f_rng, p_rng));
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->sk, 632, f_rng, p_rng));
 	} while (mbedtls_mpi_bitlen(&ctx->sk) == 0);
+  printf("Initialising pk with random data\n");
 	do {
-		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->sk, N_D, f_rng, p_rng));
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->pk, 656, f_rng, p_rng));
 	} while (mbedtls_mpi_bitlen(&ctx->sk) == 0);
 
-	mbedtls_mpi_write_binary(&ctx->sk, skey + 0 * N_D, N_D);
-	mbedtls_mpi_write_binary(&ctx->pk, skey + 1 * N_D, N_D);
-
+	mbedtls_mpi_write_binary(&ctx->sk, skey + 0, 2528);
+	mbedtls_mpi_write_binary(&ctx->pk, skey + 1 * 2528, 2624);
+  
 	if (crypto_sign_keypair_d(pkey, skey, f_rng, p_rng)) {
 		return -1;
 	}
-	mbedtls_mpi_read_binary(&ctx->sk, skey + 0 * N_D, N_D);
-	mbedtls_mpi_read_binary(&ctx->pk, skey + 1 * N_D, N_D);
+	mbedtls_mpi_read_binary(&ctx->sk, skey + 0, 2528);
+	mbedtls_mpi_read_binary(&ctx->pk, skey + 1 * 2528, 2624);
 
 cleanup:
 	if (ret != 0)
@@ -106,7 +111,6 @@ cleanup:
 	return ( 0 );
 }
 
- */
 
 /*
 * Initialize context
