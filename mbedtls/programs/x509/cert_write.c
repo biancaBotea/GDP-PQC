@@ -219,8 +219,8 @@ int write_certificate( mbedtls_x509write_cert *crt, const char *output_file,
     unsigned char output_buf[MBEDTLS_SPHINCS_MAX_SIZE];
     memset(output_buf, 0, MBEDTLS_SPHINCS_MAX_SIZE);
 #elif defined(MBEDTLS_DILITHIUM_C)
-    unsigned char output_buf[100000];
-    memset(output_buf, 0, 100000);
+    unsigned char output_buf[4096];
+    memset(output_buf, 0, 4096);
 #else
     unsigned char output_buf[4096];
     memset(output_buf, 0, 4096);
