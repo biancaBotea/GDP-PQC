@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include "pico/stdlib.h"
 
-#define MAX_UTIME_SPLITS 50
+#define MAX_UTIME_CT 8
+#define MAX_UTIME_SPLITS 64
 
 typedef struct {
     uint64_t ut_init;
@@ -72,6 +73,10 @@ void end_utime(microsecond_count_t* us_ct){
     else{
         printf("Could not allocate memory for split diffs");
     }
+}
+
+void free_utime(microsecond_count_t* us_ct){
+
 }
 
 void print_utime(microsecond_count_t* us_ct){
