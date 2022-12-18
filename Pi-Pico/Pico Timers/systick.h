@@ -31,7 +31,8 @@ systick_count_list_t st_ct_list;
 
 exception_handler_t handle_systick(){
     for(int st_ct = 0; st_ct < st_ct_list.size_st_list; ++st_ct){
-        // st_ct_list[st_ct]->countflag_sum += 1;
+        //for all active timers, increment countflag count by 1
+        st_ct_list.st_list[st_ct]->countflag_sum += 1;
     }
 }
 
