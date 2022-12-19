@@ -6,7 +6,6 @@
 int main(){
     //Init stdio Output
     stdio_init_all();
-
-    // demo_utime();
+    // demo_systick_list();
     return 0;
 }
