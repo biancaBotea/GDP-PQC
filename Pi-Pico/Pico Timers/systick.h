@@ -217,6 +217,19 @@ void print_systick(systick_count_t* st){
     printf("%llu Cycles\n",st->st_diff);
 }
 
+void print_systick_splits(systick_count_t* st){
+    print_systick(st);
+    printf("st splits:\n");
+    for(int s = 0; s < st->size_st_splits; ++s){
+        printf("%d:%llu\n",s,st->st_splits[s]);
+    }
+    printf("st diffs:\n");
+    for(int d = 0; d< st->size_st_diffs; ++d){
+        printf("%d:%llu\n",d,st->st_diffs[d]);
+    }
+    printf("\n");
+}
+
 void print_systick_list(){
     printf("List has %zu timers",st_l.size_st_list);
     if(st_l.size_st_list > 0){
@@ -226,6 +239,31 @@ void print_systick_list(){
         }
     }
     printf("\n");
+}
+
+void demo_systick_splits(){
+    systick_count_t* st1 = (systick_count_t*) malloc(sizeof(systick_count_t));
+    systick_count_t* st10 = (systick_count_t*) malloc(sizeof(systick_count_t));
+    init_systick(st1);
+    init_systick(st10);
+
+    begin_systick(st1);
+    begin_systick(st10);
+    for(int s10 = 0; s10<3; ++s10){
+        for(int s1 = 0;s1<5;++s1){
+            busy_wait_ms(1000);
+            split_systick(st1);
+        }
+        split_systick(st10);
+    }
+    end_systick(st1);
+    end_systick(st10);
+
+    print_systick_splits(st1);
+    print_systick_splits(st10);
+
+    free_systick(st10);
+    free_systick(st1);
 }
 
 void demo_systick_multi(){

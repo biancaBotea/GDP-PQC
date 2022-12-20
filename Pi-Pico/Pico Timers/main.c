@@ -6,6 +6,6 @@
 int main(){
     //Init stdio Output
     stdio_init_all();
-    demo_systick();
+    demo_systick_splits();
     return 0;
 }
