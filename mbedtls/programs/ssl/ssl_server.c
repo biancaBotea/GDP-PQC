@@ -108,7 +108,7 @@ int main( void )
     "<h2>mbed TLS Test Server</h2>\r\n" \
     "<p>Successful connection using: %s</p>\r\n"
 
-#define DEBUG_LEVEL 3
+#define DEBUG_LEVEL 4
 
 
 static void my_debug( void *ctx, int level,
@@ -163,6 +163,7 @@ int main( void )
     */
     mbedtls_printf( "\n  . Loading the server cert. and key..." );
     fflush( stdout );
+    
 
     /*
      * This demonstration program uses embedded test certificates.
@@ -194,6 +195,10 @@ int main( void )
     }
 
     mbedtls_printf( " ok\n" );
+    
+    char info_buf[1000];
+    mbedtls_x509_crt_info(info_buf, 1000, ">", &srvcert);
+    printf("\n Cert info:\n%s\n", info_buf);
 
     /*
      * 2. Setup the listening TCP socket

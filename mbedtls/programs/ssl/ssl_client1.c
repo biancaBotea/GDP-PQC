@@ -92,9 +92,12 @@ int main( void )
 
 #define SERVER_PORT "4433"
 #define SERVER_NAME "localhost"
+#define HOSTNAME "Entity Certificate"
+#define SERVER_ADDR "192.168.0.40"
+
 #define GET_REQUEST "GET / HTTP/1.0\r\n\r\n"
 
-#define DEBUG_LEVEL 2
+#define DEBUG_LEVEL 4
 
 
 static void my_debug( void *ctx, int level,
@@ -153,6 +156,8 @@ int main( void )
     }
 
     mbedtls_printf( " ok\n" );
+    
+
 
     /*
      * 0. Initialize certificates
@@ -169,14 +174,27 @@ int main( void )
     }
 
     mbedtls_printf( " ok (%d skipped)\n", ret );
+    
+    char info_buf[1000];
+    mbedtls_x509_crt_info(info_buf, 1000, ">", &cacert);
+    printf("\n Cert info:\n%s\n", info_buf);
 
     /*
      * 1. Start the connection
      */
-    mbedtls_printf( "  . Connecting to tcp/%s/%s...", SERVER_NAME, SERVER_PORT );
+    /*mbedtls_printf( "  . Connecting to tcp/%s/%s...", SERVER_NAME, SERVER_PORT );
     fflush( stdout );
 
     if( ( ret = mbedtls_net_connect( &server_fd, SERVER_NAME,
+                                         SERVER_PORT, MBEDTLS_NET_PROTO_TCP ) ) != 0 )
+    {
+        mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );
+        goto exit;
+    }*/
+    const char *server_ip = SERVER_ADDR;
+    mbedtls_printf( "  . Connecting to tcp/%s/%s...", server_ip, SERVER_PORT );
+    fflush( stdout );
+    if( ( ret = mbedtls_net_connect( &server_fd, server_ip,
                                          SERVER_PORT, MBEDTLS_NET_PROTO_TCP ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );
@@ -215,14 +233,13 @@ int main( void )
         goto exit;
     }
 
-    if( ( ret = mbedtls_ssl_set_hostname( &ssl, SERVER_NAME ) ) != 0 )
+    if( ( ret = mbedtls_ssl_set_hostname( &ssl, HOSTNAME ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
         goto exit;
     }
 
     mbedtls_ssl_set_bio( &ssl, &server_fd, mbedtls_net_send, mbedtls_net_recv, NULL );
-
     /*
      * 4. Handshake
      */
