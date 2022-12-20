@@ -78,6 +78,20 @@ void init_systick(systick_count_t* st){
     st->st_count = 0;
 }
 
+void new_systick(systick_count_t* st, uint64_t t){
+    size_t temp_size_st_splits = st->size_st_splits + 1;
+    size_t head_st_splits = temp_size_st_splits - 1;
+    uint64_t* temp_st_splits = realloc(st->st_splits, temp_size_st_splits * sizeof(uint64_t));
+    if(temp_st_splits != NULL){
+        st->st_splits = temp_st_splits;
+        st->st_splits[head_st_splits] = t;
+    }
+    else{
+        printf("Could not allocate new memory for split.\n");
+        return;
+    }
+}
+
 void begin_systick(systick_count_t* st){
     //Disable counter while capturing value
     sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
@@ -103,7 +117,10 @@ void begin_systick(systick_count_t* st){
 }
 
 void split_systick(systick_count_t* st){
-
+    sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+    uint32_t split_csr = sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS;
+    uint64_t split_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - split_csr;
+    sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
 }
 
 void end_systick(systick_count_t* st){
@@ -111,7 +128,7 @@ void end_systick(systick_count_t* st){
     sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
 
     //Store csr at end
-    st->st_end_csr = (sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS);
+    st->st_end_csr = sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS;
 
     //Calculate timer diff
     st->st_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - st->st_end_csr;
@@ -159,6 +176,18 @@ void end_systick(systick_count_t* st){
     st->st_init_csr=0;
     st->st_end_csr=0;
     st->st_count=0;
+
+    st->size_st_diffs = st->size_st_splits - 1;
+    st->st_diffs= (uint64_t*) malloc(st->size_st_diffs * sizeof(uint64_t));
+    if(st->st_diffs != NULL){
+        for(int d = 0; d<st->size_st_diffs; ++d){
+            st->st_diffs[d] = st->st_splits[d+1] - st->st_splits[d];
+        }
+    }
+    else{
+        printf("Could not allocate memory for split diffs.");
+        return;
+    }
 
     //Re-enable counter
     sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
