@@ -1325,15 +1325,12 @@ static int pk_parse_key_dilithium_der(mbedtls_dilithium_context *dilithium,
 	* DILITHIUMPrivateKey 
 	*/
     
-    printf("\nparsing dilithium private key\n");
-    
 	if ((ret = mbedtls_asn1_get_tag(&p, end, &len,
 		MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE)) != 0)
 	{
 		return(MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret);
 	}
     
-    printf("1.\n");
 	end = p + len;
 
 	if ((ret = mbedtls_asn1_get_tag(&p, end, &len, MBEDTLS_ASN1_OCTET_STRING)) != 0)
@@ -1347,7 +1344,6 @@ static int pk_parse_key_dilithium_der(mbedtls_dilithium_context *dilithium,
 
 	p += len;
     
-    printf("2.\n");
     
     if ((ret = mbedtls_asn1_get_tag(&p, end, &len, MBEDTLS_ASN1_OCTET_STRING)) != 0)
 		return(MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret);
@@ -1360,7 +1356,6 @@ static int pk_parse_key_dilithium_der(mbedtls_dilithium_context *dilithium,
     
     p += len;
     
-    printf("3.\n");
     
     if ((ret = mbedtls_asn1_get_tag(&p, end, &len, MBEDTLS_ASN1_BIT_STRING)) != 0)
 		return(MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret);

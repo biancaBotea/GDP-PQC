@@ -5848,9 +5848,7 @@ static int ssl_parse_certificate_chain( mbedtls_ssl_context *ssl )
 
         i += n;
     }
-    printf("\nline 5851\n");
     MBEDTLS_SSL_DEBUG_CRT( 3, "peer certificate", ssl->session_negotiate->peer_cert );
-    printf("\npeer cert debugged: line 5853\n");
     /*
      * On client, make sure the server cert doesn't change during renego to
      * avoid "triple handshake" attack: https://secure-resumption.com/
@@ -5880,7 +5878,7 @@ static int ssl_parse_certificate_chain( mbedtls_ssl_context *ssl )
         }
     }
 #endif /* MBEDTLS_SSL_RENEGOTIATION && MBEDTLS_SSL_CLI_C */
-    printf("\nline 5883\n");
+
     return( 0 );
 }
 
@@ -5958,7 +5956,7 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         ssl->state++;
         return( ret );
     }
-    printf("\nline 5962\n");
+
 #if defined(MBEDTLS_SSL__ECP_RESTARTABLE)
     if( ssl->handshake->ecrs_enabled)
         ssl->handshake->ecrs_state = ssl_ecrs_crt_verify;
@@ -5967,14 +5965,14 @@ crt_verify:
     if( ssl->handshake->ecrs_enabled)
         rs_ctx = &ssl->handshake->ecrs_ctx;
 #endif
-    printf("\nline 5970\n");
+
     if( authmode != MBEDTLS_SSL_VERIFY_NONE )
     {
         mbedtls_x509_crt *ca_chain;
         mbedtls_x509_crl *ca_crl;
 
 #if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
-        printf("\nline 5977\n");
+
         if( ssl->handshake->sni_ca_chain != NULL )
         {
             ca_chain = ssl->handshake->sni_ca_chain;
@@ -5990,9 +5988,7 @@ crt_verify:
         /*
          * Main check: verify certificate
          */
-        printf("\nline 5993\n");
-        printf("ssl->hostname %s", ssl->hostname);
-        printf("\nline 5996\n");
+
         fflush( stdout );
         ret = mbedtls_x509_crt_verify_restartable(
                                 ssl->session_negotiate->peer_cert,
@@ -6006,7 +6002,7 @@ crt_verify:
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "x509_verify_cert", ret );
         }
-        printf("\nline 6007\n");
+
 #if defined(MBEDTLS_SSL__ECP_RESTARTABLE)
         if( ret == MBEDTLS_ERR_ECP_IN_PROGRESS )
             return( MBEDTLS_ERR_SSL_CRYPTO_IN_PROGRESS );
@@ -9694,30 +9690,25 @@ void mbedtls_ssl_sig_hash_set_add( mbedtls_ssl_sig_hash_set_t *set,
                                    mbedtls_pk_type_t sig_alg,
                                    mbedtls_md_type_t md_alg )
 {
-    printf("\n *** mbedtls_ssl_sig_hash_set_add *** \n");
     switch( sig_alg )
     {
         case MBEDTLS_PK_RSA:
-            printf("\n added rsa md alg\n");
             if( set->rsa == MBEDTLS_MD_NONE )
                 set->rsa = md_alg;
             break;
 
         case MBEDTLS_PK_ECDSA:
-            printf("\n added ecdsa md alg\n");
             if( set->ecdsa == MBEDTLS_MD_NONE )
                 set->ecdsa = md_alg;
             break;
 #if defined(MBEDTLS_SSL_SPHINCS)
 		case MBEDTLS_PK_SPHINCS:
-            printf("\n added spx md alg\n");
 			if (set->sphincs == MBEDTLS_MD_NONE)
 				set->sphincs = md_alg;
 			break;
 #endif
 #if defined(MBEDTLS_SSL_DILITHIUM)
 		case MBEDTLS_PK_DILITHIUM:
-            printf("\n added dilithium md alg\n");
 			if (set->dilithium == MBEDTLS_MD_NONE)
 				set->dilithium = md_alg;
 			break;

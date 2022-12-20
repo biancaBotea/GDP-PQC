@@ -332,7 +332,7 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
   const unsigned char *sig, size_t slen)
 {
   unsigned char pkey[CRYPTO_PUBLICKEYBYTES_D];
-  printf("\nmbedtls_dilithium_read_signature\n");
+
   mbedtls_mpi_write_binary(&ctx->key.pk_rho, pkey, SEEDBYTES_D);
   mbedtls_mpi_write_binary(&ctx->key.pk_t1, pkey + SEEDBYTES_D, K_D*POLYT1_PACKEDBYTES);
 
@@ -572,7 +572,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
                        size_t mlen,
                        const unsigned char *pk)
 {
-  printf("\ncrypto_sign_verify_d\n");
+
   unsigned int i;
   unsigned char buf[K_D*POLYW1_PACKEDBYTES];
   unsigned char rho[SEEDBYTES_D];
@@ -659,9 +659,9 @@ int crypto_sign_open_d(unsigned char *m,
 
   if(smlen < CRYPTO_BYTES_D)
     goto badsig;
-  printf("\ncrypto_sign_open_d\n");
+
   *mlen = smlen - CRYPTO_BYTES_D;
-  printf("\nline 664\n");
+
   if(crypto_sign_verify_d(sm, CRYPTO_BYTES_D, sm + CRYPTO_BYTES_D, *mlen, pk))
     goto badsig;
   else {
@@ -670,7 +670,7 @@ int crypto_sign_open_d(unsigned char *m,
       m[i] = sm[CRYPTO_BYTES_D + i];
     return 0;
   }
-  printf("\nline 673\n");
+
 badsig:
   /* Signature verification failed */
   *mlen = -1;

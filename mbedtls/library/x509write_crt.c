@@ -420,25 +420,17 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
 #if defined(MBEDTLS_DILITHIUM_C)
     else if (mbedtls_pk_can_do(ctx->issuer_key, MBEDTLS_PK_DILITHIUM)){
         pk_alg = MBEDTLS_PK_DILITHIUM;
-        printf("\ncan do dilithium");
     }
 #endif /* MBEDTLS_DILITHIUM_C */
 
 	else
         return( MBEDTLS_ERR_X509_INVALID_ALG );
-    printf("\ngetting oid...\n");
     
-    if(ctx->md_alg == MBEDTLS_MD_SHAKE256)
-        printf("MD is SHAKE256\n");
-    else
-        printf("MD is NOT SHAKE256\n");
     if( ( ret = mbedtls_oid_get_oid_by_sig_alg( pk_alg, ctx->md_alg,
                                           &sig_oid, &sig_oid_len ) ) != 0 )
     {
         return( ret );
     }
-    
-    printf(" passed get oid\n");
 
     /*
      *  Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
@@ -605,13 +597,12 @@ int mbedtls_x509write_crt_pem( mbedtls_x509write_cert *crt,
     int ret;
     size_t olen;
 
-    printf("\nmbedtls_x509write_crt_der\n");
     if( ( ret = mbedtls_x509write_crt_der( crt, buf, size,
                                    f_rng, p_rng ) ) < 0 )
     {
         return( ret );
     }
-    printf("mbedtls_pem_write_buffer\n");
+
     if( ( ret = mbedtls_pem_write_buffer( PEM_BEGIN_CRT, PEM_END_CRT,
                                           buf + size - ret, ret,
                                           buf, size, &olen ) ) != 0 )

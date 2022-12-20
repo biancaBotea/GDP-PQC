@@ -252,30 +252,23 @@ static int ssl_write_signature_algorithms_ext( mbedtls_ssl_context *ssl,
     for( md = ssl->conf->sig_hashes; *md != MBEDTLS_MD_NONE; md++ )
     {
 #if defined(MBEDTLS_ECDSA_C)
-        printf("\n*** hash added to ecdsa *** \n");
         sig_alg_list[sig_alg_len++] = mbedtls_ssl_hash_from_md_alg( *md );
         sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_ECDSA;
 #endif
 #if defined(MBEDTLS_RSA_C)
-        printf("\n*** hash added to rsa *** \n");
         sig_alg_list[sig_alg_len++] = mbedtls_ssl_hash_from_md_alg( *md );
         sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_RSA;
 #endif
-        printf("sig_alg_len = %d\n", sig_alg_len);
     }
 #if defined(MBEDTLS_SPHINCS_C)
-    printf("\n*** hash added to sphincs *** \n");
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_HASH_SHA256;
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_SPHINCS;
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_HASH_SHAKE256;
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_SPHINCS;
-    printf("sig_alg_len = %d\n", sig_alg_len);
 #endif
 #if defined(MBEDTLS_DILITHIUM_C)
-    printf("\n*** hash added to dilithium %d *** \n", MBEDTLS_SSL_HASH_SHAKE256);
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_HASH_SHAKE256;
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_DILITHIUM;
-    printf("sig_alg_len = %d\n", sig_alg_len);
 #endif
     /*
      * enum {
@@ -2501,10 +2494,9 @@ static int ssl_parse_signature_algorithm( mbedtls_ssl_context *ssl,
     {
         return( 0 );
     }
-    printf("\nline 2504\n");
+
     if( (*p) + 2 > end )
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
-    printf("\n *** HashAlgorithm %d, SignatureAlgorithm %d ***\n", *(p)[0], (*p)[1]);
     /*
      * Get hash algorithm
      */
@@ -2775,7 +2767,7 @@ start_processing:
 			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA    ||
 			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM)
 		{
-            printf("\nline 2778\n");
+
 			if (mbedtls_kyber_read_params(&ssl->handshake->kyber_ctx, &p, end) != 0)
 			{
 				MBEDTLS_SSL_DEBUG_MSG(1, ("bad server key exchange message"));
@@ -2820,7 +2812,7 @@ start_processing:
         unsigned char *params = ssl->in_msg + mbedtls_ssl_hs_hdr_len( ssl );
         size_t params_len = p - params;
         void *rs_ctx = NULL;
-        printf("\nline 2823\n");
+
         /*
          * Handle the digitally-signed structure
          */
@@ -2838,7 +2830,7 @@ start_processing:
                     MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
                 return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
             }
-            printf("\nline 2841\n");
+
             if( pk_alg !=
                 mbedtls_ssl_get_ciphersuite_sig_pk_alg( ciphersuite_info ) )
             {
@@ -2873,7 +2865,7 @@ start_processing:
         /*
          * Read signature
          */
-        printf("\nline 2876\n");
+
         if( p > end - 2 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
@@ -2897,7 +2889,7 @@ start_processing:
         }
 
         MBEDTLS_SSL_DEBUG_BUF( 3, "signature", p, sig_len );
-        printf("\nline 2900\n");
+
         /*
          * Compute the hash that has been signed
          */
@@ -3981,7 +3973,6 @@ int mbedtls_ssl_handshake_client_step( mbedtls_ssl_context *ssl )
        case MBEDTLS_SSL_SERVER_CERTIFICATE:
            RUNTIME_START
            ret = mbedtls_ssl_parse_certificate( ssl );
-           printf("\nline 3983\n");
            RUNTIME_STOP
 #if defined(MBEDTLS_PEFORMANCE)
            ssl->performance->parse_server_certificate = runtime;

@@ -877,7 +877,7 @@ static int dilithium_verify_wrap(void *ctx, mbedtls_md_type_t md_alg,
     const unsigned char *sig, size_t sig_len)
 {
     ((void)md_alg);
-    printf("\ndilithium_verify_wrap\n");
+
     return mbedtls_dilithium_read_signature((mbedtls_dilithium_context *)ctx,
         hash, hash_len, sig, sig_len);
 }

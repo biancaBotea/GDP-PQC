@@ -143,7 +143,6 @@ int mbedtls_kyber_read_params(mbedtls_kyber_context *ctx,
 {
 	int ret;
 	size_t len;
-	printf("\nmbedtls_kyber_read_params\n");
 	if (ctx == NULL)
 		return(MBEDTLS_ERR_KYBER_BAD_INPUT_DATA);
 
@@ -151,7 +150,7 @@ int mbedtls_kyber_read_params(mbedtls_kyber_context *ctx,
 	{
 		return (MBEDTLS_ERR_KYBER_BAD_INPUT_DATA);
 	}
-	printf("\line 154\n");
+
 	len = 0;
 	mbedtls_mpi_read_binary(&ctx->key.pk_poly, *buf, KYBER_POLYVECCOMPRESSEDBYTES);
 	(*buf) += KYBER_POLYVECCOMPRESSEDBYTES;
@@ -159,7 +158,7 @@ int mbedtls_kyber_read_params(mbedtls_kyber_context *ctx,
 	(*buf) += KYBER_SYMBYTES;
 	memcpy(&ctx->key.pk_seed, (*buf), KYBER_SYMBYTES);
 	(*buf) += KYBER_SYMBYTES;
-	printf("\line 162\n");
+
 	return (0);
 }
 
