@@ -191,21 +191,20 @@ static int write_private_key( mbedtls_pk_context *key, const char *output_file )
 {
     int ret;
     FILE *f;
-    unsigned char output_buf[160000];
+    unsigned char output_buf[16000];
     unsigned char *c = output_buf;
     size_t len = 0;
-    printf("\nwriting private key\n");
-    memset(output_buf, 0, 160000);
+    memset(output_buf, 0, 16000);
     if( opt.format == FORMAT_PEM )
     {
-        if( ( ret = mbedtls_pk_write_key_pem( key, output_buf, 160000 ) ) != 0 )
+        if( ( ret = mbedtls_pk_write_key_pem( key, output_buf, 16000 ) ) != 0 )
             return( ret );
 
         len = strlen( (char *) output_buf );
     }
     else
     {
-        if( ( ret = mbedtls_pk_write_key_der( key, output_buf, 160000 ) ) < 0 )
+        if( ( ret = mbedtls_pk_write_key_der( key, output_buf, 16000 ) ) < 0 )
             return( ret );
 
         len = ret;
@@ -445,10 +444,7 @@ int main( int argc, char *argv[] )
 #if defined(MBEDTLS_DILITHIUM_C)
 	if (opt.type == MBEDTLS_PK_DILITHIUM)
 	{
-        int pk_length = mbedtls_dilithium_get_len(mbedtls_pk_dilithium(key));
-        printf("pk_length = %d\n", pk_length);
 		ret = mbedtls_dilithium_genkey(mbedtls_pk_dilithium(key), mbedtls_ctr_drbg_random, &ctr_drbg);
-        mbedtls_printf( " you're here\n" );
 		if (ret != 0)
 		{
 			mbedtls_printf(" failed\n  !  mbedtls_dilithium_genkey returned -0x%04x", -ret);
@@ -519,10 +515,9 @@ int main( int argc, char *argv[] )
 	if (mbedtls_pk_get_type(&key) == MBEDTLS_PK_DILITHIUM)
 	{
 		mbedtls_dilithium_context *dilithium = mbedtls_pk_dilithium(key);
-		mbedtls_mpi_write_file("PK: ", &dilithium->pk, 16, NULL);
-        fflush( stdout );
-		mbedtls_mpi_write_file("SK: ", &dilithium->sk, 16, NULL);
-        fflush( stdout );
+		mbedtls_mpi_write_file("PK_rho: ", &dilithium->key.pk_rho, 16, NULL);
+        mbedtls_mpi_write_file("PK_t1: ", &dilithium->key.pk_t1, 16, NULL);
+		mbedtls_mpi_write_file("SK: ", &dilithium->key.sk, 16, NULL);
 	}
     else
 #endif /* MBEDTLS_DILITHIUM_C */
