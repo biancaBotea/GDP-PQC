@@ -9,11 +9,25 @@
 #include "mbedtls/md.h"
 #include "mbedtls/bignum.h"
 
+typedef struct
+{
+	//mbedtls_mpi sk_rho;
+	//mbedtls_mpi sk_seed;
+	//mbedtls_mpi sk_prf;
+	//mbedtls_mpi sk_l;
+	//mbedtls_mpi sk_k;
+	mbedtls_mpi pk_rho;
+	mbedtls_mpi pk_t1;
+	mbedtls_mpi sk;
+	size_t bitlen;
+}
+mbedtls_dilithium_keypair;
 
 typedef struct mbedtls_dilithium_context
 {
-	unsigned char pk[CRYPTO_PUBLICKEYBYTES_D];
-	unsigned char sk[CRYPTO_SECRETKEYBYTES_D];
+	//unsigned char pk[CRYPTO_PUBLICKEYBYTES_D];
+	//unsigned char sk[CRYPTO_SECRETKEYBYTES_D];
+	mbedtls_dilithium_keypair key;
 }mbedtls_dilithium_context;
 
 #if defined(MBEDTLS_ASN1_PARSE_C)
