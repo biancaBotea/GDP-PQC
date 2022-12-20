@@ -862,7 +862,8 @@ const mbedtls_pk_info_t mbedtls_sphincs_info = {
 #if defined(MBEDTLS_DILITHIUM_C)
 static size_t dilithium_get_bitlen(const void *ctx)
 {
-    return(sizeof(((mbedtls_dilithium_context *)ctx)->pk));
+    //return(sizeof(((mbedtls_dilithium_context *)ctx)->pk));
+    return(((mbedtls_dilithium_context *)ctx)->key.bitlen);
 }
 
 static int dilithium_can_do(mbedtls_pk_type_t type)
@@ -876,7 +877,7 @@ static int dilithium_verify_wrap(void *ctx, mbedtls_md_type_t md_alg,
     const unsigned char *sig, size_t sig_len)
 {
     ((void)md_alg);
-
+    printf("\ndilithium_verify_wrap\n");
     return mbedtls_dilithium_read_signature((mbedtls_dilithium_context *)ctx,
         hash, hash_len, sig, sig_len);
 }
@@ -894,13 +895,13 @@ static int dilithium_sign_wrap(void *ctx, mbedtls_md_type_t md_alg,
 
 static int dilithium_check_pair(const void *pub, const void *prv)
 {
-    return(memcmp(((const mbedtls_dilithium_context *)pub)->pk, 
-        ((const mbedtls_dilithium_context *)prv)->pk,
-        mbedtls_dilithium_get_len((const mbedtls_dilithium_context *)pub)));
+    //return(memcmp(((const mbedtls_dilithium_context *)pub)->pk, 
+      //  ((const mbedtls_dilithium_context *)prv)->pk,
+        //mbedtls_dilithium_get_len((const mbedtls_dilithium_context *)pub)));
     
-    //return(mbedtls_dilithium_check_pub_priv(
-      //  (const mbedtls_dilithium_context *)pub,
-        //(const mbedtls_dilithium_context *)prv));
+    return(mbedtls_dilithium_check_pub_priv(
+    (const mbedtls_dilithium_context *)pub,
+    (const mbedtls_dilithium_context *)prv));
 }
 
 static void *dilithium_alloc_wrap(void)
@@ -919,18 +920,18 @@ static void dilithium_free_wrap(void *ctx)
     mbedtls_free(ctx);
 }
 
-/*static void dilithium_debug(const void *ctx, mbedtls_pk_debug_item *items)
+static void dilithium_debug(const void *ctx, mbedtls_pk_debug_item *items)
 {
     items->type = MBEDTLS_PK_DEBUG_MPI;
-    items->name = "root";
-    items->value = &(((mbedtls_dilithium_context *)ctx)->key.root);
+    items->name = "pk_rho";
+    items->value = &(((mbedtls_dilithium_context *)ctx)->key.pk_rho);
 
     items++;
 
     items->type = MBEDTLS_PK_DEBUG_MPI;
-    items->name = "pk_seed";
-    items->value = &(((mbedtls_dilithium_context *)ctx)->key.pk_seed);
-}*/
+    items->name = "pk_t1";
+    items->value = &(((mbedtls_dilithium_context *)ctx)->key.pk_t1);
+}
 
 const mbedtls_pk_info_t mbedtls_dilithium_info = {
     MBEDTLS_PK_DILITHIUM,
@@ -952,7 +953,7 @@ const mbedtls_pk_info_t mbedtls_dilithium_info = {
     NULL,
     NULL,
 #endif
-    NULL, //dilithium_debug,
+    dilithium_debug,
 };
 #endif /* MBEDTLS_DILITHIUM_C */ 
 

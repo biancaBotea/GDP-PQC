@@ -207,7 +207,7 @@ static int ssl_write_signature_algorithms_ext( mbedtls_ssl_context *ssl,
     size_t sig_alg_len = 0;
     const int *md;
 
-#if defined(MBEDTLS_RSA_C) || defined(MBEDTLS_ECDSA_C)
+#if defined(MBEDTLS_RSA_C) || defined(MBEDTLS_ECDSA_C) || defined(MBEDTLS_DILITHIUM_C)
     unsigned char *sig_alg_list = buf + 6;
 #endif
 
@@ -252,19 +252,30 @@ static int ssl_write_signature_algorithms_ext( mbedtls_ssl_context *ssl,
     for( md = ssl->conf->sig_hashes; *md != MBEDTLS_MD_NONE; md++ )
     {
 #if defined(MBEDTLS_ECDSA_C)
+        printf("\n*** hash added to ecdsa *** \n");
         sig_alg_list[sig_alg_len++] = mbedtls_ssl_hash_from_md_alg( *md );
         sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_ECDSA;
 #endif
 #if defined(MBEDTLS_RSA_C)
+        printf("\n*** hash added to rsa *** \n");
         sig_alg_list[sig_alg_len++] = mbedtls_ssl_hash_from_md_alg( *md );
         sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_RSA;
 #endif
+        printf("sig_alg_len = %d\n", sig_alg_len);
     }
 #if defined(MBEDTLS_SPHINCS_C)
+    printf("\n*** hash added to sphincs *** \n");
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_HASH_SHA256;
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_SPHINCS;
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_HASH_SHAKE256;
 	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_SPHINCS;
+    printf("sig_alg_len = %d\n", sig_alg_len);
+#endif
+#if defined(MBEDTLS_DILITHIUM_C)
+    printf("\n*** hash added to dilithium %d *** \n", MBEDTLS_SSL_HASH_SHAKE256);
+	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_HASH_SHAKE256;
+	sig_alg_list[sig_alg_len++] = MBEDTLS_SSL_SIG_DILITHIUM;
+    printf("sig_alg_len = %d\n", sig_alg_len);
 #endif
     /*
      * enum {
@@ -2260,7 +2271,8 @@ static int ssl_parse_server_dh_params( mbedtls_ssl_context *ssl,
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED) ||                      \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED) ||					   \
-	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED)
+	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED) ||					   \
+	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED)
 static int ssl_check_server_ecdh_params( const mbedtls_ssl_context *ssl )
 {
     const mbedtls_ecp_curve_info *curve_info;
@@ -2298,12 +2310,14 @@ static int ssl_check_server_ecdh_params( const mbedtls_ssl_context *ssl )
           MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED ||
-		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED */
+		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED ||
+		  MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||                   \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED) ||					   \
-	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED)
+	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED) ||					   \
+	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED)
 static int ssl_parse_server_ecdh_params( mbedtls_ssl_context *ssl,
                                          unsigned char **p,
                                          unsigned char *end )
@@ -2341,7 +2355,8 @@ static int ssl_parse_server_ecdh_params( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED 	||
-		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED */
+		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED ||
+		  MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED)
 static int ssl_parse_server_psk_hint( mbedtls_ssl_context *ssl,
@@ -2468,7 +2483,9 @@ static int ssl_write_encrypted_pms( mbedtls_ssl_context *ssl,
 #if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||                     \
-    defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)
+    defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)||                     \
+    defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)||                     \
+    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED)
 static int ssl_parse_signature_algorithm( mbedtls_ssl_context *ssl,
                                           unsigned char **p,
                                           unsigned char *end,
@@ -2484,10 +2501,10 @@ static int ssl_parse_signature_algorithm( mbedtls_ssl_context *ssl,
     {
         return( 0 );
     }
-
+    printf("\nline 2504\n");
     if( (*p) + 2 > end )
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
-
+    printf("\n *** HashAlgorithm %d, SignatureAlgorithm %d ***\n", *(p)[0], (*p)[1]);
     /*
      * Get hash algorithm
      */
@@ -2723,12 +2740,16 @@ start_processing:
 #if defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED) ||                     \
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||				   \
-	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED)
+	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED) ||				   \
+	defined(MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED)
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_RSA ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK ||
 #if defined(MBEDTLS_SSL_SPHINCS)
 		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS ||
 #endif /* MBEDTLS_SSL_SPHINCS */
+#if defined(MBEDTLS_SSL_DILITHIUM)
+		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM ||
+#endif /* MBEDTLS_SSL_DILITHIUM */
 		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA )
     {
         if( ssl_parse_server_ecdh_params( ssl, &p, end ) != 0 )
@@ -2745,12 +2766,16 @@ start_processing:
 #endif /* MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED ||
-		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED */
+		  MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED ||
+          MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED*/
 #if defined(MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED)	||	\
-    defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)
+    defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED) ||  \
+    defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)
 		if (ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS  ||
-			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA)
+			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA    ||
+			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM)
 		{
+            printf("\nline 2778\n");
 			if (mbedtls_kyber_read_params(&ssl->handshake->kyber_ctx, &p, end) != 0)
 			{
 				MBEDTLS_SSL_DEBUG_MSG(1, ("bad server key exchange message"));
@@ -2761,7 +2786,8 @@ start_processing:
 	}
 		else
 #endif /* MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED	||
-		  MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED */
+		  MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED ||
+          MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED*/
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE )
     {
@@ -2794,7 +2820,7 @@ start_processing:
         unsigned char *params = ssl->in_msg + mbedtls_ssl_hs_hdr_len( ssl );
         size_t params_len = p - params;
         void *rs_ctx = NULL;
-
+        printf("\nline 2823\n");
         /*
          * Handle the digitally-signed structure
          */
@@ -2812,7 +2838,7 @@ start_processing:
                     MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
                 return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
             }
-
+            printf("\nline 2841\n");
             if( pk_alg !=
                 mbedtls_ssl_get_ciphersuite_sig_pk_alg( ciphersuite_info ) )
             {
@@ -2847,7 +2873,7 @@ start_processing:
         /*
          * Read signature
          */
-
+        printf("\nline 2876\n");
         if( p > end - 2 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
@@ -2871,7 +2897,7 @@ start_processing:
         }
 
         MBEDTLS_SSL_DEBUG_BUF( 3, "signature", p, sig_len );
-
+        printf("\nline 2900\n");
         /*
          * Compute the hash that has been signed
          */
@@ -3259,12 +3285,14 @@ static int ssl_write_client_key_exchange( mbedtls_ssl_context *ssl )
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||                   \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED) ||                      \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED) ||					   \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED)
+    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED) ||                 \
+    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED)
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_RSA ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA ||
 		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS ||
 		ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA )
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA ||
+        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM  )
     {
         /*
          * ECDH key exchange -- send client public value
@@ -3335,9 +3363,11 @@ ecdh_calc_secret:
           MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED ||
 		  MBEDTLS_KEY_EXCHANGE_ECDH_SPHINCS_ENABLED */
 #if defined(MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED)	||	\
-	defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)
+	defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED) ||	\
+	defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)
 		if (ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS ||
-			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA)
+			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA   ||
+			ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM)
 		{
 			/*
 			* KYBER key exchange -- send client public value
@@ -3377,7 +3407,8 @@ ecdh_calc_secret:
 		}
 		else
 #endif /* MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED ||
-		  MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED */
+		  MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED ||
+		  MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED */
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED)
     if( mbedtls_ssl_ciphersuite_uses_psk( ciphersuite_info ) )
     {
@@ -3553,7 +3584,8 @@ ecdh_calc_secret:
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)&& \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)&& \
-    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)
+    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)&& \
+    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)
 static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
 {
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
@@ -3949,6 +3981,7 @@ int mbedtls_ssl_handshake_client_step( mbedtls_ssl_context *ssl )
        case MBEDTLS_SSL_SERVER_CERTIFICATE:
            RUNTIME_START
            ret = mbedtls_ssl_parse_certificate( ssl );
+           printf("\nline 3983\n");
            RUNTIME_STOP
 #if defined(MBEDTLS_PEFORMANCE)
            ssl->performance->parse_server_certificate = runtime;

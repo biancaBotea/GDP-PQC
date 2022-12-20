@@ -70,7 +70,14 @@
 }*/
 
 
-
+int mbedtls_dilithium_check_pub_priv(const mbedtls_dilithium_context *pub, const mbedtls_dilithium_context *prv)
+{
+	if (mbedtls_mpi_cmp_mpi(&pub->key.pk_rho, &prv->key.pk_rho) || mbedtls_mpi_cmp_mpi(&pub->key.pk_t1, &prv->key.pk_t1))
+	{
+		return -1;
+	}
+	return 0;
+}
 
 
 /* 
@@ -80,35 +87,133 @@
 int mbedtls_dilithium_genkey(mbedtls_dilithium_context *ctx,
 							int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
 {
-	int ret;
+  /*int ret;
   printf("CRYPTO_PUBLICKEYBYTES_D = %d, CRYPTO_SECRETKEYBYTES_D = %d\n", CRYPTO_PUBLICKEYBYTES_D, CRYPTO_SECRETKEYBYTES_D);
-	unsigned char pkey[CRYPTO_PUBLICKEYBYTES_D];
-	unsigned char skey[CRYPTO_SECRETKEYBYTES_D + CRYPTO_PUBLICKEYBYTES_D];
+  unsigned char pkey[CRYPTO_PUBLICKEYBYTES_D];
+  unsigned char skey[CRYPTO_SECRETKEYBYTES_D + CRYPTO_PUBLICKEYBYTES_D];
 
   //Initialize with random data 
   printf("Initialising sk with random data\n");
-	do {
-		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->sk, 632, f_rng, p_rng));
-	} while (mbedtls_mpi_bitlen(&ctx->sk) == 0);
+  int count;
+  count = 0;
+  do {
+    MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->sk, 632, f_rng, p_rng));
+    printf("%d ,", count);
+    count++;
+  } while (mbedtls_mpi_bitlen(&ctx->sk) == 0);
   printf("Initialising pk with random data\n");
-	do {
-		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->pk, 656, f_rng, p_rng));
-	} while (mbedtls_mpi_bitlen(&ctx->sk) == 0);
-
-	mbedtls_mpi_write_binary(&ctx->sk, skey + 0, 2528);
-	mbedtls_mpi_write_binary(&ctx->pk, skey + 1 * 2528, 2624);
+  count = 0;
+  do {
+    MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->pk, 656, f_rng, p_rng));
+    printf("%d ,", count);
+  } while (mbedtls_mpi_bitlen(&ctx->sk) == 0);
   
-	if (crypto_sign_keypair_d(pkey, skey, f_rng, p_rng)) {
+
+  MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->sk, CRYPTO_SECRETKEYBYTES_D/2, f_rng, p_rng));
+  MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->pk, CRYPTO_PUBLICKEYBYTES_D/2, f_rng, p_rng));
+
+  mbedtls_mpi_write_binary(&ctx->sk, skey + 0, 2528);
+  mbedtls_mpi_write_binary(&ctx->pk, skey + 1 * 2528, 1312);
+
+  if (crypto_sign_keypair_d(pkey, skey, f_rng, p_rng)) {
+    return -1;
+  }
+  mbedtls_mpi_read_binary(&ctx->sk, skey + 0, 2528);
+  mbedtls_mpi_read_binary(&ctx->pk, skey + 1 * 2528, 1312);
+  
+  */
+  
+  /*
+  int ret;
+	unsigned char pk[CRYPTO_PUBLICKEYBYTES_D];
+	unsigned char sk[SEEDBYTES_D*2 + CRYPTO_PUBLICKEYBYTES_D];
+  
+  // rho length = SEEDBYTES_D, t1 length = K_D*POLYT1_PACKEDBYTES
+  
+  ctx->key.version = 0;
+	// Initialize with random data 
+  do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.sk_rho, SEEDBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.sk_rho) == 0);
+	do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.sk_seed, SEEDBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.sk_rho) == 0);
+	do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.sk_prf, SEEDBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.sk_rho) == 0);
+	do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.sk_l, SEEDBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.sk_rho) == 0);
+	do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.sk_k, SEEDBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.sk_rho) == 0);
+  
+  do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.pk_rho, SEEDBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.sk_rho) == 0);
+	do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.pk_t1, K_D*POLYT1_PACKEDBYTES, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.sk_rho) == 0);
+
+	mbedtls_mpi_write_binary(&ctx->key.sk_rho, sk, SEEDBYTES_D); 
+	mbedtls_mpi_write_binary(&ctx->key.sk_seed, sk + SEEDBYTES_D, SEEDBYTES_D); 
+  mbedtls_mpi_write_binary(&ctx->key.pk_rho, sk + 2 * SEEDBYTES_D, SEEDBYTES_D); 
+	mbedtls_mpi_write_binary(&ctx->key.pk_t1, sk + 3 * SEEDBYTES_D, K_D*POLYT1_PACKEDBYTES);
+
+	if (crypto_sign_keypair_d(pk, sk, f_rng, p_rng)) {
 		return -1;
 	}
-	mbedtls_mpi_read_binary(&ctx->sk, skey + 0, 2528);
-	mbedtls_mpi_read_binary(&ctx->pk, skey + 1 * 2528, 2624);
+	mbedtls_mpi_read_binary(&ctx->key.sk_seed, sk, SEEDBYTES_D);
+	mbedtls_mpi_read_binary(&ctx->key.sk_rho, sk + SEEDBYTES_D, SEEDBYTES_D);
+  mbedtls_mpi_read_binary(&ctx->key.pk_rho, sk + 2 * SEEDBYTES_D, SEEDBYTES_D);
+	mbedtls_mpi_read_binary(&ctx->key.pk_t1, sk + 3 * SEEDBYTES_D, K_D*POLYT1_PACKEDBYTES);
+
+	ctx->key.bitlen = (SEEDBYTES_D + rho_len + POLYT1_PACKEDBYTES) * 8; 
+  */
+  
+  int ret;
+	unsigned char pk[CRYPTO_PUBLICKEYBYTES_D];
+	unsigned char sk[CRYPTO_SECRETKEYBYTES_D];
+  
+  // rho length = SEEDBYTES_D, t1 length = K_D*POLYT1_PACKEDBYTES
+  
+	// Initialize with random data 
+
+  printf("\nrandomising pk rho bytes\n");
+  do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.pk_rho, SEEDBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.pk_rho) == 0);
+  printf("randomising pk t1 bytes\n");
+	do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.pk_t1, K_D*POLYT1_PACKEDBYTES, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.pk_rho) == 0);
+  printf("randomising sk bytes\n");
+  do {
+		MBEDTLS_MPI_CHK(mbedtls_mpi_fill_random(&ctx->key.sk, CRYPTO_PUBLICKEYBYTES_D, f_rng, p_rng));
+	} while (mbedtls_mpi_bitlen(&ctx->key.pk_rho) == 0);
+
+
+	mbedtls_mpi_write_binary(&ctx->key.sk, sk, CRYPTO_SECRETKEYBYTES_D); 
+  mbedtls_mpi_write_binary(&ctx->key.pk_rho, pk, SEEDBYTES_D); 
+	mbedtls_mpi_write_binary(&ctx->key.pk_t1, pk + SEEDBYTES_D, K_D*POLYT1_PACKEDBYTES);
+
+	if (crypto_sign_keypair_d(pk, sk, f_rng, p_rng)) {
+		return -1;
+	}
+	mbedtls_mpi_read_binary(&ctx->key.sk, sk, CRYPTO_SECRETKEYBYTES_D);
+  mbedtls_mpi_read_binary(&ctx->key.pk_rho, pk, SEEDBYTES_D);
+	mbedtls_mpi_read_binary(&ctx->key.pk_t1, pk + SEEDBYTES_D, K_D*POLYT1_PACKEDBYTES);
+
+
+	ctx->key.bitlen = (CRYPTO_PUBLICKEYBYTES_D + CRYPTO_SECRETKEYBYTES_D) * 8; 
+  
+   
 
 cleanup:
-	if (ret != 0)
-		return(ret);
+  if (ret != 0)
+    return(ret);
 
-	return ( 0 );
+  return ( 0 );
 }
 
 
@@ -117,8 +222,12 @@ cleanup:
 */
 void mbedtls_dilithium_init(mbedtls_dilithium_context *ctx){
 
-  memset ( ctx -> pk , 0 , CRYPTO_PUBLICKEYBYTES_D ) ;
-  memset ( ctx -> sk , 0 , CRYPTO_SECRETKEYBYTES_D ) ;
+  //memset ( ctx -> pk , 0 , CRYPTO_PUBLICKEYBYTES_D ) ;
+  //memset ( ctx -> sk , 0 , CRYPTO_SECRETKEYBYTES_D ) ;
+  
+  mbedtls_mpi_init(&ctx->key.pk_rho);
+  mbedtls_mpi_init(&ctx->key.pk_t1);
+	mbedtls_mpi_init(&ctx->key.sk);
 }
 
 /*
@@ -129,8 +238,9 @@ void mbedtls_dilithium_free(mbedtls_dilithium_context *ctx){
   // if(ctx == NULL)
   //   return;
 
-  mbedtls_mpi_free(&ctx->pk);
-  mbedtls_mpi_free(&ctx->sk);
+  mbedtls_mpi_free(&ctx->key.pk_rho);
+  mbedtls_mpi_free(&ctx->key.pk_t1);
+  mbedtls_mpi_free(&ctx->key.sk);
 }
 
 /**
@@ -145,7 +255,7 @@ size_t mbedtls_dilithium_get_len( const mbedtls_dilithium_context *ctx ){
 
   // return( ctx->len );
 
-  return sizeof(ctx->pk);
+  return (ctx->key.bitlen);
 }
 
 /**
@@ -164,19 +274,20 @@ size_t mbedtls_dilithium_get_len( const mbedtls_dilithium_context *ctx ){
 * \return          \c 0 on success
 *                  or an error code on failure.
 */
-int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
+int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx, /* re-write */
   //mbedtls_md_type_t md_alg,
   const unsigned char *hash, size_t hlen,
   unsigned char *sig, size_t *slen,
   int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
 {
   int ret = 0;
-  unsigned char skey[2 * N_D];
-  unsigned char optrand[N_D];
+  unsigned char skey[CRYPTO_PUBLICKEYBYTES_D + CRYPTO_SECRETKEYBYTES_D];
+  unsigned char optrand[SEEDBYTES_D];
   unsigned long long ull_slen = 0;
 
-  mbedtls_mpi_write_binary(&ctx->sk, skey + 0 * N_D, N_D);
-  mbedtls_mpi_write_binary(&ctx->pk, skey + 1 * N_D, N_D);
+  mbedtls_mpi_write_binary(&ctx->key.sk, skey + 0 * N_D, CRYPTO_SECRETKEYBYTES_D);
+  mbedtls_mpi_write_binary(&ctx->key.pk_rho, skey + 1 * CRYPTO_SECRETKEYBYTES_D, SEEDBYTES_D);
+  mbedtls_mpi_write_binary(&ctx->key.pk_t1, skey + 1 * CRYPTO_SECRETKEYBYTES_D + SEEDBYTES_D, K_D*POLYT1_PACKEDBYTES);
   // mbedtls_mpi_write_binary(&ctx->key.pk_seed, sk + 2 * SPX_N, SPX_N);
   // mbedtls_mpi_write_binary(&ctx->key.root, sk + 3 * SPX_N, SPX_N);
 
@@ -190,7 +301,7 @@ int mbedtls_dilithium_write_signature(mbedtls_dilithium_context *ctx,
   //   md = &sphincs_shake256_info;
   // }
   
-  if ((ret = f_rng(p_rng, optrand, N_D)) != 0)
+  if ((ret = f_rng(p_rng, optrand, SEEDBYTES_D)) != 0)
     return ret;
 
   ret = crypto_sign_d(sig, &ull_slen, hash, hlen, skey);
@@ -220,9 +331,10 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
   const unsigned char *hash, size_t hlen,
   const unsigned char *sig, size_t slen)
 {
-  unsigned char pkey[2 * N_D];
-
-  mbedtls_mpi_write_binary(&ctx->pk, pkey + 1 * N_D, N_D);
+  unsigned char pkey[CRYPTO_PUBLICKEYBYTES_D];
+  printf("\nmbedtls_dilithium_read_signature\n");
+  mbedtls_mpi_write_binary(&ctx->key.pk_rho, pkey, SEEDBYTES_D);
+  mbedtls_mpi_write_binary(&ctx->key.pk_t1, pkey + SEEDBYTES_D, K_D*POLYT1_PACKEDBYTES);
 
   //mbedtls_mpi_write_file("Root:    ", &ctx->key.root, 16, NULL);
   //mbedtls_mpi_write_file("PK_D_Seed: ", &ctx->key.pk_seed, 16, NULL);
@@ -237,7 +349,7 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
   //   md = &sphincs_shake256_info;
   // }
 
-  return crypto_sign_open_d(hash, hlen, sig, slen, pkey);
+  return crypto_sign_open_d(hash, &hlen, sig, slen, pkey);
 }
 
 /*************************************************
@@ -246,9 +358,9 @@ int mbedtls_dilithium_read_signature(mbedtls_dilithium_context *ctx,
 * Description: Generates public and private key.
 *
 * Arguments:   - unsigned char *pk: pointer to output public key (allocated
-*                             array of CRYPTO_PUBLICK_DEYBYTES_D bytes)
+*                             array of CRYPTO_PUBLICKEYBYTES_D bytes)
 *              - unsigned char *sk: pointer to output private key (allocated
-*                             array of CRYPTO_SECRETK_DEYBYTES_D bytes)
+*                             array of CRYPTO_SECRETKEYBYTES_D bytes)
 *
 * Returns 0 (success)
 **************************************************/
@@ -460,6 +572,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
                        size_t mlen,
                        const unsigned char *pk)
 {
+  printf("\ncrypto_sign_verify_d\n");
   unsigned int i;
   unsigned char buf[K_D*POLYW1_PACKEDBYTES];
   unsigned char rho[SEEDBYTES_D];
@@ -470,7 +583,7 @@ int crypto_sign_verify_d(const unsigned char *sig,
   polyvecl mat[K_D], z;
   polyveck t1, w1, h;
   keccak_state state;
-
+  
   if(siglen != CRYPTO_BYTES_D)
     return -1;
 
@@ -546,8 +659,9 @@ int crypto_sign_open_d(unsigned char *m,
 
   if(smlen < CRYPTO_BYTES_D)
     goto badsig;
-
+  printf("\ncrypto_sign_open_d\n");
   *mlen = smlen - CRYPTO_BYTES_D;
+  printf("\nline 664\n");
   if(crypto_sign_verify_d(sm, CRYPTO_BYTES_D, sm + CRYPTO_BYTES_D, *mlen, pk))
     goto badsig;
   else {
@@ -556,7 +670,7 @@ int crypto_sign_open_d(unsigned char *m,
       m[i] = sm[CRYPTO_BYTES_D + i];
     return 0;
   }
-
+  printf("\nline 673\n");
 badsig:
   /* Signature verification failed */
   *mlen = -1;

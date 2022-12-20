@@ -121,7 +121,7 @@ int mbedtls_shake256_finish_ret( mbedtls_shake256_context *ctx,
     SHAKE256_VALIDATE_RET( ctx != NULL );
     SHAKE256_VALIDATE_RET( (unsigned char *)output != NULL );
 
-    shake256_dilithium(output, 64, ctx->buffer, (unsigned long long) ctx->buff_len);
+    shake256_d(output, 64, ctx->buffer, (unsigned long long) ctx->buff_len);
     return( 0 );
 }
 
@@ -133,7 +133,7 @@ int mbedtls_shake256_ret( const unsigned char *input,
                     unsigned char output[64])
 {
 
-    shake256_dilithium(output, 64, input, (unsigned long long) ilen);
+    shake256_d(output, 64, input, (unsigned long long) ilen);
     return( 0 );
 }
 #endif

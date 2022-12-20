@@ -417,46 +417,28 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
 		pk_alg = MBEDTLS_PK_SPHINCS;
 #endif /* MBEDTLS_SPHINCS_C */
 
-
-
-
 #if defined(MBEDTLS_DILITHIUM_C)
-    //unsigned char sig[MBEDTLS_DILITHIUM_MAX_SIZE];
-
-    unsigned char sig_d[SIGNATURE_MAX_SIZE];
-#endif
-   /* size_t sub_len = 0, pub_len = 0, sig_and_oid_len = 0, sig_len;
-    size_t len = 0;
-    mbedtls_pk_type_t pk_alg;
-*/
-    /*
-     * Prepare data to be signed at the end of the target buffer
-     */
-    //c = buf + size; 
-
-    /* Signature algorithm needed in TBS, and later for actual signature */
-
-    /* There's no direct way of extracting a signature algorithm
-     * (represented as an element of mbedtls_pk_type_t) from a PK instance. */
-    if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_RSA ) )
-        pk_alg = MBEDTLS_PK_RSA;
-    else if( mbedtls_pk_can_do( ctx->issuer_key, MBEDTLS_PK_ECDSA ) )
-        pk_alg = MBEDTLS_PK_ECDSA;
-#if defined(MBEDTLS_DILITHIUM_C)
-    else if (mbedtls_pk_can_do(ctx->issuer_key, MBEDTLS_PK_DILITHIUM))
+    else if (mbedtls_pk_can_do(ctx->issuer_key, MBEDTLS_PK_DILITHIUM)){
         pk_alg = MBEDTLS_PK_DILITHIUM;
+        printf("\ncan do dilithium");
+    }
 #endif /* MBEDTLS_DILITHIUM_C */
-
-
 
 	else
         return( MBEDTLS_ERR_X509_INVALID_ALG );
-
+    printf("\ngetting oid...\n");
+    
+    if(ctx->md_alg == MBEDTLS_MD_SHAKE256)
+        printf("MD is SHAKE256\n");
+    else
+        printf("MD is NOT SHAKE256\n");
     if( ( ret = mbedtls_oid_get_oid_by_sig_alg( pk_alg, ctx->md_alg,
                                           &sig_oid, &sig_oid_len ) ) != 0 )
     {
         return( ret );
     }
+    
+    printf(" passed get oid\n");
 
     /*
      *  Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
@@ -573,7 +555,7 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
     }
 
     if( ( ret = mbedtls_pk_sign( ctx->issuer_key, ctx->md_alg,
-                                 hash, 0, sig_d, &sig_len,
+                                 hash, 0, sig, &sig_len,
                                  f_rng, p_rng ) ) != 0 )
     {
         return( ret );
@@ -589,7 +571,7 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
      * into the CRT buffer. */
     c2 = buf + size;
     MBEDTLS_ASN1_CHK_ADD( sig_and_oid_len, mbedtls_x509_write_sig( &c2, c,
-                                        sig_oid, sig_oid_len, sig_d, sig_len ) );
+                                        sig_oid, sig_oid_len, sig, sig_len ) );
 
     /*
      * Memory layout after this step:
@@ -623,12 +605,13 @@ int mbedtls_x509write_crt_pem( mbedtls_x509write_cert *crt,
     int ret;
     size_t olen;
 
+    printf("\nmbedtls_x509write_crt_der\n");
     if( ( ret = mbedtls_x509write_crt_der( crt, buf, size,
                                    f_rng, p_rng ) ) < 0 )
     {
         return( ret );
     }
-
+    printf("mbedtls_pem_write_buffer\n");
     if( ( ret = mbedtls_pem_write_buffer( PEM_BEGIN_CRT, PEM_END_CRT,
                                           buf + size - ret, ret,
                                           buf, size, &olen ) ) != 0 )

@@ -450,15 +450,11 @@ static const oid_sig_alg_t oid_sig_alg[] =
         MBEDTLS_MD_SHAKE256,   MBEDTLS_PK_DILITHIUM,
     },
     /* Public-key OID*/
-	{
+	/*{
 		{ ADD_LEN(MBEDTLS_OID_DILITHIUM_SHAKE256),     "id-dilithium-shake256 ",    "DILITHIUM with SHAKE256" },
 		MBEDTLS_PK_DILITHIUM,
-	},
-    /* Message digest OID */
-    {
-        { ADD_LEN(MBEDTLS_OID_SHAKE256),     "id-shake-256",    "SHAKE-256" },
-        MBEDTLS_MD_SHAKE256,
-    },
+	},*/
+
 #endif /* MBEDTLS_SHAKE256_C */
 #endif /* MBEDTLS_DILITHIUM_C */
 
@@ -508,7 +504,7 @@ static const oid_pk_alg_t oid_pk_alg[] =
 		MBEDTLS_PK_SPHINCS,
 	},
     {
-        { ADD_LEN(MBEDTLS_OID_DILITHIUM_ALG),  "id-diliothiumPublicKey",   "Generic DILITHIUM key" },
+        { ADD_LEN(MBEDTLS_OID_DILITHIUM_ALG),  "id-dilithiumPublicKey",   "Generic DILITHIUM key" },
         MBEDTLS_PK_DILITHIUM,
     },
     {        
@@ -524,7 +520,6 @@ static const oid_pk_alg_t oid_pk_alg[] =
 FN_OID_TYPED_FROM_ASN1(oid_pk_alg_t, pk_alg, oid_pk_alg)
 FN_OID_GET_ATTR1(mbedtls_oid_get_pk_alg, oid_pk_alg_t, pk_alg, mbedtls_pk_type_t, pk_alg)
 FN_OID_GET_OID_BY_ATTR1(mbedtls_oid_get_oid_by_pk_alg, oid_pk_alg_t, oid_pk_alg, mbedtls_pk_type_t, pk_alg)
-
 #if defined(MBEDTLS_ECP_C)
 /*
  * For namedCurve (RFC 5480)
@@ -697,6 +692,13 @@ static const oid_md_alg_t oid_md_alg[] =
         MBEDTLS_MD_SHA512,
     },
 #endif /* MBEDTLS_SHA512_C */
+#if defined(MBEDTLS_SHAKE256_C)
+    /* Message digest OID */
+    {
+        { ADD_LEN(MBEDTLS_OID_SHAKE256),     "id-shake-256",    "SHAKE-256" },
+        MBEDTLS_MD_SHAKE256,
+    },
+#endif /* MBEDTLS_SHAKE256_C */
     {
         { NULL, 0, NULL, NULL },
         MBEDTLS_MD_NONE,

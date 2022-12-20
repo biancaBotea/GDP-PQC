@@ -240,12 +240,36 @@ static int pk_write_sphincs_pubkey(unsigned char **p, unsigned char *start,
 
 static int pk_write_dilithium_pubkey(unsigned char **p, unsigned char *start, mbedtls_dilithium_context *dilithium){
 
-    size_t len = mbedtls_pk_get_len((mbedtls_pk_context *)dilithium->pk);//MBEDTLS_DILITHIUM_PK_LEN;
+    /*size_t len = mbedtls_pk_get_len((mbedtls_pk_context *)dilithium->pk);//MBEDTLS_DILITHIUM_PK_LEN;
     int ret;
     if (*p < start || (size_t) (*p - start) < len)
         return(MBEDTLS_ERR_ASN1_BUF_TOO_SMALL);
 
-    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(p, start, dilithium->pk, len*8));
+    MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(p, start, dilithium->pk, len*8));*/
+    
+    /*
+    * DilithiumPublicKey ::= SEQUENCE {
+    *       rho    OCTET STRING,
+    *       t1     OCTET STRING
+    *    }
+    */
+    
+    int ret;
+	size_t len = 0;
+    
+    /* PUBLIC KEY */
+    /* t1 */
+	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_mpi(p, start, &dilithium->key.pk_t1));
+	**p = MBEDTLS_ASN1_OCTET_STRING;
+    
+    /* rho */
+	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_mpi(p, start, &dilithium->key.pk_rho));
+	**p = MBEDTLS_ASN1_OCTET_STRING;
+
+	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(p, start, len));
+	MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_tag(p, start, MBEDTLS_ASN1_CONSTRUCTED |
+		MBEDTLS_ASN1_SEQUENCE));
+    
 
     return ((int) len);
 }
@@ -537,17 +561,18 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
             * SecretKey BIT STRING ,
             * PublicKey BIT STRING
         * }
-    */
+        */
         mbedtls_dilithium_context *dilithium = mbedtls_pk_dilithium(*key);
 
 
         // Write keys to buffer in ASN .1 format
-        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->pk, 
-            CRYPTO_PUBLICKEYBYTES_D * 8));
+
+        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_mpi(&c, buf, &dilithium->key.sk));
         *c = MBEDTLS_ASN1_BIT_STRING;
-        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_bitstring(&c, buf, &dilithium->sk, 
-            CRYPTO_SECRETKEYBYTES_D * 8));
-        *c = MBEDTLS_ASN1_BIT_STRING;
+        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_mpi(&c, buf, &dilithium->key.pk_t1));
+        *c = MBEDTLS_ASN1_OCTET_STRING;
+        MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_mpi(&c, buf, &dilithium->key.pk_rho));
+        *c = MBEDTLS_ASN1_OCTET_STRING;
         MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_len(&c, buf, len));
         MBEDTLS_ASN1_CHK_ADD(len, mbedtls_asn1_write_tag(&c, buf, 
             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ));
@@ -653,8 +678,8 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
 
 #if defined(MBEDTLS_DILITHIUM_C)
 
-#define PUB_DER_MAX_BYTES   1000000 /*change this*/
-#define PRV_DER_MAX_BYTES   1000000
+#define PUB_DER_MAX_BYTES   100000 /*change this*/
+#define PRV_DER_MAX_BYTES   100000
 
 #else
 
@@ -692,7 +717,6 @@ int mbedtls_pk_write_pubkey_pem( mbedtls_pk_context *key, unsigned char *buf, si
 int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_t size )
 {
     int ret;
-    printf("prv der max bytes = %d, size = %d\n", PRV_DER_MAX_BYTES, size);
     unsigned char output_buf[PRV_DER_MAX_BYTES];
     const char *begin, *end;
     size_t olen = 0;
@@ -736,15 +760,12 @@ int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_
 #endif         
 			return( MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE );
     
-    printf("line 742\n");
     if( ( ret = mbedtls_pem_write_buffer( begin, end,
                                   output_buf + sizeof(output_buf) - ret,
                                   ret, buf, size, &olen ) ) != 0 )
     {
-        printf("returning ret\n");
         return( ret );
     }
-    printf("returning 0\n");
     return( 0 );
 }
 #endif /* MBEDTLS_PEM_WRITE_C */

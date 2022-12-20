@@ -407,7 +407,7 @@ void mbedtls_debug_print_crt( const mbedtls_ssl_context *ssl, int level,
 
     while( crt != NULL )
     {
-        char buf[1024];
+        char buf[4096];
 
         mbedtls_snprintf( str, sizeof( str ), "%s #%d:\n", text, ++i );
         debug_send_line( ssl, level, file, line, str );

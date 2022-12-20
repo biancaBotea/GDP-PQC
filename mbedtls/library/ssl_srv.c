@@ -270,7 +270,7 @@ static int ssl_parse_signature_algorithms_ext( mbedtls_ssl_context *ssl,
     for( p = buf + 2; p < end; p += 2 )
     {
         /* Silently ignore unknown signature or hash algorithms. */
-
+        printf("\nhash = %d, sig = %d\n",  p[0], p[1]);
         if( ( sig_cur = mbedtls_ssl_pk_alg_from_sig( p[1] ) ) == MBEDTLS_PK_NONE )
         {
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "client hello v3, signature_algorithm ext"
@@ -3180,6 +3180,10 @@ static int ssl_prepare_server_key_exchange( mbedtls_ssl_context *ssl,
                                                           sig_alg ) ) == MBEDTLS_MD_NONE )
             {
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
+                if(sig_alg == MBEDTLS_PK_NONE)
+                    printf("\n sig alg NONE\n");
+                else
+                    printf("\n md alg NONE\n");
                 /* (... because we choose a cipher suite
                  *      only if there is a matching hash.) */
                 return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );

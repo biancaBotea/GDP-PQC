@@ -184,10 +184,8 @@ int mbedtls_pk_setup( mbedtls_pk_context *ctx, const mbedtls_pk_info_t *info )
     if( ( ctx->pk_ctx = info->ctx_alloc_func() ) == NULL )
         return( MBEDTLS_ERR_PK_ALLOC_FAILED );
 
-    char *name = info->name;
     ctx->pk_info = info;
-    char *ctxname = ctx->pk_info->name;
-    printf("\ ctx name = %s\n", ctxname);
+
     return( 0 );
 }
 
@@ -291,7 +289,7 @@ int mbedtls_pk_verify_restartable( mbedtls_pk_context *ctx,
     PK_VALIDATE_RET( ( md_alg == MBEDTLS_MD_NONE && hash_len == 0 ) ||
                      hash != NULL );
     PK_VALIDATE_RET( sig != NULL );
-
+    printf("\nmbedtls_pk_verify_restartable\n");
     if( ctx->pk_info == NULL ||
         pk_hashlen_helper( md_alg, &hash_len ) != 0 )
         return( MBEDTLS_ERR_PK_BAD_INPUT_DATA );
@@ -349,7 +347,7 @@ int mbedtls_pk_verify_ext( mbedtls_pk_type_t type, const void *options,
     PK_VALIDATE_RET( ( md_alg == MBEDTLS_MD_NONE && hash_len == 0 ) ||
                      hash != NULL );
     PK_VALIDATE_RET( sig != NULL );
-
+    printf("\nmbedtls_pk_verify_ext\n");
     if( ctx->pk_info == NULL )
         return( MBEDTLS_ERR_PK_BAD_INPUT_DATA );
 
