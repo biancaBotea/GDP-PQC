@@ -119,7 +119,7 @@ To run ur project you have to write a CMakeLists.txt file then :
 	cp ../pico-examples/pico_w/lwipopts_examples_common.h lwipopts.h
 	cd build
 	export PICO_SDK_PATH=../../pico-sdk
-	cmake -DPICO_BOARD=pico_w ..
+	cmake -DPICO_BOARD=pico_w -DWIFI_SSID="Your Network" -DWIFI_PASSWORD="Your Password" ..
 	make
 
 ## Build
