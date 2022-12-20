@@ -323,9 +323,9 @@ struct mbedtls_ssl_sig_hash_set_t
 #if defined(MBEDTLS_SSL_SPHINCS)
 	mbedtls_md_type_t sphincs;
 #endif /* MBEDTLS_SSL_SPHINCS */
-#if defined(MBEDTLS_SSL_SPHINCS)
+#if defined(MBEDTLS_SSL_DILITHIUM)
 	mbedtls_md_type_t dilithium;
-#endif /* MBEDTLS_SSL_SPHINCS */
+#endif /* MBEDTLS_SSL_DILITHIUM */
 };
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 &&
           MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED */
