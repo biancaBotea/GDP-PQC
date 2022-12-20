@@ -5,13 +5,16 @@
 #include "hardware/structs/systick.h"
 #include "hardware/exception.h"
 
+#define SYSTICK_MAX 0x00FFFFFF
 #define MAX_STSTICK_CT 8
 #define MAX_SYSTICK_SPLITS 64
 
 typedef struct systick_count{
-    uint64_t st_init;
-    uint64_t st_end;
+    uint32_t st_init_csr;
+    uint32_t st_end_csr;
+
     uint64_t st_diff;
+    uint64_t st_count;
 
     size_t size_st_splits;
     uint64_t* st_splits;
@@ -37,16 +40,18 @@ typedef struct systick_reg{
 systick_reg_t sr = {.init=false};
 
 void handle_systick(){
-
+    for(int st = 0; st < st_l.size_st_list; ++st){
+        st_l.st_list[st]->st_count += 1;
+    }
 }
 
 void init_systick_reg(){
     sr.init = true;
     sr.st = systick_hw;
     sr.st_ex = (exception_handler_t) handle_systick;
+    exception_set_exclusive_handler(SYSTICK_EXCEPTION, sr.st_ex);
 
     /*SYST_RVR - SysTick Reload Value Register*/
-    uint32_t SYSTICK_MAX = 0x00FFFFFF;
     sr.st->rvr &= M0PLUS_SYST_RVR_BITS & SYSTICK_MAX;
 
     /*SYST_CSR - SysTick Current Value Register*/
@@ -63,19 +68,26 @@ void init_systick_reg(){
 
 void init_systick(systick_count_t* st){
     if(sr.init == false){init_systick_reg();}
-    st->st_init = 0;
-    st->st_end = 0;    
+    st->st_init_csr = 0;
+    st->st_end_csr = 0;    
     st->st_diff = 0;
     st->size_st_splits = 0;
     st->st_splits = NULL;
     st->size_st_diffs = 0;
     st->st_diffs = NULL;
+    st->st_count = 0;
 }
 
 void begin_systick(systick_count_t* st){
+    //Disable counter while capturing value
+    sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+    
+    //Store csr at init
+    st->st_init_csr = (sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS);    
+    
+    //Register timer
     size_t temp_size_st_list = st_l.size_st_list + 1;
     size_t head_st_list = st_l.size_st_list;
-
     systick_count_t** temp_st_list = realloc(st_l.st_list,temp_size_st_list * sizeof(systick_count_t*));
     if(temp_st_list != NULL){
         st_l.st_list = temp_st_list;
@@ -86,6 +98,8 @@ void begin_systick(systick_count_t* st){
         printf("Could not reallocate memory for new systick in list.\n");
         return;
     }
+    //Re-enable counter
+    sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
 }
 
 void split_systick(systick_count_t* st){
@@ -93,6 +107,15 @@ void split_systick(systick_count_t* st){
 }
 
 void end_systick(systick_count_t* st){
+    //Disable counter while capturing value
+    sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+
+    //Store csr at end
+    st->st_end_csr = (sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS);
+
+    //Calculate timer diff
+    st->st_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - st->st_end_csr;
+
     //make copy of old list
     systick_count_t** old_st_list = malloc(st_l.size_st_list * sizeof(systick_count_t*));
     for(int s = 0; s<st_l.size_st_list; ++s){
@@ -111,8 +134,9 @@ void end_systick(systick_count_t* st){
            if(old_st_list[s] == st)
                 {
                     st_index = s; 
-                    printf("%p at index %d\n",old_st_list[s],s);
-                    break;}
+                    free(old_st_list);   
+                    break;
+                }
         }
         //pass through old list and copy elements but for one to skip 
         int i = 0;
@@ -123,22 +147,31 @@ void end_systick(systick_count_t* st){
                 ++i;
             }
         }
+
         //shrink list
         st_l.size_st_list = temp_size_st_list;
-        
     }
     else{
         printf("Could not reallocate memory to remove systick from list.\n");
+        free(old_st_list);
+        return;
     }
-    free(old_st_list);
+    st->st_init_csr=0;
+    st->st_end_csr=0;
+    st->st_count=0;
+
+    //Re-enable counter
+    sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
 }
 
 void free_systick(systick_count_t* st){
-
+    free(st->st_diffs);
+    free(st->st_splits);
+    free(st);
 }
 
 void print_systick(systick_count_t* st){
-    printf("Timer has address %p\n", st);
+    printf("%llu Cycles\n",st->st_diff);
 }
 
 void print_systick_list(){
@@ -152,16 +185,36 @@ void print_systick_list(){
     printf("\n");
 }
 
+void demo_systick_multi(){
+    systick_count_t* st0 = (systick_count_t*) malloc(sizeof(systick_count_t));
+    systick_count_t* st10 = (systick_count_t*) malloc(sizeof(systick_count_t));
+    init_systick(st0);
+    init_systick(st10);
+    begin_systick(st10);
+    for(int s = 0;s<10;++s){
+        begin_systick(st0);
+        busy_wait_ms(1000);
+        end_systick(st0);
+        print_systick(st0);
+    }
+    printf("For 10 loops:\n");
+    end_systick(st10);
+    print_systick(st10);
+
+    free_systick(st10);
+    free_systick(st0);
+}
+
 void demo_systick_list(){
-    systick_count_t* st0 = (systick_count_t*) malloc(sizeof(microsecond_count_t));
+    systick_count_t* st0 = (systick_count_t*) malloc(sizeof(systick_count_t));
     init_systick(st0);
     begin_systick(st0);
 
-    systick_count_t* st1 = (systick_count_t*) malloc(sizeof(microsecond_count_t));
+    systick_count_t* st1 = (systick_count_t*) malloc(sizeof(systick_count_t));
     init_systick(st1);
     begin_systick(st1);
 
-    systick_count_t* st2 = (systick_count_t*) malloc(sizeof(microsecond_count_t));
+    systick_count_t* st2 = (systick_count_t*) malloc(sizeof(systick_count_t));
     init_systick(st2);
     begin_systick(st2);
 
