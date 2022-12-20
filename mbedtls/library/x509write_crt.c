@@ -392,6 +392,8 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx,
 
 #if defined(MBEDTLS_SPHINCS_C)
     unsigned char sig[MBEDTLS_SPHINCS_MAX_SIZE];
+#elif defined(MBEDTLS_DILITHIUM_C)
+    unsigned char sig[100000];
 #else
     unsigned char sig[SIGNATURE_MAX_SIZE];
 #endif
