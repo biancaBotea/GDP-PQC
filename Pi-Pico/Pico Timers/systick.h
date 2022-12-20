@@ -85,6 +85,7 @@ void new_systick(systick_count_t* st, uint64_t t){
     if(temp_st_splits != NULL){
         st->st_splits = temp_st_splits;
         st->st_splits[head_st_splits] = t;
+        st->size_st_splits = temp_size_st_splits;
     }
     else{
         printf("Could not allocate new memory for split.\n");
@@ -123,17 +124,17 @@ void begin_systick(systick_count_t* st){
 }
 
 void split_systick(systick_count_t* st){
-if(st->size_st_splits <= MAX_SYSTICK_SPLITS){
-    sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
-    uint32_t split_csr = sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS;
-    uint64_t split_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - split_csr;
-    sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
-}
-else{
-    printf("MAX_SYSTICK_SPLITS Reached: %u",MAX_SYSTICK_SPLITS);
-    return;
-}
-
+    if(st->size_st_splits <= MAX_SYSTICK_SPLITS){
+        sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+        uint32_t split_csr = sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS;
+        uint64_t split_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - split_csr;
+        new_systick(st,split_diff);
+        sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
+    }
+    else{
+        printf("MAX_SYSTICK_SPLITS Reached: %u",MAX_SYSTICK_SPLITS);
+        return;
+    }
 }
 
 void end_systick(systick_count_t* st){
@@ -225,7 +226,7 @@ void print_systick_splits(systick_count_t* st){
     }
     printf("st diffs:\n");
     for(int d = 0; d< st->size_st_diffs; ++d){
-        printf("%d:%llu\n",d,st->st_diffs[d]);
+        printf("%d->%d:%llu\n",d,d+1,st->st_diffs[d]);
     }
     printf("\n");
 }
@@ -249,13 +250,14 @@ void demo_systick_splits(){
 
     begin_systick(st1);
     begin_systick(st10);
-    for(int s10 = 0; s10<3; ++s10){
-        for(int s1 = 0;s1<5;++s1){
+    for(int s10 = 0; s10<2; ++s10){
+        for(int s1 = 0;s1<4;++s1){
             busy_wait_ms(1000);
             split_systick(st1);
         }
         split_systick(st10);
     }
+    busy_wait_ms(5000);
     end_systick(st1);
     end_systick(st10);
 
