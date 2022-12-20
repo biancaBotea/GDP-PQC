@@ -90,6 +90,39 @@ int main( void )
 
 #include <string.h>
 
+// Comment or define GDP_MEM_TEST as required for heap benchmarking
+#define GDP_MEM_TEST
+#ifdef GDP_MEM_TEST
+#if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
+#include "mbedtls/memory_buffer_alloc.h"
+#endif
+
+/*
+ * For heap usage estimates, we need an estimate of the overhead per allocated
+ * block. ptmalloc2/3 (used in gnu libc for instance) uses 2 size_t per block,
+ * so use that as our baseline.
+ */
+#define MEM_BLOCK_OVERHEAD  ( 2 * sizeof( size_t ) )
+
+/*
+ * Size to use for the alloc buffer if MEMORY_BUFFER_ALLOC_C is defined.
+ */
+#define HEAP_SIZE       (1u << 21)  // 64k
+
+#define MEMORY_MEASURE_INIT                                             \
+    size_t max_used, max_blocks, max_bytes;                             \
+    size_t prv_used, prv_blocks;                                        \
+    mbedtls_memory_buffer_alloc_cur_get( &prv_used, &prv_blocks );      \
+    mbedtls_memory_buffer_alloc_max_reset( );
+
+#define MEMORY_MEASURE_PRINT                                            \
+    mbedtls_memory_buffer_alloc_max_get( &max_used, &max_blocks );      \
+    max_used -= prv_used;                                               \
+    max_blocks -= prv_blocks;                                           \
+    max_bytes = max_used + MEM_BLOCK_OVERHEAD * max_blocks;             \
+    mbedtls_printf( "Heap Usage - %u bytes\n\n", (unsigned) max_bytes );
+#endif
+
 #define SERVER_PORT "4433"
 #define SERVER_NAME "localhost"
 #define GET_REQUEST "GET / HTTP/1.0\r\n\r\n"
@@ -124,6 +157,11 @@ mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
     mbedtls_x509_crt cacert;
+
+#if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C) && defined(GDP_MEM_TEST)
+    unsigned char alloc_buf[HEAP_SIZE] = { 0 };
+    mbedtls_memory_buffer_alloc_init( alloc_buf, sizeof( alloc_buf ) );
+#endif
 
 #if defined(MBEDTLS_DEBUG_C)
     mbedtls_debug_set_threshold( DEBUG_LEVEL );
@@ -237,6 +275,9 @@ mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const
     
     HS_RUNTIME_INIT
     HS_RUNTIME_START
+#ifdef GDP_MEM_TEST
+    MEMORY_MEASURE_INIT;
+#endif
     while( ( ret = mbedtls_ssl_handshake( &ssl ) ) != 0 )
     {
         if( ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE )
@@ -245,6 +286,9 @@ mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const
             goto exit;
         }
     }
+#ifdef GDP_MEM_TEST
+    MEMORY_MEASURE_PRINT;
+#endif
     HS_RUNTIME_STOP
     performance.handshake = hs_runtime;
 
@@ -378,6 +422,10 @@ exit:
 #if defined(_WIN32)
     mbedtls_printf( "  + Press Enter to exit this program.\n" );
     fflush( stdout ); getchar();
+#endif
+
+#if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C) && defined(GDP_MEM_TEST)
+    mbedtls_memory_buffer_alloc_free();
 #endif
 
     return performance;
