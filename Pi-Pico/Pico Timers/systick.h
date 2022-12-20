@@ -95,9 +95,15 @@ void new_systick(systick_count_t* st, uint64_t t){
 void begin_systick(systick_count_t* st){
     //Disable counter while capturing value
     sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
-    
+
+    if(st_l.size_st_list > MAX_STSTICK_CT){
+        printf("MAX_SYSTICK_CT Reached: %u", MAX_STSTICK_CT);
+        return;
+    }
+
     //Store csr at init
     st->st_init_csr = (sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS);    
+    new_systick(st,0);
     
     //Register timer
     size_t temp_size_st_list = st_l.size_st_list + 1;
@@ -117,10 +123,17 @@ void begin_systick(systick_count_t* st){
 }
 
 void split_systick(systick_count_t* st){
+if(st->size_st_splits <= MAX_SYSTICK_SPLITS){
     sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
     uint32_t split_csr = sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS;
     uint64_t split_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - split_csr;
     sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
+}
+else{
+    printf("MAX_SYSTICK_SPLITS Reached: %u",MAX_SYSTICK_SPLITS);
+    return;
+}
+
 }
 
 void end_systick(systick_count_t* st){
@@ -132,6 +145,7 @@ void end_systick(systick_count_t* st){
 
     //Calculate timer diff
     st->st_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - st->st_end_csr;
+    new_systick(st,st->st_diff);
 
     //make copy of old list
     systick_count_t** old_st_list = malloc(st_l.size_st_list * sizeof(systick_count_t*));

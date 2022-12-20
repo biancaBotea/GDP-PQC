@@ -45,6 +45,11 @@ void new_utime(microsecond_count_t* us_ct, uint64_t ut){
 }
 
 void begin_utime(microsecond_count_t* us_ct){
+    if(st_l.size_st_list > MAX_UTIME_CT){
+        printf("MAX_SYSTICK_CT Reached: %u", MAX_UTIME_CT);
+        return;
+    }
+
     us_ct->ut_init = time_us_64();
     new_utime(us_ct,us_ct->ut_init);
 }
