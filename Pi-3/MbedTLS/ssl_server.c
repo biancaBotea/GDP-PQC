@@ -106,7 +106,7 @@ int main( void )
 #include "new_certs.h"
 
 // Comment or define GDP_MEM_TEST as required for heap benchmarking
-#define GDP_MEM_TEST
+// #define GDP_MEM_TEST
 #ifdef GDP_MEM_TEST
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
 #include "mbedtls/memory_buffer_alloc.h"
