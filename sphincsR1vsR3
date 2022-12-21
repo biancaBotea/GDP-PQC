@@ -1,0 +1,13 @@
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: error: /usr/lib/arm-linux-gnueabihf/libc_nonshared.a(atexit.oS) uses VFP register arguments, client.elf does not
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: warning: /usr/lib/arm-linux-gnueabihf/libc_nonshared.a(atexit.oS) uses 32-bit enums yet the output is to use variable-size enums; use of enum values across objects may fail
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: failed to merge target specific data of file /usr/lib/arm-linux-gnueabihf/libc_nonshared.a(atexit.oS)
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v6-m/nofp/crt0.o: in function `_mainCRTStartup':
+/build/newlib-kGgvwE/newlib-3.3.0/build/arm-none-eabi/thumb/v6-m/nofp/libgloss/arm/semihv2m/../../../../../../../../libgloss/arm/crt0.S:541: undefined reference to `__libc_init_array'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: /build/newlib-kGgvwE/newlib-3.3.0/build/arm-none-eabi/thumb/v6-m/nofp/libgloss/arm/semihv2m/../../../../../../../../libgloss/arm/crt0.S:547: undefined reference to `__libc_fini_array'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: CMakeFiles/client.dir/ssl_client1.c.obj: in function `run_client':
+ssl_client1.c:(.text+0x2dc): undefined reference to `_impure_ptr'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: client.elf: warning: thumb-1 mode PLT generation not currently supported
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/client.dir/build.make:118: client.elf] Error 1
+make[1]: *** [CMakeFiles/Makefile2:1663: CMakeFiles/client.dir/all] Error 2
+make: *** [Makefile:103: all] Error 2
