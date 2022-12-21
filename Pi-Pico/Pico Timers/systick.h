@@ -39,13 +39,13 @@ typedef struct systick_reg{
 
 systick_reg_t sr = {.init=false};
 
-void handle_systick(){
+static void handle_systick(){
     for(int st = 0; st < st_l.size_st_list; ++st){
         st_l.st_list[st]->st_count += 1;
     }
 }
 
-void init_systick_reg(){
+static void init_systick_reg(){
     sr.init = true;
     sr.st = systick_hw;
     sr.st_ex = (exception_handler_t) handle_systick;
@@ -78,7 +78,7 @@ void init_systick(systick_count_t* st){
     st->st_count = 0;
 }
 
-void new_systick(systick_count_t* st, uint64_t t){
+static void new_systick(systick_count_t* st, uint64_t t){
     size_t temp_size_st_splits = st->size_st_splits + 1;
     size_t head_st_splits = temp_size_st_splits - 1;
     uint64_t* temp_st_splits = realloc(st->st_splits, temp_size_st_splits * sizeof(uint64_t));

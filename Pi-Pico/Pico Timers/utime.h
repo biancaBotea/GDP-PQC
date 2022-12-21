@@ -29,7 +29,7 @@ void init_utime(microsecond_count_t* us_ct){
 }
 
 //struct helper function
-void new_utime(microsecond_count_t* us_ct, uint64_t ut){
+static void new_utime(microsecond_count_t* us_ct, uint64_t ut){
     us_ct->size_ut_splits +=1;
     size_t head_ut_splits = us_ct->size_ut_splits - 1;
     uint64_t* new_ut_splits = realloc(us_ct->ut_splits, us_ct->size_ut_splits * sizeof(uint64_t));
