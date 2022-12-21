@@ -26,7 +26,7 @@ static void __prepare_new_sector_flash(flash_t* fl, flashobj_t* fo){
     //assign sectors, sector pointer, and new stack pointer for sector.
     fo->sectors = sectors;
     fo->sector_start = fl->sp_sector;
-    fl->sp_sector = fl->sp_sector + FLASH_SECTOR_SIZE * sectors;
+    fl->sp_sector = fl->sp_sector - FLASH_SECTOR_SIZE * sectors;
 }
 
 static int __write_new_page_flash(flash_t* fl, flashobj_t* fo){
@@ -53,7 +53,7 @@ static int __write_new_page_flash(flash_t* fl, flashobj_t* fo){
     }
     //assign page pointer, update stack pointer for sector.
     fo->page_start = fl->sp_page;
-    fl->sp_page = fl->sp_page + FLASH_PAGE_SIZE * fo->pages;
+    fl->sp_page = fl->sp_page - FLASH_PAGE_SIZE * fo->pages;
     return 0;
 }
 
@@ -79,17 +79,28 @@ static int __add_new_index_flash(flash_t* fl, flashobj_t* fo){
 void write_obj_flash(flash_t* fl, flashobj_t* fo){
     //check if writing in new sector
     //call to prepare (erase) new sector if needed
-    if((&fl->sp_page + fo->pages)>= &fl->sp_sector){
+    if((fl->sp_page + FLASH_PAGE_SIZE * fo->pages)>= fl->sp_sector){
         __prepare_new_sector_flash(fl,fo);
     }
     //write to cleared sector and verify
     if(__write_new_page_flash(fl,fo) != 0){
         return;
     }
+    //once verified, may free memobject
+    free_memobj(fo->mem);
     //add flash object to index
     if(__add_new_index_flash(fl,fo) != 0){
         return;
     }
+}
+
+static void read_from_page_flash(flash_t* fl, flashobj_t* fo){
+    
+}
+
+memobj_t read_obj_flash(flash_t* fl, size_t index){
+    flashobj_t* fo = fl->index[index];
+    
 }
 
 void free_flash(flash_t* fl){
