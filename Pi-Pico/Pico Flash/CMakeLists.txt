@@ -9,7 +9,9 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
+    flashobj.h
     flash.h
+    memobj.h
     main.c
 )
 

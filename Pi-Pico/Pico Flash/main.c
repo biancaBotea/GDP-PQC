@@ -4,6 +4,6 @@
 
 int main(){
     stdio_init_all();
-    printf("Hello World!");
+    demo_memobj();
     return 0;
 }
