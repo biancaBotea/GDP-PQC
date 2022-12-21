@@ -6,4 +6,5 @@ Pi-3/Analysis/test_parse.py
 Pi-3/Analysis/.vscode/
 Pi-3/Analysis/__pycache__/
 .vscode
+build
 .idea
