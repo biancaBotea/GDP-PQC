@@ -94,13 +94,18 @@ void write_obj_flash(flash_t* fl, flashobj_t* fo){
     }
 }
 
-static void read_from_page_flash(flash_t* fl, flashobj_t* fo){
+static void __read_from_page_flash(flash_t* fl, flashobj_t* fo){
     
 }
 
-memobj_t read_obj_flash(flash_t* fl, size_t index){
+memobj_t* read_obj_flash(flash_t* fl, size_t index){
     flashobj_t* fo = fl->index[index];
-    
+    fo->mem->obj = (uint8_t*) malloc(fo->bytes * fo->mem->size_obj);
+    for(size_t b = 0; b<fo->bytes; ++b){
+        fo->mem->obj[b] = fo->obj[b];
+    }
+    fo->mem->size_obj = fo->bytes;
+    return fo->mem;
 }
 
 void free_flash(flash_t* fl){
