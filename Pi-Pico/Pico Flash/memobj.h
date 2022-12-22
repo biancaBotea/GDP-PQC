@@ -6,7 +6,7 @@ typedef struct memobj{
     size_t size_obj;
 } memobj_t;
 
-void init_memobj(memobj_t* mem, void* obj, size_t size_obj){
+void init_memobj(memobj_t* mem, uint8_t* obj, size_t size_obj){
     mem->obj = obj;
     mem->size_obj = size_obj;
 }
@@ -22,13 +22,13 @@ void free_memobj(memobj_t* mem){
 
 void demo_memobj(){
     char c = 'a';
-    void* cp = &c;
+    uint8_t* cp = (uint8_t*) &c;
 
     int i = 3;
-    void* ip = &i;
+    uint8_t* ip = (uint8_t*) &i;
 
     double d = 8.2;
-    void* dp = &d;
+    uint8_t* dp = (uint8_t*) &d;
 
     size_t size_cert = 128;
     uint8_t* cert = (uint8_t*) malloc(size_cert * sizeof(uint8_t));
