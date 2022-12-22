@@ -8,6 +8,12 @@ if(INSTALL_MBEDTLS_HEADERS)
         DESTINATION include/mbedtls
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
 
+    file(GLOB pq_headers "pq/*.h")
+
+    install(FILES ${pq_headers}
+        DESTINATION include/pq
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+
 endif(INSTALL_MBEDTLS_HEADERS)
 
 # Make config.h available in an out-of-source build. ssl-opt.sh requires it.
