@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "flash.h"
+#include "flashmem.h"
 
 int main(){
     stdio_init_all();
-    demo_memobj();
+    demo_flash();
     return 0;
 }

@@ -16,6 +16,7 @@ void print_memobj(memobj_t* mem){
 }
 
 void free_memobj(memobj_t* mem){
+    mem->size_obj = 0;
     free(mem->obj);
     free(mem);
 }
