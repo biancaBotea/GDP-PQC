@@ -10,8 +10,7 @@ pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
     memobj.h
-    flashobj.h
-    flashmem.h
+    flash.h
     main.c
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

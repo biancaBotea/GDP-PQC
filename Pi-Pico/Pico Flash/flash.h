@@ -1,7 +1,27 @@
-#include "flashobj.h"
 #include "pico/stdlib.h"
 #include "hardware/flash.h"
 #include <math.h>
+
+typedef struct flashobj{
+    uint8_t* mem;
+    uint8_t* flash_target;
+    size_t bytes;
+    size_t pages;
+
+} flashobj_t;
+
+void init_flashobj(flashobj_t* fo, uint8_t* mem, size_t size_mem){
+    fo->mem = mem;
+    fo->bytes = size_mem;
+    fo->pages = 1 + (fo->bytes >> 8);
+    
+    fo->flash_target = NULL;
+}
+
+void free_flashobj(flashobj_t* fo){
+    free(fo->mem);
+    free(fo);
+}
 
 typedef struct flash{
     uint32_t sp_page;
