@@ -3,6 +3,7 @@
 
 int main(){
     stdio_init_all();
-    demo_flash();
-    return 0;
+    int ret;
+    ret = demo_flasharray();
+    return ret;
 }
