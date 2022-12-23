@@ -1,6 +1,8 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 #include "pico/stdlib.h"
 #include "hardware/flash.h"
-#include <math.h>
 
 typedef struct flashobj{
     uint8_t* mem;
@@ -56,7 +58,7 @@ static int __write_new_page_flash(flash_t* fl, flashobj_t* fo){
     uint8_t data[data_bytes];
     for(size_t b = 0; b < data_bytes; ++b){
         if(b < fo->bytes){
-            data[b] = fo->mem->obj[b];
+            data[b] = fo->mem[b];
         }
         else{
             data[b] = 0;
@@ -116,22 +118,22 @@ void write_obj_flash(flash_t* fl, flashobj_t* fo){
     if(__write_new_page_flash(fl,fo) != 0){
         return;
     }
-    //once verified, may free memobject
-    free_memobj(fo->mem);
     //add flash object to index
     if(__add_new_index_flash(fl,fo) != 0){
         return;
     }
+    //once verified, may free memobject
+    free(fo->mem);
 }
 
-void read_obj_flash(flash_t* fl, memobj_t* mem, size_t index){
+uint8_t* read_obj_flash(flash_t* fl, size_t index){
     flashobj_t* fo = fl->index[index];
     printf("Reading from flash at %p, %zu Bytes\n",fo->flash_target,fo->bytes);
-    mem->obj = (uint8_t*) malloc(fo->bytes * sizeof(uint8_t));
+    uint8_t* mem = (uint8_t*) malloc(fo->bytes * sizeof(uint8_t));
     for(size_t b = 0; b<fo->bytes; ++b){
-        mem->obj[b] = fo->flash_target[b];
+        mem[b] = fo->flash_target[b];
     }
-    mem->size_obj = fo->bytes;
+    return mem;
 }
 
 void free_flash(flash_t* fl){
@@ -146,8 +148,8 @@ void demo_flash(){
 
     //Create test certificate object
     size_t size_cert = 10000;
-    printf("Generating 10kb certificate; first 10b:\n");
     uint8_t* cert = (uint8_t*) malloc(size_cert * sizeof(uint8_t));
+    printf("Generating 10kb certificate to %p; first 10b:\n",cert);
     for(size_t b = 0; b<size_cert; ++b){
         cert[b] = rand() >> 23;
         if(b<10){
@@ -159,40 +161,29 @@ void demo_flash(){
     }
     
     /*WRITE STAGE*/
-    //Init memobj structure and print
-    memobj_t * mc = (memobj_t*) malloc(sizeof(memobj_t));
-    init_memobj(mc, cert, size_cert);
-    print_memobj(mc);
-
     //Init flashobj structure
     flashobj_t* fo_cert = (flashobj_t*) malloc(sizeof(flashobj_t));
-    init_flashobj(fo_cert, mc);
+    init_flashobj(fo_cert,cert,size_cert);
 
     //Write flashobj to flash
-    printf("Writing to flash.\n");
     write_obj_flash(fl, fo_cert);
-    print_memobj(mc);
-    printf("\n\n\n");
-    
-    //Now verified, may free original memory
+        
+    //Check that object has been removed from memory
     // free(cert);
 
     /*READ STAGE*/
     //Read from flash at index 0 where flashobj should be indexed
-    memobj_t* mc_flash = (memobj_t*) malloc(sizeof(memobj_t));
-    read_obj_flash(fl,mc_flash,0);
-    print_memobj(mc_flash);
-    printf("Loaded memobject from flash, first 10b:\n");
-    for(size_t b = 0; b<mc_flash->size_obj; ++b){
+    uint8_t* cert_flash = read_obj_flash(fl,0);
+    printf("Loaded from flash to %p, first 10b:\n",cert_flash);
+    for(size_t b = 0; b<fo_cert->bytes; ++b){
         if(b<10){
-            printf("%hu ",mc_flash->obj[b]);
+            printf("%hu ",cert_flash[b]);
         }
         else if(b==10){
-            printf("\n");
+            printf("\n\n");
         }
     }
 
-    // free_flashobj(fo_cert);
-    // free_memobj(mc_flash);
-    // free_flash(fl);
+    free_flashobj(fo_cert);
+    free_flash(fl);
 }

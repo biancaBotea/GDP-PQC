@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "pico/stdlib.h"
-#include "flashmem.h"
+#include "flash.h"
 
 int main(){
     stdio_init_all();

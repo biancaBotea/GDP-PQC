@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
-    memobj.h
     flash.h
     main.c
 )
@@ -18,8 +17,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 pico_add_extra_outputs(${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
-    hardware_flash
     pico_stdlib
+    hardware_flash
 )
 
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
