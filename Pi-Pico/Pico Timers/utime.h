@@ -16,26 +16,26 @@ typedef struct {
     uint64_t* ut_diffs;
 } microsecond_count_t;
 
-void init_utime(microsecond_count_t* us_ct){
-    us_ct->ut_init = 0;
-    us_ct->ut_end = 0;
-    us_ct->ut_diff = 0;
+void init_utime(microsecond_count_t* us){
+    us->ut_init = 0;
+    us->ut_end = 0;
+    us->ut_diff = 0;
 
-    us_ct->size_ut_splits = 0;
-    us_ct->ut_splits = NULL;
+    us->size_ut_splits = 0;
+    us->ut_splits = NULL;
 
-    us_ct->size_ut_diffs = 0;
-    us_ct->ut_diffs = NULL;
+    us->size_ut_diffs = 0;
+    us->ut_diffs = NULL;
 }
 
 //struct helper function
-static void new_utime(microsecond_count_t* us_ct, uint64_t ut){
-    us_ct->size_ut_splits +=1;
-    size_t head_ut_splits = us_ct->size_ut_splits - 1;
-    uint64_t* new_ut_splits = realloc(us_ct->ut_splits, us_ct->size_ut_splits * sizeof(uint64_t));
+static void new_utime(microsecond_count_t* us, uint64_t ut){
+    us->size_ut_splits +=1;
+    size_t head_ut_splits = us->size_ut_splits - 1;
+    uint64_t* new_ut_splits = realloc(us->ut_splits, us->size_ut_splits * sizeof(uint64_t));
     if(new_ut_splits != NULL){
-        us_ct->ut_splits = new_ut_splits;
-        us_ct->ut_splits[head_ut_splits] = ut;
+        us->ut_splits = new_ut_splits;
+        us->ut_splits[head_ut_splits] = ut;
     }
     else{
         printf("Could not allocate new memory for split.\n");
@@ -43,30 +43,30 @@ static void new_utime(microsecond_count_t* us_ct, uint64_t ut){
     }
 }
 
-void begin_utime(microsecond_count_t* us_ct){
-    us_ct->ut_init = time_us_64();
-    new_utime(us_ct,us_ct->ut_init);
+void begin_utime(microsecond_count_t* us){
+    us->ut_init = time_us_64();
+    new_utime(us,us->ut_init);
 }
 
-void split_utime(microsecond_count_t* us_ct){
-    if(us_ct->size_ut_splits <= MAX_UTIME_SPLITS){
-        new_utime(us_ct,time_us_64());
+void split_utime(microsecond_count_t* us){
+    if(us->size_ut_splits <= MAX_UTIME_SPLITS){
+        new_utime(us,time_us_64());
     }
     else{
         printf("MAX_UTIME_SPLITS Reached: %u",MAX_UTIME_SPLITS);
     }
 }
 
-void end_utime(microsecond_count_t* us_ct){
-    us_ct->ut_end = time_us_64();
-    new_utime(us_ct,us_ct->ut_end);
-    us_ct->ut_diff = us_ct->ut_end - us_ct->ut_init;
+void end_utime(microsecond_count_t* us){
+    us->ut_end = time_us_64();
+    new_utime(us,us->ut_end);
+    us->ut_diff = us->ut_end - us->ut_init;
     
-    us_ct->size_ut_diffs = us_ct->size_ut_splits - 1;
-    us_ct->ut_diffs = (uint64_t*) malloc(us_ct->size_ut_diffs * sizeof(uint64_t));
-    if(us_ct->ut_diffs != NULL){
-        for(int d = 0; d<us_ct->size_ut_diffs; ++d){
-            us_ct->ut_diffs[d] = us_ct->ut_splits[d+1] - us_ct->ut_splits[d];
+    us->size_ut_diffs = us->size_ut_splits - 1;
+    us->ut_diffs = (uint64_t*) malloc(us->size_ut_diffs * sizeof(uint64_t));
+    if(us->ut_diffs != NULL){
+        for(int d = 0; d<us->size_ut_diffs; ++d){
+            us->ut_diffs[d] = us->ut_splits[d+1] - us->ut_splits[d];
         }
     }
     else{
@@ -74,23 +74,25 @@ void end_utime(microsecond_count_t* us_ct){
     }
 }
 
-void free_utime(microsecond_count_t* us_ct){
-
+void free_utime(microsecond_count_t* us){
+    free(us->ut_diffs);
+    free(us->size_ut_splits);
+    free(us);
 }
 
-void print_utime(microsecond_count_t* us_ct){
+void print_utime(microsecond_count_t* us){
     printf("Start utime: %llu\nEnd utime: %llu\nDiff utime: %llu\n", \
-        us_ct->ut_init, \
-        us_ct->ut_end, \
-        us_ct->ut_diff);
+        us->ut_init, \
+        us->ut_end, \
+        us->ut_diff);
     printf("ut splits:\n");
-    for(int s = 0; s < us_ct->size_ut_splits; ++s){
-        printf("%llu\n",us_ct->ut_splits[s]);
+    for(int s = 0; s < us->size_ut_splits; ++s){
+        printf("%llu\n",us->ut_splits[s]);
     }
 
     printf("ut diffs:\n");
-    for(int d = 0; d < us_ct->size_ut_diffs; ++d){
-        printf("%llu\n",us_ct->ut_diffs[d]);
+    for(int d = 0; d < us->size_ut_diffs; ++d){
+        printf("%llu\n",us->ut_diffs[d]);
     }
 }
 
