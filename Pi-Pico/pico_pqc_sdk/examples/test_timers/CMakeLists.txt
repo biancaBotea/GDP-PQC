@@ -2,12 +2,7 @@ add_executable(test_timers
     test_timers.c
     )
 
-target_link_libraries(test_timers PUBLIC pqc_utime)
-
-target_include_directories(test_timers PUBLIC
-    "${PROJECT_SOURCE_DIR}/src/pqc_utime"
-)
-
+target_link_libraries(test_timers PUBLIC pqc_utimer)
 
 pico_add_extra_outputs(test_timers)
 

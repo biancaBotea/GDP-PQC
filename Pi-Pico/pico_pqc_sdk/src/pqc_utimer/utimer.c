@@ -1,22 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "pico/stdlib.h"
+#include "pqc-pico/utimer.h"
 
-#define MAX_UTIME_SPLITS 64
-
-typedef struct {
-    uint64_t ut_init;
-    uint64_t ut_end;
-    uint64_t ut_diff;
-
-    size_t size_ut_splits;
-    uint64_t* ut_splits;
-
-    size_t size_ut_diffs;
-    uint64_t* ut_diffs;
-} microsecond_count_t;
-
-void init_utime(microsecond_count_t* us){
+void init_utimer(microsecond_count_t* us){
     us->ut_init = 0;
     us->ut_end = 0;
     us->ut_diff = 0;
@@ -29,7 +13,7 @@ void init_utime(microsecond_count_t* us){
 }
 
 //struct helper function
-static void new_utime(microsecond_count_t* us, uint64_t ut){
+static void new_utimer(microsecond_count_t* us, uint64_t ut){
     us->size_ut_splits +=1;
     size_t head_ut_splits = us->size_ut_splits - 1;
     uint64_t* new_ut_splits = realloc(us->ut_splits, us->size_ut_splits * sizeof(uint64_t));
@@ -43,23 +27,23 @@ static void new_utime(microsecond_count_t* us, uint64_t ut){
     }
 }
 
-void begin_utime(microsecond_count_t* us){
+void begin_utimer(microsecond_count_t* us){
     us->ut_init = time_us_64();
-    new_utime(us,us->ut_init);
+    new_utimer(us,us->ut_init);
 }
 
-void split_utime(microsecond_count_t* us){
-    if(us->size_ut_splits <= MAX_UTIME_SPLITS){
-        new_utime(us,time_us_64());
+void split_utimer(microsecond_count_t* us){
+    if(us->size_ut_splits <= MAX_UTIMER_SPLITS){
+        new_utimer(us,time_us_64());
     }
     else{
-        printf("MAX_UTIME_SPLITS Reached: %u",MAX_UTIME_SPLITS);
+        printf("MAX_UTIMER_SPLITS Reached: %u",MAX_UTIMER_SPLITS);
     }
 }
 
-void end_utime(microsecond_count_t* us){
+void end_utimer(microsecond_count_t* us){
     us->ut_end = time_us_64();
-    new_utime(us,us->ut_end);
+    new_utimer(us,us->ut_end);
     us->ut_diff = us->ut_end - us->ut_init;
     
     us->size_ut_diffs = us->size_ut_splits - 1;
@@ -74,14 +58,14 @@ void end_utime(microsecond_count_t* us){
     }
 }
 
-void free_utime(microsecond_count_t* us){
+void free_utimer(microsecond_count_t* us){
     free(us->ut_diffs);
     free(us->ut_splits);
     free(us);
 }
 
-void print_utime(microsecond_count_t* us){
-    printf("Start utime: %llu\nEnd utime: %llu\nDiff utime: %llu\n", \
+void print_utimer(microsecond_count_t* us){
+    printf("Start utimer: %llu\nEnd utimer: %llu\nDiff utimer: %llu\n", \
         us->ut_init, \
         us->ut_end, \
         us->ut_diff);
@@ -100,23 +84,23 @@ void demo_utime(){
     microsecond_count_t* us_500 = (microsecond_count_t*) malloc(sizeof(microsecond_count_t));
     microsecond_count_t* us_1000 = (microsecond_count_t*) malloc(sizeof(microsecond_count_t));
 
-    init_utime(us_500);
-    init_utime(us_1000);
+    init_utimer(us_500);
+    init_utimer(us_1000);
 
-    begin_utime(us_500);
-    begin_utime(us_1000);
+    begin_utimer(us_500);
+    begin_utimer(us_1000);
     for(int a = 0; a<3; ++a){
         busy_wait_ms(500);
-        split_utime(us_500);
+        split_utimer(us_500);
         busy_wait_ms(500);
-        split_utime(us_500);
-        split_utime(us_1000);
+        split_utimer(us_500);
+        split_utimer(us_1000);
     }
     busy_wait_ms(500);
-    end_utime(us_500);
+    end_utimer(us_500);
     busy_wait_ms(500);
-    end_utime(us_1000);
+    end_utimer(us_1000);
 
-    print_utime(us_500);
-    print_utime(us_1000);
+    print_utimer(us_500);
+    print_utimer(us_1000);
 }

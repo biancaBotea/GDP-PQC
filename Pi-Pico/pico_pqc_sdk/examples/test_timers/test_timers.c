@@ -1,4 +1,4 @@
-#include "utime.c"
+#include "pqc-pico/utimer.h"
 
 int main(){
     stdio_init_all();
