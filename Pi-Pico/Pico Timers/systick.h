@@ -45,7 +45,7 @@ static void handle_systick(){
     }
 }
 
-static void init_systick_reg(){
+void init_systick_reg(){
     sr.init = true;
     sr.st = systick_hw;
     sr.st_ex = (exception_handler_t) handle_systick;
@@ -67,8 +67,11 @@ static void init_systick_reg(){
 }
 
 void init_systick(systick_count_t* st){
-    if(sr.init == false){init_systick_reg();}
     sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+    if(sr.init == false){
+        print("SysTick Registers not configured.");
+        return -1;
+    }
 
     st->st_init_csr = 0;
     st->st_end_csr = 0;    
@@ -251,6 +254,8 @@ void print_systick_list(){
 }
 
 void demo_systick_splits(){
+    init_systick_reg();
+
     systick_count_t* st1 = (systick_count_t*) malloc(sizeof(systick_count_t));
     systick_count_t* st10 = (systick_count_t*) malloc(sizeof(systick_count_t));
     init_systick(st1);
@@ -277,6 +282,8 @@ void demo_systick_splits(){
 }
 
 void demo_systick_multi(){
+    init_systick_reg();
+
     systick_count_t* st0 = (systick_count_t*) malloc(sizeof(systick_count_t));
     systick_count_t* st10 = (systick_count_t*) malloc(sizeof(systick_count_t));
     init_systick(st0);
@@ -297,6 +304,8 @@ void demo_systick_multi(){
 }
 
 void demo_systick_list(){
+    init_systick_reg();
+
     systick_count_t* st0 = (systick_count_t*) malloc(sizeof(systick_count_t));
     init_systick(st0);
     begin_systick(st0);
