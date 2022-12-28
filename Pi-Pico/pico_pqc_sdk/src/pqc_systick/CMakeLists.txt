@@ -1,0 +1,1 @@
+add_library(pqc_systick INTERFACE systick.c)
