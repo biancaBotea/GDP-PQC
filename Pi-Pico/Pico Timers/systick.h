@@ -68,6 +68,8 @@ static void init_systick_reg(){
 
 void init_systick(systick_count_t* st){
     if(sr.init == false){init_systick_reg();}
+    sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+
     st->st_init_csr = 0;
     st->st_end_csr = 0;    
     st->st_diff = 0;
@@ -76,6 +78,8 @@ void init_systick(systick_count_t* st){
     st->size_st_diffs = 0;
     st->st_diffs = NULL;
     st->st_count = 0;
+
+    sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
 }
 
 static void __new_systick(systick_count_t* st, uint64_t t){
@@ -106,7 +110,7 @@ void begin_systick(systick_count_t* st){
     st->st_init_csr = (sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS);    
     __new_systick(st,0);
     
-    //Register timer
+    //Register counter
     size_t temp_size_st_list = st_l.size_st_list + 1;
     size_t head_st_list = st_l.size_st_list;
     systick_count_t** temp_st_list = realloc(st_l.st_list,temp_size_st_list * sizeof(systick_count_t*));
@@ -144,7 +148,7 @@ void end_systick(systick_count_t* st){
     //Store csr at end
     st->st_end_csr = sr.st->cvr & M0PLUS_SYST_CVR_CURRENT_BITS;
 
-    //Calculate timer diff
+    //Calculate counter diff
     st->st_diff = st->st_init_csr + st->st_count*SYSTICK_MAX - st->st_end_csr;
     __new_systick(st,st->st_diff);
 
@@ -209,9 +213,13 @@ void end_systick(systick_count_t* st){
 }
 
 void free_systick(systick_count_t* st){
+    sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+
     free(st->st_diffs);
     free(st->st_splits);
     free(st);
+
+    sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
 }
 
 void print_systick(systick_count_t* st){
