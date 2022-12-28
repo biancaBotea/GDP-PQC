@@ -22,10 +22,10 @@ static void new_utimer(microsecond_count_t* us, uint64_t ut);
 void begin_utimer(microsecond_count_t* us);
 
 void split_utimer(microsecond_count_t* us);
-void end_utime(microsecond_count_t* us);
+void end_utimer(microsecond_count_t* us);
 
-void free_utime(microsecond_count_t* us);
+void free_utimer(microsecond_count_t* us);
 
-void print_utime(microsecond_count_t* us);
+void print_utimer(microsecond_count_t* us);
 
 void demo_utime();

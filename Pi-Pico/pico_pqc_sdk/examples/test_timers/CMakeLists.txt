@@ -2,7 +2,10 @@ add_executable(test_timers
     test_timers.c
     )
 
-target_link_libraries(test_timers PUBLIC pqc_utimer)
+target_link_libraries(test_timers PUBLIC 
+    pqc_utimer
+    pqc_systick
+    pqc_flash)
 
 pico_add_extra_outputs(test_timers)
 
