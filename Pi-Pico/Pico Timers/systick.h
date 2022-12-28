@@ -66,7 +66,8 @@ void init_systick_reg(){
     st_l.st_list = NULL;
 }
 
-void init_systick(systick_count_t* st){
+int init_systick(systick_count_t* st){
+    //Disable counter
     sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
     if(sr.init == false){
         print("SysTick Registers not configured.");
@@ -82,7 +83,9 @@ void init_systick(systick_count_t* st){
     st->st_diffs = NULL;
     st->st_count = 0;
 
+    //Re-enable counter
     sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
+    return 0;
 }
 
 static void __new_systick(systick_count_t* st, uint64_t t){
