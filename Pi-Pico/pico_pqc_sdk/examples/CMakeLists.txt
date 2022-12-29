@@ -1,1 +1,2 @@
+add_subdirectory(test_stats)
 add_subdirectory(test_timers)
