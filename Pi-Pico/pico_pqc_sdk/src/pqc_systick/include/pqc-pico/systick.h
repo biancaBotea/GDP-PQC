@@ -36,6 +36,8 @@ typedef struct systick_reg{
 
 } systick_reg_t;
 
+
+
 static void handle_systick();
 void init_systick_reg();
 int init_systick(systick_count_t* st);
@@ -43,6 +45,13 @@ static void __new_systick(systick_count_t* st, uint64_t t);
 void begin_systick(systick_count_t* st);
 void split_systick(systick_count_t* st);
 void end_systick(systick_count_t* st);
+void free_systick(systick_count_t* st);
+void print_systick(systick_count_t* st);
+void print_systick_splits(systick_count_t* st);
+void print_systick_list();
 void demo_systick_splits();
 void demo_systick_multi();
 void demo_systick_list();
+
+extern void global_pause_systick();
+extern void global_unpause_systick();

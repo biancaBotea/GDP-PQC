@@ -4,6 +4,14 @@ systick_list_t st_l;
 
 systick_reg_t sr = {.init=false};
 
+inline void global_pause_systick(){
+    sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
+}
+
+inline void global_unpause_systick(){
+    sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
+}
+
 static void handle_systick(){
     for(int st = 0; st < st_l.size_st_list; ++st){
         st_l.st_list[st]->st_count += 1;
@@ -29,6 +37,14 @@ void init_systick_reg(){
 
     st_l.size_st_list = 0;
     st_l.st_list = NULL;
+
+    //Dummy Timer Object to clear first most of run lag
+    systick_count_t* dp = (systick_count_t*) malloc(sizeof(systick_count_t));
+    init_systick(dp);
+    begin_systick(dp);
+    busy_wait_ms(100);
+    end_systick(dp);
+    free_systick(dp);
 }
 
 int init_systick(systick_count_t* st){
@@ -186,9 +202,12 @@ void end_systick(systick_count_t* st){
 void free_systick(systick_count_t* st){
     sr.st->csr &= ~M0PLUS_SYST_CSR_ENABLE_BITS;
 
-    free(st->st_diffs);
     free(st->st_splits);
+    st->st_splits = NULL;
+    free(st->st_diffs);
+    st->st_diffs = NULL;
     free(st);
+    st = NULL;
 
     sr.st->csr |= M0PLUS_SYST_CSR_ENABLE_BITS;
 }
