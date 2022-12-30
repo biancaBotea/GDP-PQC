@@ -77,6 +77,12 @@ set(src_crypto
     ripemd160.c
     rsa.c
     rsa_internal.c
+    saber_cbd.c
+    saber_indcpa.c
+    saber_kem.c
+    saber_pack_unpack.c
+    saber_poly.c
+    saber_poly_mul.c
     sha1.c
     sha256.c
     sha512.c

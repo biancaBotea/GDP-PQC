@@ -8,24 +8,62 @@ Vadim Lyubashevsky, John M. Schanck, Peter Schwabe & Damien stehle
 #include <stdio.h>
 #include "pq/saber_api.h"
 #include "pq/saber_poly.h"
+#include "pq/saber_poly_mul.h"
+#include "pq/saber_pack_unpack.h"
 #include "pq/saber_cbd.h"
-#include "pq/fips202.h"
+#include "pq/saber_fips202.h"
 
 
-
-void GenSecret(uint16_t r[SABER_K][SABER_N],const unsigned char *seed){
-
-
-		uint32_t i;
-
-		int32_t buf_size= SABER_MU*SABER_N*SABER_K/8;
-
-		unsigned char buf[buf_size];
-
-		shake128(buf, buf_size, seed,SABER_NOISESEEDBYTES);
-
-		for(i=0;i<SABER_K;i++)
+void MatrixVectorMul(const uint16_t A[SABER_L][SABER_L][SABER_N], const uint16_t s[SABER_L][SABER_N], uint16_t res[SABER_L][SABER_N], int16_t transpose)
+{
+	int i, j;
+	for (i = 0; i < SABER_L; i++)
+	{
+		for (j = 0; j < SABER_L; j++)
 		{
-			cbd(r[i],buf+i*SABER_MU*SABER_N/8);
+			if (transpose == 1)
+			{
+				poly_mul_acc(A[j][i], s[j], res[i]);
+			}
+			else
+			{
+				poly_mul_acc(A[i][j], s[j], res[i]);
+			}	
 		}
+	}
+}
+
+void InnerProd(const uint16_t b[SABER_L][SABER_N], const uint16_t s[SABER_L][SABER_N], uint16_t res[SABER_N])
+{
+	int j;
+	for (j = 0; j < SABER_L; j++)
+	{
+		poly_mul_acc(b[j], s[j], res);
+	}
+}
+
+void GenMatrix(uint16_t A[SABER_L][SABER_L][SABER_N], const uint8_t seed[SABER_SEEDBYTES])
+{
+	uint8_t buf[SABER_L * SABER_POLYVECBYTES];
+	int i;
+
+	shake128(buf, sizeof(buf), seed, SABER_SEEDBYTES);
+
+	for (i = 0; i < SABER_L; i++)
+	{
+		BS2POLVECq(buf + i * SABER_POLYVECBYTES, A[i]);
+	}
+}
+
+void GenSecret(uint16_t s[SABER_L][SABER_N], const uint8_t seed[SABER_NOISE_SEEDBYTES])
+{
+	uint8_t buf[SABER_L * SABER_POLYCOINBYTES];
+	size_t i;
+
+	shake128(buf, sizeof(buf), seed, SABER_NOISE_SEEDBYTES);
+
+	for (i = 0; i < SABER_L; i++)
+	{
+		saber_cbd(s[i], buf + i * SABER_POLYCOINBYTES);
+	}
 }

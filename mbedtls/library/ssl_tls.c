@@ -5510,7 +5510,9 @@ int mbedtls_ssl_send_alert_message( mbedtls_ssl_context *ssl,
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED)    && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)  && \
     !defined(MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED)  && \
-    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED)
+    !defined(MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED) && \
+    !defined(MBEDTLS_KEY_EXCHANGE_SABER_SPHINCS_ENABLED)  && \
+    !defined(MBEDTLS_KEY_EXCHANGE_SABER_DILITHIUM_ENABLED)
 /* No certificate support -> dummy functions */
 int mbedtls_ssl_write_certificate( mbedtls_ssl_context *ssl )
 {
@@ -9905,6 +9907,9 @@ int mbedtls_ssl_check_cert_usage( const mbedtls_x509_crt *cert,
 			case MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA:
 			case MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS:
 			case MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM:
+            case MBEDTLS_KEY_EXCHANGE_SABER_ECDSA:
+			case MBEDTLS_KEY_EXCHANGE_SABER_SPHINCS:
+			case MBEDTLS_KEY_EXCHANGE_SABER_DILITHIUM:
                 usage = 0;
         }
     }
