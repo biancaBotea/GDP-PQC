@@ -1,5 +1,5 @@
-#ifndef VERIFY_H
-#define VERIFY_H
+#ifndef KYBER_VERIFY_H
+#define KYBER_VERIFY_H
 
 #include <stdio.h>
 
