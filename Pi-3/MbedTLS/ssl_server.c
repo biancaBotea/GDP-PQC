@@ -44,6 +44,8 @@
  *  **********
  */
 
+#include <math.h>
+
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
 #else
@@ -157,7 +159,7 @@ static void my_debug( void *ctx, int level,
     fflush(  (FILE *) ctx  );
 }
 
-mbedtls_pq_performance run_server(const char *cert, const char *key, const int cipher_suite, char *MsgToClient)
+mbedtls_pq_avg_performance run_server(const char *cert, const char *key, const int cipher_suite, char *MsgToClient)
 {
     int ret, len;
     mbedtls_net_context listen_fd, client_fd;
@@ -180,9 +182,17 @@ mbedtls_pq_performance run_server(const char *cert, const char *key, const int c
     mbedtls_ssl_config_init( &conf );
 #if defined(MBEDTLS_PEFORMANCE)
     mbedtls_pq_performance performance;
-    mbedtls_pq_performance avg_performance;
+    mbedtls_pq_avg_performance avg_performance;
 	ssl.performance = &performance;
-    int handshake_count = 0;
+    avg_performance.handshake_x = 0;
+    avg_performance.handshake_x2 = 0;
+    avg_performance.kyber_dec_x = 0;
+    avg_performance.kyber_dec_x2 = 0;
+    avg_performance.sphincs_sign_x = 0;
+    avg_performance.sphincs_sign_x2 = 0;
+    avg_performance.kyber_genkey_x = 0;
+    avg_performance.kyber_genkey_x2 = 0;
+    avg_performance.count = 0;
 #endif
 
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C) && defined(GDP_MEM_TEST)
@@ -367,10 +377,9 @@ reset:
 
 #if defined(MBEDTLS_PEFORMANCE)
 	ssl.performance->handshake = mbedtls_timing_get_timer(&handshaketimer, 0);
-    handshake_count++;
 	
     if (DEBUG_LEVEL >= 1) {
-        mbedtls_printf( "  . Performance Data: %i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i\n",
+        mbedtls_printf( "  . Performance Data: %.3f,%.3f,%.3f,%.3f,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%.3f\n",
             performance.handshake,
             performance.sphincs_sign,
             performance.kyber_dec,
@@ -389,14 +398,16 @@ reset:
         );
     }
 
-    if (handshake_count == 1) {
-				avg_performance = performance;
-			} else {
-				avg_performance.handshake = ((avg_performance.handshake * (handshake_count - 1)) + performance.handshake) / handshake_count;
-				avg_performance.sphincs_sign = ((avg_performance.sphincs_sign * (handshake_count - 1)) + performance.sphincs_sign) / handshake_count;
-				avg_performance.kyber_dec = ((avg_performance.kyber_dec * (handshake_count - 1)) + performance.kyber_dec) / handshake_count;
-				avg_performance.kyber_genkey = ((avg_performance.kyber_genkey * (handshake_count - 1)) + performance.kyber_genkey) / handshake_count;
-			}
+    // Update average performance metrics
+    avg_performance.handshake_x += performance.handshake;
+    avg_performance.handshake_x2 += pow(performance.handshake, 2);
+    avg_performance.kyber_dec_x += performance.kyber_dec;
+    avg_performance.kyber_dec_x2 += pow(performance.kyber_dec, 2);
+    avg_performance.sphincs_sign_x += performance.sphincs_sign;
+    avg_performance.sphincs_sign_x2 += pow(performance.sphincs_sign, 2);
+    avg_performance.kyber_genkey_x += performance.kyber_genkey;
+    avg_performance.kyber_genkey_x2 += pow(performance.kyber_genkey, 2);
+    avg_performance.count += 1;
 #endif	
     
 
@@ -501,7 +512,6 @@ reset:
         goto reset;
     } else {
         stop = 0;
-        handshake_count = 0;
     }
 
 exit:

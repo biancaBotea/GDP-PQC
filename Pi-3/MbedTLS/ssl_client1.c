@@ -299,9 +299,10 @@ mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const
 
 #if defined(MBEDTLS_PEFORMANCE)
     if (DEBUG_LEVEL >= 1) {
-        mbedtls_printf("  . Performance Data: %i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i\n",
+        mbedtls_printf("  . Performance Data: %.3f,%.3f,%.3f,%.3f,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%.3f\n",
         performance.handshake,
         performance.sphincs_verify,
+        performance.dilithium_verify,
         performance.kyber_enc,
         performance.write_client_hello,
         performance.parse_server_hello,

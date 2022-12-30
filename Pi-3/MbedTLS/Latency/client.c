@@ -17,6 +17,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <math.h>
 
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
@@ -42,12 +43,13 @@
 #include "../ssl_client1.h"
 #include "mbedtls/ssl_ciphersuites.h"
 #include "../new_certs.h"
+#include "../std_dev.h"
 #include "mbedtls/ssl.h"
 
 #define TEST_SIZE	2
 
 /* application args */
-const char *server_addr = "192.168.137.206";
+const char *server_addr = "127.0.0.1";
 const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256", 
 									"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256",
 									"MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256",
@@ -68,17 +70,23 @@ const char *certs[] = {TEST_CA_CRT_EC_PEM,
 					   TEST_CA_CRT_DILITHIUM_SHAKE256_PEM};
 char * MsgToServer = "Test Message";
 
-
 int main() {
-	printf("Test Configuration:\nServer Address - %s\nRepeats - %d\n\n", server_addr, TEST_SIZE);
+	printf("Test Configuration:\nServer Address - %s\nUnits - ms\nRepeats - %d\n\n", server_addr, TEST_SIZE);
 
     for (int i = 0; i < 6; i++) {
 		printf("Testing %s...\n\n", cipherSuiteStrings[i]);
 		
-		//Wait for server to start
+		// Wait for server to start
 		sleep(2);
 		
-		mbedtls_pq_performance avg_performance;
+		// Initialise average performance record
+		mbedtls_pq_avg_performance avg_performance;
+		avg_performance.handshake_x = 0;
+		avg_performance.handshake_x2 = 0;
+		avg_performance.kyber_enc_x = 0;
+		avg_performance.kyber_enc_x2 = 0;
+		avg_performance.sphincs_verify_x = 0;
+		avg_performance.sphincs_verify_x2 = 0;
 		int handshake_count = 0;
 
 		// Loop for a given number of handshakes
@@ -86,23 +94,28 @@ int main() {
 			mbedtls_pq_performance new_data = run_client(server_addr, certs[i], cipherSuites[i], MsgToServer);
 			handshake_count++;
 
-			// Calculate new average performance metrics
-			if (handshake_count == 1) {
-				avg_performance = new_data;
-			} else {
-				avg_performance.handshake = ((avg_performance.handshake * (handshake_count - 1)) + new_data.handshake) / handshake_count;
-				avg_performance.sphincs_verify = ((avg_performance.sphincs_verify * (handshake_count - 1)) + new_data.sphincs_verify) / handshake_count;
-				avg_performance.kyber_enc = ((avg_performance.kyber_enc * (handshake_count - 1)) + new_data.kyber_enc) / handshake_count;
-			}
+			// Update average performance metrics
+			avg_performance.handshake_x += new_data.handshake;
+			avg_performance.handshake_x2 += pow(new_data.handshake, 2);
+			avg_performance.kyber_enc_x += new_data.kyber_enc;
+			avg_performance.kyber_enc_x2 += pow(new_data.kyber_enc, 2);
+			avg_performance.sphincs_verify_x += new_data.sphincs_verify;
+			avg_performance.sphincs_verify_x2 += pow(new_data.sphincs_verify, 2);
 		}
 
 		// Shutdown the server
 		run_client(server_addr, certs[i], cipherSuites[i], "Shutdown");
 
-		printf("Performance Measurements:\n");
-		printf("Handshake Latency - %d ms\n", avg_performance.handshake);
-		printf("Certificate Verification - %d ms\n", avg_performance.sphincs_verify);
-		printf("Key Encapsulation - %d ms\n\n", avg_performance.kyber_enc);
+		// Calculate Standard Deviation for each metric
+		double handshake_std_dev = calc_std_dev(avg_performance.handshake_x, avg_performance.handshake_x2, TEST_SIZE);
+		double key_enc_std_dev = calc_std_dev(avg_performance.kyber_enc_x, avg_performance.kyber_enc_x2, TEST_SIZE);
+		double sphincs_verify_std_dev = calc_std_dev(avg_performance.sphincs_verify_x, avg_performance.sphincs_verify_x2, TEST_SIZE);
+
+		// Output performance measurements
+		printf("Performance Measurements:\tMean\t\tStd Dev\n");
+		printf("Handshake Latency\t\t%.2f\t\t%.2f\n", avg_performance.handshake_x / TEST_SIZE, handshake_std_dev);
+		printf("Key Encapsulation\t\t%.2f\t\t%.2f\n", avg_performance.kyber_enc_x / TEST_SIZE, key_enc_std_dev);
+		printf("Certificate Verification\t%.2f\t\t%.2f\n\n", avg_performance.sphincs_verify_x / TEST_SIZE, sphincs_verify_std_dev);
 	}
 
   	return 0;
