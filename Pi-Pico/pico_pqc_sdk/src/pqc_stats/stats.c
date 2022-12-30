@@ -54,3 +54,24 @@ inline void print_conf_stat(stat_t* st, int conf_pc){
 void free_stat(stat_t* st){
     free(st);
 }
+
+void init_statobj(stat_obj_t* so, stat_t* st, int conf_pc){
+    so->mean = mean_stat(st);
+    so->sd = sd_stat(st);
+    so->p = conf_pc;
+    so->ci = conf_stat(st,conf_pc);
+    so->n = st->n;
+}
+
+void print_statobj(stat_obj_t* so){
+    printf("mean=%f,sd=%f,ci=%f,p=0.%d,n=%zu\n",
+        so->mean,
+        so->sd,
+        so->ci,
+        so->p,
+        so->n);
+}
+
+void free_statobj(stat_obj_t* so){
+    free(so);
+}
