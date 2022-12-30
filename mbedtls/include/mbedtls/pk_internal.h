@@ -168,6 +168,10 @@ extern const mbedtls_pk_info_t mbedtls_dilithium_info;
 extern const mbedtls_pk_info_t mbedtls_kyber_info;
 #endif
 
+#if defined(MBEDTLS_SABER_C)
+extern const mbedtls_pk_info_t mbedtls_saber_info;
+#endif
+
 #if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)
 extern const mbedtls_pk_info_t mbedtls_rsa_alt_info;
 #endif

@@ -452,6 +452,11 @@ union mbedtls_ssl_premaster_secret
     defined(MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED)
 	unsigned char _pms_kyber[32];
 #endif
+#if defined(MBEDTLS_KEY_EXCHANGE_SABER_SPHINCS_ENABLED)        || \
+    defined(MBEDTLS_KEY_EXCHANGE_SABER_DILITHIUM_ENABLED)      || \
+    defined(MBEDTLS_KEY_EXCHANGE_SABER_ECDSA_ENABLED)
+	unsigned char _pms_saber[32];
+#endif
 };
 
 #define MBEDTLS_PREMASTER_SIZE     sizeof( union mbedtls_ssl_premaster_secret )
@@ -1088,6 +1093,9 @@ struct mbedtls_pq_performance
     uint32_t kyber_genkey;
     uint32_t kyber_enc;
     uint32_t kyber_dec;
+    uint32_t saber_genkey;
+    uint32_t saber_enc;
+    uint32_t saber_dec;
     uint32_t sphincs_sign;
     uint32_t sphincs_verify;
     uint32_t dilithium_sign;

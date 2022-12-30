@@ -352,6 +352,9 @@ struct mbedtls_ssl_handshake_params
 #if defined(MBEDTLS_KYBER_C)
 	mbedtls_kyber_context kyber_ctx;              /*!<  KYBER key exchange       */
 #endif
+#if defined(MBEDTLS_SABER_C)
+	mbedtls_saber_context saber_ctx;              /*!<  SABER key exchange       */
+#endif
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
     mbedtls_ecjpake_context ecjpake_ctx;        /*!< EC J-PAKE key exchange */
 #if defined(MBEDTLS_SSL_CLI_C)

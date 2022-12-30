@@ -1086,19 +1086,6 @@
  */
 //#define MBEDTLS_KEY_EXCHANGE_ECDHE_SPHINCS_ENABLED
 
- /**
- * \def MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED
- *
- * Enable the KYBER-SPHINCS based ciphersuite modes in SSL / TLS.
- *
- * Requires: MBEDTLS_KYBER_C, MBEDTLS_SPHINCS_C, MBEDTLS_X509_CRT_PARSE_C,
- *
- * This enables the following ciphersuites (if other requisites are
- * enabled as well):
- *      MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256
- */
-//#define MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED
-
 /**
  * \def MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED
  *
@@ -1113,20 +1100,6 @@
 #define MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED
 
  /**
- * \def MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
- *
- * Enable the KYBER-DILITHIUM based ciphersuite modes in SSL / TLS.
- *
- * Requires: MBEDTLS_KYBER_C, MBEDTLS_DILITHIUM_C, MBEDTLS_X509_CRT_PARSE_C,
- *
- * This enables the following ciphersuites (if other requisites are
- * enabled as well):
- *      MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256
- */
-#define MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
-
-
- /**
  * \def MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED
  *
  * Enable the KYBER-ECDSA based ciphersuite modes in SSL / TLS.
@@ -1139,6 +1112,38 @@
  */
 //#define MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED
 
+ /**
+ * \def MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED
+ *
+ * Enable the KYBER-SPHINCS based ciphersuite modes in SSL / TLS.
+ *
+ * Requires: MBEDTLS_KYBER_C, MBEDTLS_SPHINCS_C, MBEDTLS_X509_CRT_PARSE_C,
+ *
+ * This enables the following ciphersuites (if other requisites are
+ * enabled as well):
+ *      MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256
+ */
+//#define MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED
+
+ /**
+ * \def MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
+ *
+ * Enable the KYBER-DILITHIUM based ciphersuite modes in SSL / TLS.
+ *
+ * Requires: MBEDTLS_KYBER_C, MBEDTLS_DILITHIUM_C, MBEDTLS_X509_CRT_PARSE_C,
+ *
+ * This enables the following ciphersuites (if other requisites are
+ * enabled as well):
+ *      MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256
+ */
+//#define MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
+
+ /**
+ * SABER ciphers
+ */
+#define MBEDTLS_KEY_EXCHANGE_SABER_ECDSA_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_SABER_SPHINCS_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_SABER_DILITHIUM_ENABLED
 /**
  * \def MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED
  *
@@ -2456,7 +2461,22 @@
  *
  * Requires: TODO
  */
-#define MBEDTLS_KYBER_C
+//#define MBEDTLS_KYBER_C
+
+ /**
+ * \def MBEDTLS_SABER_C
+ *
+ * Enable the SABER algorithm.
+ *
+ * Module:  library/saber_kem.c
+ * Caller:
+ *
+ * This module is used by the following key exchanges:
+ *      PQ
+ *
+ * Requires: TODO
+ */
+#define MBEDTLS_SABER_C
 
 /**
  * \def MBEDTLS_ECJPAKE_C

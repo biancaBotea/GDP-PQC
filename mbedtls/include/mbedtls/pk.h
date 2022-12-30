@@ -83,7 +83,7 @@
 #endif
 
 #if defined(MBEDTLS_SABER_C)
-#include "pq/saber.h"
+#include "pq/saber_api.h"
 #endif
 
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
