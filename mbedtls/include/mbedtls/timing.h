@@ -118,7 +118,7 @@ unsigned long mbedtls_timing_hardclock( void );
  *                 get_timer(0) }` the value time1+time2 is only approximately
  *                 the delay since the first reset.
  */
-unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int reset );
+double mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int reset );
 
 /**
  * \brief          Setup an alarm clock
@@ -174,21 +174,21 @@ int mbedtls_timing_self_test( int verbose );
 #if defined(MBEDTLS_PEFORMANCE)
 #define HS_RUNTIME_START hs_runtime = 0; (void)mbedtls_timing_get_timer(&hs_runtimer, 1);
 #define HS_RUNTIME_STOP hs_runtime += mbedtls_timing_get_timer(&hs_runtimer, 0);
-#define HS_RUNTIME_INIT extern unsigned long hs_runtime; extern struct mbedtls_timing_hr_time hs_runtimer;
+#define HS_RUNTIME_INIT extern double hs_runtime; extern struct mbedtls_timing_hr_time hs_runtimer;
 
 #define RUNTIME_START runtime = 0; (void)mbedtls_timing_get_timer(&runtimer, 1);
 #define RUNTIME_STOP runtime += mbedtls_timing_get_timer(&runtimer, 0);
-#define RUNTIME_INIT extern unsigned long runtime; extern struct mbedtls_timing_hr_time runtimer;
+#define RUNTIME_INIT extern double runtime; extern struct mbedtls_timing_hr_time runtimer;
 
 #define NETTIME_START runtime += mbedtls_timing_get_timer(&runtimer, 0);
 #define NETTIME_STOP (void)mbedtls_timing_get_timer(&runtimer, 1);
 
 #define CRYPTOTIME_START cryptotime = 0; (void)mbedtls_timing_get_timer(&cryptotimer, 1);
 #define CRYPTOTIME_STOP cryptotime += mbedtls_timing_get_timer(&cryptotimer, 0);
-#define CRYPTOTIME_INIT extern unsigned long cryptotime; extern struct mbedtls_timing_hr_time cryptotimer;
+#define CRYPTOTIME_INIT extern double cryptotime; extern struct mbedtls_timing_hr_time cryptotimer;
 
 #define HASH_START hash_calls = 0;
-#define HASH_INIT extern unsigned long hash_calls;
+#define HASH_INIT extern double hash_calls;
 #define HASH_ADD hash_calls++;
 #else
 #define HS_RUNTIME_START

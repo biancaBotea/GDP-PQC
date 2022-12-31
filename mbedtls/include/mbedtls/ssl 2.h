@@ -1062,7 +1062,7 @@ struct mbedtls_ssl_config
 
 struct mbedtls_pq_performance
 {
-    uint32_t handshake;
+    double handshake;
 
     uint32_t write_client_hello;
     uint32_t parse_client_hello;
@@ -1085,14 +1085,31 @@ struct mbedtls_pq_performance
     uint32_t write_server_finish;
     uint32_t parse_server_finish;
 
-    uint32_t kyber_genkey;
-    uint32_t kyber_enc;
-    uint32_t kyber_dec;
-    uint32_t sphincs_sign;
-    uint32_t sphincs_verify;
-    uint32_t dilithium_sign;
-    uint32_t dilithium_verify;
-    uint32_t hashs;
+    double kyber_genkey;
+    double kyber_enc;
+    double kyber_dec;
+    double sphincs_sign;
+    double sphincs_verify;
+    double dilithium_sign;
+    double dilithium_verify;
+    double hashs;
+};
+
+struct mbedtls_pq_avg_performance
+{
+    double handshake_x;
+    double handshake_x2;
+    double kyber_genkey_x;
+    double kyber_genkey_x2;
+    double kyber_enc_x;
+    double kyber_enc_x2;
+    double kyber_dec_x;
+    double kyber_dec_x2;
+    double sphincs_sign_x;
+    double sphincs_sign_x2;
+    double sphincs_verify_x;
+    double sphincs_verify_x2;
+    uint32_t count;
 };
 
 struct mbedtls_ssl_context
