@@ -202,7 +202,7 @@
  *
  * Enable this layer to allow use of alternative memory allocators.
  */
-#define MBEDTLS_PLATFORM_MEMORY
+//#define MBEDTLS_PLATFORM_MEMORY
 
 /**
  * \def MBEDTLS_PLATFORM_NO_STD_FUNCTIONS
@@ -1099,6 +1099,33 @@
  */
 #define MBEDTLS_KEY_EXCHANGE_KYBER_SPHINCS_ENABLED
 
+/**
+ * \def MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED
+ *
+ * Enable the ECDHE-DILITHIUM based ciphersuite modes in SSL / TLS.
+ *
+ * Requires: MBEDTLS_ECDH_C, MBEDTLS_DILITHIUM_C, MBEDTLS_X509_CRT_PARSE_C,
+ *
+ * This enables the following ciphersuites (if other requisites are
+ * enabled as well):
+ *      MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256
+ */
+#define MBEDTLS_KEY_EXCHANGE_ECDHE_DILITHIUM_ENABLED
+
+ /**
+ * \def MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
+ *
+ * Enable the KYBER-DILITHIUM based ciphersuite modes in SSL / TLS.
+ *
+ * Requires: MBEDTLS_KYBER_C, MBEDTLS_DILITHIUM_C, MBEDTLS_X509_CRT_PARSE_C,
+ *
+ * This enables the following ciphersuites (if other requisites are
+ * enabled as well):
+ *      MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256
+ */
+#define MBEDTLS_KEY_EXCHANGE_KYBER_DILITHIUM_ENABLED
+
+
  /**
  * \def MBEDTLS_KEY_EXCHANGE_KYBER_ECDSA_ENABLED
  *
@@ -1303,7 +1330,7 @@
  *
  * Uncomment this macro to let the buffer allocator print out error messages.
  */
-#define MBEDTLS_MEMORY_DEBUG
+//#define MBEDTLS_MEMORY_DEBUG
 
 /**
  * \def MBEDTLS_MEMORY_BACKTRACE
@@ -1389,6 +1416,14 @@
 *
 */
 #define MBEDTLS_SSL_SPHINCS
+
+/**
+* \def MBEDTLS_DILITHIUM_SSL
+*
+* Enable DILITHIUM ciphersuites.
+*
+*/
+#define MBEDTLS_SSL_DILITHIUM
 
 /**
 * \def MBEDTLS_SSL_HS_FRAGMENTATION
@@ -2392,6 +2427,22 @@
 #define MBEDTLS_SPHINCS_C
 #define MBEDTLS_SPHINCS_MAX_SIZE 100000
 
+/**
+ * \def MBEDTLS_DILITHIUM_C
+ *
+ * Enable the DILITHIUM algorithm.
+ *
+ * Module:  library/spx.c
+ * Caller:
+ *
+ * This module is used by the following key exchanges:
+ *      PQ
+ *
+ * Requires: TODO
+ */
+#define MBEDTLS_DILITHIUM_C
+
+
  /**
  * \def MBEDTLS_KYBER_C
  *
@@ -2627,7 +2678,7 @@
  *
  * Enable this module to enable the buffer memory allocator.
  */
-#define MBEDTLS_MEMORY_BUFFER_ALLOC_C
+//#define MBEDTLS_MEMORY_BUFFER_ALLOC_C
 
 /**
  * \def MBEDTLS_NET_C
@@ -3222,8 +3273,8 @@
 
 /* Platform options */
 //#define MBEDTLS_PLATFORM_STD_MEM_HDR   <stdlib.h> /**< Header to include if MBEDTLS_PLATFORM_NO_STD_FUNCTIONS is defined. Don't define if no header is needed. */
-#define MBEDTLS_PLATFORM_STD_CALLOC        calloc /**< Default allocator to use, can be undefined */
-#define MBEDTLS_PLATFORM_STD_FREE            free /**< Default free to use, can be undefined */
+//#define MBEDTLS_PLATFORM_STD_CALLOC        calloc /**< Default allocator to use, can be undefined */
+//#define MBEDTLS_PLATFORM_STD_FREE            free /**< Default free to use, can be undefined */
 //#define MBEDTLS_PLATFORM_STD_EXIT            exit /**< Default exit to use, can be undefined */
 //#define MBEDTLS_PLATFORM_STD_TIME            time /**< Default time to use, can be undefined. MBEDTLS_HAVE_TIME must be enabled */
 //#define MBEDTLS_PLATFORM_STD_FPRINTF      fprintf /**< Default fprintf to use, can be undefined */
