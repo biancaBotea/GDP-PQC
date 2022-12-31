@@ -1,27 +1,16 @@
-In file included from /usr/include/newlib/dirent.h:39,
-                 from /home/bb/pico/pico-sdk/lib/mbedtls/library/x509_crt.c:102:
-/usr/include/newlib/sys/dirent.h:10:2: error: #error "<dirent.h> not supported"
- #error "<dirent.h> not supported"
-  ^~~~~
-In file included from /home/bb/pico/pico-sdk/lib/mbedtls/library/x509_crt.c:102:
-/usr/include/newlib/dirent.h:48:12: error: unknown type name 'DIR'
- int  dirfd(DIR *);
-            ^~~
-/usr/include/newlib/dirent.h:51:17: error: unknown type name 'DIR'
- int  fdclosedir(DIR *);
-                 ^~~
-/usr/include/newlib/dirent.h:53:1: error: unknown type name 'DIR'
- DIR *opendir(const char *);
- ^~~
-/usr/include/newlib/dirent.h:54:1: error: unknown type name 'DIR'
- DIR *fdopendir(int);
- ^~~
-/usr/include/newlib/dirent.h:56:11: error: unknown type name 'DIR'
-   readdir(DIR *);
-           ^~~
-/usr/include/newlib/dirent.h:58:16: error: unknown type name 'DIR'
- int  readdir_r(DIR *__restrict, struct dirent *__restrict,
-                ^~~
-/usr/include/newlib/dirent.h:61:17: error: unknown type name 'DIR'
- void  rewinddir(DIR *);
-                 ^~~
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0xf2): undefined reference to `mbedtls_debug_print_ret'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x136): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x15e): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x190): undefined reference to `mbedtls_debug_print_ret'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x1a4): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x1f6): undefined reference to `mbedtls_debug_print_ret'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x23a): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x272): undefined reference to `mbedtls_debug_print_ret'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x28a): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x2b4): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x2f2): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x306): undefined reference to `mbedtls_debug_print_ret'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x31c): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x330): undefined reference to `mbedtls_debug_print_msg'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x3f0): undefined reference to `mbedtls_debug_print_ret'
+/usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/bin/ld: ssl_tls.c:(.text.mbedtls_ssl_read+0x402): undefined reference to `mbedtls_debug_print_msg'
