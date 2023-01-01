@@ -12,7 +12,6 @@ void init_flashobj(flashobj_t* fo, uint8_t* mem, size_t size_mem){
 }
 
 void free_flashobj(flashobj_t* fo){
-    free(fo->mem);
     free(fo);
 }
 
