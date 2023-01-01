@@ -28,5 +28,6 @@ void init_flash(flash_t* fl);
 void free_mem_flash(flashobj_t* fo);
 int write_obj_flash(flash_t* fl, flashobj_t* fo);
 int read_obj_flash(flash_t* fl, size_t index);
+void free_flash(flash_t* fl);
 void demo_flash();
 int demo_flasharray();
