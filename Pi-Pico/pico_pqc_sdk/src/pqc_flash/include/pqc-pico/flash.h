@@ -26,9 +26,6 @@ typedef struct flash{
 
 void init_flash(flash_t* fl);
 void free_mem_flash(flashobj_t* fo);
-static int __prepare_new_sector_flash(flash_t* fl, flashobj_t* fo);
-static int __write_new_page_flash(flash_t* fl, flashobj_t* fo);
-static int __add_new_index_flash(flash_t* fl, flashobj_t* fo);
 int write_obj_flash(flash_t* fl, flashobj_t* fo);
 int read_obj_flash(flash_t* fl, size_t index);
 void demo_flash();
