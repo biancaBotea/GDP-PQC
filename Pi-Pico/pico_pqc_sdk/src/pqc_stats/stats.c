@@ -55,7 +55,8 @@ void free_stat(stat_t* st){
     free(st);
 }
 
-void init_statobj(stat_obj_t* so, stat_t* st, int conf_pc){
+void init_statobj(stat_obj_t* so, const char* label, stat_t* st, int conf_pc){
+    so->label = strdup(label);
     so->mean = mean_stat(st);
     so->sd = sd_stat(st);
     so->p = conf_pc;
@@ -64,9 +65,13 @@ void init_statobj(stat_obj_t* so, stat_t* st, int conf_pc){
 }
 
 void print_statobj(stat_obj_t* so){
-    printf("mean=%f,sd=%f,ci=%f,p=0.%d,n=%zu\n",
+    printf("mean=%f,sd=%f,ci=%f,p=0.%d,n=%zu\n",so->mean,so->sd,so->ci,so->p,so->n);
+}
+
+void print_statobj_csv(stat_obj_t* so){
+    printf("%s, %f, %f, 0.%d, %zu\n",
+        so->label,
         so->mean,
-        so->sd,
         so->ci,
         so->p,
         so->n);
@@ -74,4 +79,46 @@ void print_statobj(stat_obj_t* so){
 
 void free_statobj(stat_obj_t* so){
     free(so);
+}
+
+void init_csv(csv_t* csv, char* HEADER_LABEL){
+    csv->HEADER_LABEL = HEADER_LABEL;
+    csv->size_so_l = 0;
+    csv->so_l = NULL;
+}
+
+void add_csv(csv_t* csv, stat_obj_t* so){
+    size_t temp_size_so_l = csv->size_so_l + 1;
+    size_t head_so_l = temp_size_so_l - 1;
+    stat_obj_t** temp_so_l = realloc(csv->so_l, temp_size_so_l * sizeof(stat_obj_t*));
+    if(temp_so_l != NULL){
+        csv->size_so_l = temp_size_so_l;
+        csv->so_l = temp_so_l;
+        csv->so_l[head_so_l] = so;
+    }
+    else{
+        printf("Could not allocate memory for new CSV statobj");
+        return;
+    }
+}
+
+void print_csv(csv_t* csv){
+    char* header = strcat(csv->HEADER_LABEL, HEADER_PARTIAL_STATOBJ_CSV);
+    printf("%s",header);
+    for(size_t row = 0; row< csv->size_so_l; ++row){
+        print_statobj_csv(csv->so_l[row]);
+    }
+    printf("\n");
+}
+
+void free_csv(csv_t* csv){
+    for(size_t so = 0; so<csv->size_so_l; ++so){
+        free(csv->so_l[so]->label);
+        free(csv->so_l[so]);
+        csv->so_l[so] = NULL;
+    }
+    free(csv->so_l);
+    csv->so_l = NULL;
+    free(csv);
+    csv = NULL;
 }
