@@ -1,0 +1,93 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"library/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 206,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"library/libmbedtls.a"
+			],
+			"targetId" : "mbedtls::@25993c7f548492bbc626",
+			"targetIndex" : 27,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"library/libmbedx509.a"
+			],
+			"targetId" : "mbedx509::@25993c7f548492bbc626",
+			"targetIndex" : 28,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"library/libmbedcrypto.a"
+			],
+			"targetId" : "mbedcrypto::@25993c7f548492bbc626",
+			"targetIndex" : 26,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"library/libcrypto.a"
+			],
+			"targetId" : "crypto::@25993c7f548492bbc626",
+			"targetIndex" : 8,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"library/libssl.a"
+			],
+			"targetId" : "ssl::@25993c7f548492bbc626",
+			"targetIndex" : 45,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "library",
+		"source" : "library"
+	}
+}
