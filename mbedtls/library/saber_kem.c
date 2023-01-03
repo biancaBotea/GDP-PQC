@@ -8,7 +8,7 @@
 #include "pq/saber_fips202.h"
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int crypto_kem_keypair(unsigned char *pk, unsigned char *sk, 
+int crypto_saber_kem_keypair(unsigned char *pk, unsigned char *sk, 
   int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
 
 {
@@ -38,7 +38,7 @@ int crypto_kem_keypair(unsigned char *pk, unsigned char *sk,
 * Returns 0 (success)
 **************************************************/
 
-int crypto_kem_enc(unsigned char *ct, unsigned char *ss, const unsigned char *pk,
+int crypto_saber_kem_enc(unsigned char *ct, unsigned char *ss, const unsigned char *pk,
   int(*f_rng)(void *, unsigned char *, size_t), void *p_rng)
 
 {
@@ -79,7 +79,7 @@ int crypto_kem_enc(unsigned char *ct, unsigned char *ss, const unsigned char *pk
 * On failure, ss will contain a randomized value.
 **************************************************/
 
-int crypto_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned char *sk)
+int crypto_saber_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned char *sk)
 {
   size_t i;
   int fail;
@@ -88,7 +88,7 @@ int crypto_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned ch
   unsigned char kr[64];                             // Will contain key, coins
   const unsigned char *pk = sk + SABER_INDCPA_SECRETKEYBYTES;
 
-   indcpa_kem_dec(sk, ct, buf);			     // buf[0:31] <-- message
+  indcpa_kem_dec(sk, ct, buf);			     // buf[0:31] <-- message
 
  
   // Multitarget countermeasure for coins + contributory KEM 
@@ -99,7 +99,6 @@ int crypto_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned ch
 
   indcpa_kem_enc(buf, kr+32, pk, cmp);
 
-
   fail = verify(ct, cmp, SABER_BYTES_CCA_DEC);
 
   sha3_256(kr+32, ct, SABER_BYTES_CCA_DEC);        		     // overwrite coins in kr with h(c)  
@@ -107,7 +106,6 @@ int crypto_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned ch
   cmov(kr, sk+SABER_SECRETKEYBYTES-SABER_KEYBYTES, SABER_KEYBYTES, fail); 
 
   sha3_256(ss, kr, 64);                          	   	     // hash concatenation of pre-k and h(c) to k
-
   return -fail;	
 }
 
