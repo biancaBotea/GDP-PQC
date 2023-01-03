@@ -1,0 +1,560 @@
+[ 
+ 	 { 
+		"Algorithm":"Dilithium2",
+		 "keypair": 2983.0,
+		 "keypaircycles": 335103, 
+		 "sign": 1052.32, 
+		 "signcycles": 950015, 
+		 "verify": 3191.0, 
+		 "verifycycles": 313226
+ 	 }, 
+	 { 
+		"Algorithm": "Dilithium3",
+		 "keypair": 1748.75,
+		 "keypaircycles": 571576, 
+		 "sign": 683.65, 
+		 "signcycles": 1462359, 
+		 "verify": 1932.67, 
+		 "verifycycles": 517307
+ 	 }, 
+	 { 
+		"Algorithm": "Dilithium5",
+		 "keypair": 1074.67,
+		 "keypaircycles": 930469, 
+		 "sign": 527.81, 
+		 "signcycles": 1894140, 
+		 "verify": 1120.67, 
+		 "verifycycles": 892224
+ 	 }, 
+	 { 
+		"Algorithm": "Dilithium2-AES",
+		 "keypair": 1238.92,
+		 "keypaircycles": 806892, 
+		 "sign": 313.23, 
+		 "signcycles": 3192189, 
+		 "verify": 1188.33, 
+		 "verifycycles": 841468
+ 	 }, 
+	 { 
+		"Algorithm": "Dilithium3-AES",
+		 "keypair": 726.42,
+		 "keypaircycles": 1376432, 
+		 "sign": 192.88, 
+		 "signcycles": 5184709, 
+		 "verify": 719.33, 
+		 "verifycycles": 1390201
+ 	 }, 
+	 { 
+		"Algorithm": "Dilithium5-AES",
+		 "keypair": 440.19,
+		 "keypaircycles": 2271840, 
+		 "sign": 155.61, 
+		 "signcycles": 6426936, 
+		 "verify": 428.38, 
+		 "verifycycles": 2334009
+ 	 }, 
+	 { 
+		"Algorithm": "Falcon-512",
+		 "keypair": 15.36,
+		 "keypaircycles": 65107374, 
+		 "sign": 59.68, 
+		 "signcycles": 16755824, 
+		 "verify": 3226.0, 
+		 "verifycycles": 309845
+ 	 }, 
+	 { 
+		"Algorithm": "Falcon-1024",
+		 "keypair": 5.17,
+		 "keypaircycles": 193476944, 
+		 "sign": 27.35, 
+		 "signcycles": 36569831, 
+		 "verify": 1594.0, 
+		 "verifycycles": 627203
+ 	 }, 
+	 { 
+		"Algorithm": "Rainbow-III-Classic",
+		 "keypair": 0.12,
+		 "keypaircycles": 8157446656, 
+		 "sign": 13.75, 
+		 "signcycles": 72742260, 
+		 "verify": 13.24, 
+		 "verifycycles": 75551974
+ 	 }, 
+	 { 
+		"Algorithm": "Rainbow-III-Circumzenithal",
+		 "keypair": 0.11,
+		 "keypaircycles": 9290180864, 
+		 "sign": 13.75, 
+		 "signcycles": 72736250, 
+		 "verify": 10.25, 
+		 "verifycycles": 97508484
+ 	 }, 
+	 { 
+		"Algorithm": "Rainbow-III-Compressed",
+		 "keypair": 0.11,
+		 "keypaircycles": 9294022144, 
+		 "sign": 0.23, 
+		 "signcycles": 4328519680, 
+		 "verify": 10.26, 
+		 "verifycycles": 97432667
+ 	 }, 
+	 { 
+		"Algorithm": "Rainbow-V-Classic",
+		 "keypair": 0.04,
+		 "keypaircycles": 22926747136, 
+		 "sign": 6.22, 
+		 "signcycles": 160827944, 
+		 "verify": 6.07, 
+		 "verifycycles": 164711451
+ 	 }, 
+	 { 
+		"Algorithm": "Rainbow-V-Circumzenithal",
+		 "keypair": 0.04,
+		 "keypaircycles": 26350442240, 
+		 "sign": 6.22, 
+		 "signcycles": 160841741, 
+		 "verify": 4.67, 
+		 "verifycycles": 214013525
+ 	 }, 
+	 { 
+		"Algorithm": "Rainbow-V-Compressed",
+		 "keypair": 0.04,
+		 "keypaircycles": 26348439040, 
+		 "sign": 0.08, 
+		 "signcycles": 12462056960, 
+		 "verify": 4.68, 
+		 "verifycycles": 213855983
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-128f-robust",
+		 "keypair": 53.05,
+		 "keypaircycles": 18850336, 
+		 "sign": 2.11, 
+		 "signcycles": 473648165, 
+		 "verify": 33.98, 
+		 "verifycycles": 29435761
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-128f-simple",
+		 "keypair": 91.27,
+		 "keypaircycles": 10954918, 
+		 "sign": 3.62, 
+		 "signcycles": 276186461, 
+		 "verify": 58.67, 
+		 "verifycycles": 17045657
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-128s-robust",
+		 "keypair": 0.83,
+		 "keypaircycles": 1200103595, 
+		 "sign": 0.11, 
+		 "signcycles": 9396363520, 
+		 "verify": 94.6, 
+		 "verifycycles": 10570903
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-128s-simple",
+		 "keypair": 1.44,
+		 "keypaircycles": 692776294, 
+		 "sign": 0.18, 
+		 "signcycles": 5487195904, 
+		 "verify": 159.95, 
+		 "verifycycles": 6251327
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-192f-robust",
+		 "keypair": 35.93,
+		 "keypaircycles": 27836632, 
+		 "sign": 1.23, 
+		 "signcycles": 810008512, 
+		 "verify": 22.83, 
+		 "verifycycles": 43803622
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-192f-simple",
+		 "keypair": 62.11,
+		 "keypaircycles": 16099156, 
+		 "sign": 2.14, 
+		 "signcycles": 467781632, 
+		 "verify": 41.21, 
+		 "verifycycles": 24267627
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-192s-robust",
+		 "keypair": 0.56,
+		 "keypaircycles": 1777575808, 
+		 "sign": 0.06, 
+		 "signcycles": 17844302592, 
+		 "verify": 59.23, 
+		 "verifycycles": 16881362
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-192s-simple",
+		 "keypair": 0.98,
+		 "keypaircycles": 1022706261, 
+		 "sign": 0.1, 
+		 "signcycles": 10245391616, 
+		 "verify": 111.7, 
+		 "verifycycles": 8951964
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-256f-robust",
+		 "keypair": 13.5,
+		 "keypaircycles": 74068567, 
+		 "sign": 0.6, 
+		 "signcycles": 1679725824, 
+		 "verify": 21.49, 
+		 "verifycycles": 46544250
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-256f-simple",
+		 "keypair": 23.42,
+		 "keypaircycles": 42695197, 
+		 "sign": 1.02, 
+		 "signcycles": 981702656, 
+		 "verify": 37.27, 
+		 "verifycycles": 26827195
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-256s-robust",
+		 "keypair": 0.84,
+		 "keypaircycles": 1185433088, 
+		 "sign": 0.06, 
+		 "signcycles": 17236858368, 
+		 "verify": 39.84, 
+		 "verifycycles": 25103866
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-Haraka-256s-simple",
+		 "keypair": 1.47,
+		 "keypaircycles": 681576704, 
+		 "sign": 0.1, 
+		 "signcycles": 10210847488, 
+		 "verify": 70.46, 
+		 "verifycycles": 14193348
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-128f-robust",
+		 "keypair": 51.13,
+		 "keypaircycles": 19560724, 
+		 "sign": 2.09, 
+		 "signcycles": 479149349, 
+		 "verify": 36.07, 
+		 "verifycycles": 27725521
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-128f-simple",
+		 "keypair": 93.42,
+		 "keypaircycles": 10703676, 
+		 "sign": 3.78, 
+		 "signcycles": 264714752, 
+		 "verify": 65.87, 
+		 "verifycycles": 15180738
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-128s-robust",
+		 "keypair": 0.82,
+		 "keypaircycles": 1217818539, 
+		 "sign": 0.11, 
+		 "signcycles": 9140347904, 
+		 "verify": 106.05, 
+		 "verifycycles": 9429211
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-128s-simple",
+		 "keypair": 1.5,
+		 "keypaircycles": 665524173, 
+		 "sign": 0.2, 
+		 "signcycles": 5098975488, 
+		 "verify": 191.27, 
+		 "verifycycles": 5226778
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-192f-robust",
+		 "keypair": 33.43,
+		 "keypaircycles": 29909910, 
+		 "sign": 1.22, 
+		 "signcycles": 816708480, 
+		 "verify": 22.79, 
+		 "verifycycles": 43863211
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-192f-simple",
+		 "keypair": 64.83,
+		 "keypaircycles": 15426590, 
+		 "sign": 2.34, 
+		 "signcycles": 426907840, 
+		 "verify": 46.75, 
+		 "verifycycles": 21386948
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-192s-robust",
+		 "keypair": 0.55,
+		 "keypaircycles": 1807519744, 
+		 "sign": 0.06, 
+		 "signcycles": 16483086848, 
+		 "verify": 65.12, 
+		 "verifycycles": 15357110
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-192s-simple",
+		 "keypair": 1.04,
+		 "keypaircycles": 960761216, 
+		 "sign": 0.11, 
+		 "signcycles": 8814530048, 
+		 "verify": 133.07, 
+		 "verifycycles": 7514726
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-256f-robust",
+		 "keypair": 11.58,
+		 "keypaircycles": 86353042, 
+		 "sign": 0.56, 
+		 "signcycles": 1792094208, 
+		 "verify": 19.35, 
+		 "verifycycles": 51681744
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-256f-simple",
+		 "keypair": 24.39,
+		 "keypaircycles": 40996449, 
+		 "sign": 1.16, 
+		 "signcycles": 858752896, 
+		 "verify": 44.59, 
+		 "verifycycles": 22427218
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-256s-robust",
+		 "keypair": 0.72,
+		 "keypaircycles": 1385201067, 
+		 "sign": 0.06, 
+		 "signcycles": 16798834688, 
+		 "verify": 40.05, 
+		 "verifycycles": 24967466
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHA256-256s-simple",
+		 "keypair": 1.56,
+		 "keypaircycles": 640389632, 
+		 "sign": 0.13, 
+		 "signcycles": 7869475072, 
+		 "verify": 89.58, 
+		 "verifycycles": 11163460
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-128f-robust",
+		 "keypair": 38.58,
+		 "keypaircycles": 25922778, 
+		 "sign": 1.57, 
+		 "signcycles": 636641741, 
+		 "verify": 27.06, 
+		 "verifycycles": 36950697
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-128f-simple",
+		 "keypair": 73.4,
+		 "keypaircycles": 13625327, 
+		 "sign": 2.97, 
+		 "signcycles": 336738844, 
+		 "verify": 53.26, 
+		 "verifycycles": 18772293
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-128s-robust",
+		 "keypair": 0.61,
+		 "keypaircycles": 1652214528, 
+		 "sign": 0.08, 
+		 "signcycles": 12427125248, 
+		 "verify": 75.7, 
+		 "verifycycles": 13207647
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-128s-simple",
+		 "keypair": 1.15,
+		 "keypaircycles": 869756544, 
+		 "sign": 0.15, 
+		 "signcycles": 6602010624, 
+		 "verify": 155.84, 
+		 "verifycycles": 6416187
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-192f-robust",
+		 "keypair": 29.15,
+		 "keypaircycles": 34306752, 
+		 "sign": 1.09, 
+		 "signcycles": 916202432, 
+		 "verify": 20.54, 
+		 "verifycycles": 48694867
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-192f-simple",
+		 "keypair": 54.17,
+		 "keypaircycles": 18460908, 
+		 "sign": 1.98, 
+		 "signcycles": 505216128, 
+		 "verify": 38.46, 
+		 "verifycycles": 25999062
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-192s-robust",
+		 "keypair": 0.41,
+		 "keypaircycles": 2418194048, 
+		 "sign": 0.05, 
+		 "signcycles": 21123459584, 
+		 "verify": 55.33, 
+		 "verifycycles": 18071717
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-192s-simple",
+		 "keypair": 0.78,
+		 "keypaircycles": 1274584917, 
+		 "sign": 0.09, 
+		 "signcycles": 11422712832, 
+		 "verify": 103.49, 
+		 "verifycycles": 9661954
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-256f-robust",
+		 "keypair": 10.06,
+		 "keypaircycles": 99363320, 
+		 "sign": 0.5, 
+		 "signcycles": 2009149312, 
+		 "verify": 18.18, 
+		 "verifycycles": 55018124
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-256f-simple",
+		 "keypair": 19.07,
+		 "keypaircycles": 52452233, 
+		 "sign": 0.91, 
+		 "signcycles": 1097840128, 
+		 "verify": 34.76, 
+		 "verifycycles": 28770148
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-256s-robust",
+		 "keypair": 0.63,
+		 "keypaircycles": 1588306816, 
+		 "sign": 0.06, 
+		 "signcycles": 18120580608, 
+		 "verify": 36.46, 
+		 "verifycycles": 27428773
+ 	 }, 
+	 { 
+		"Algorithm": "SPHINCS+-SHAKE256-256s-simple",
+		 "keypair": 1.2,
+		 "keypaircycles": 832819904, 
+		 "sign": 0.1, 
+		 "signcycles": 9930860032, 
+		 "verify": 73.73, 
+		 "verifycycles": 13560479
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L1_FS",
+		 "keypair": 15912.67,
+		 "keypaircycles": 62693, 
+		 "sign": 72.05, 
+		 "signcycles": 13880965, 
+		 "verify": 86.71, 
+		 "verifycycles": 11533243
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L1_UR",
+		 "keypair": 15966.67,
+		 "keypaircycles": 62481, 
+		 "sign": 53.98, 
+		 "signcycles": 18524169, 
+		 "verify": 69.57, 
+		 "verifycycles": 14370284
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L1_full",
+		 "keypair": 17040.67,
+		 "keypaircycles": 58537, 
+		 "sign": 80.48, 
+		 "signcycles": 12425575, 
+		 "verify": 106.75, 
+		 "verifycycles": 9366307
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L3_FS",
+		 "keypair": 11522.67,
+		 "keypaircycles": 86638, 
+		 "sign": 25.21, 
+		 "signcycles": 39670067, 
+		 "verify": 28.46, 
+		 "verifycycles": 35143540
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L3_UR",
+		 "keypair": 11539.67,
+		 "keypaircycles": 86508, 
+		 "sign": 19.83, 
+		 "signcycles": 50438080, 
+		 "verify": 23.02, 
+		 "verifycycles": 43447263
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L3_full",
+		 "keypair": 15902.67,
+		 "keypaircycles": 62733, 
+		 "sign": 44.7, 
+		 "signcycles": 22370712, 
+		 "verify": 52.67, 
+		 "verifycycles": 18985646
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L5_FS",
+		 "keypair": 10136.0,
+		 "keypaircycles": 98509, 
+		 "sign": 14.65, 
+		 "signcycles": 68242583, 
+		 "verify": 16.43, 
+		 "verifycycles": 60869233
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L5_UR",
+		 "keypair": 10138.0,
+		 "keypaircycles": 98493, 
+		 "sign": 12.29, 
+		 "signcycles": 81370818, 
+		 "verify": 14.03, 
+		 "verifycycles": 71252569
+ 	 }, 
+	 { 
+		"Algorithm": "picnic_L5_full",
+		 "keypair": 14946.67,
+		 "keypaircycles": 66756, 
+		 "sign": 26.11, 
+		 "signcycles": 38300656, 
+		 "verify": 31.88, 
+		 "verifycycles": 31362931
+ 	 }, 
+	 { 
+		"Algorithm": "picnic3_L1",
+		 "keypair": 17109.0,
+		 "keypaircycles": 58302, 
+		 "sign": 19.33, 
+		 "signcycles": 51727047, 
+		 "verify": 25.19, 
+		 "verifycycles": 39692985
+ 	 }, 
+	 { 
+		"Algorithm": "picnic3_L3",
+		 "keypair": 15946.67,
+		 "keypaircycles": 62560, 
+		 "sign": 9.06, 
+		 "signcycles": 110443785, 
+		 "verify": 11.88, 
+		 "verifycycles": 84203271
+ 	 }, 
+	 { 
+		"Algorithm": "picnic3_L5",
+		 "keypair": 14941.0,
+		 "keypaircycles": 66783, 
+		 "sign": 5.48, 
+		 "signcycles": 182561175, 
+		 "verify": 7.51, 
+		 "verifycycles": 133099687
+ 	 } 
+ ]

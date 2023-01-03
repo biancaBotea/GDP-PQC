@@ -1,0 +1,398 @@
+[ 
+ 	 { 
+		"Algorithm":"BIKE-L1",
+		 "keygen/s": 65.51,
+		 "keygen(cycles)": 15262390, 
+		 "encaps/s": 643.45, 
+		 "encaps(cycles)": 1553481, 
+		 "decaps/s": 36.95, 
+		 "decaps(cycles)": 27066774
+ 	 }, 
+	 { 
+		"Algorithm": "BIKE-L3",
+		 "keygen/s": 21.37,
+		 "keygen(cycles)": 46798734, 
+		 "encaps/s": 224.18, 
+		 "encaps(cycles)": 4460181, 
+		 "decaps/s": 11.78, 
+		 "decaps(cycles)": 84848661
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-348864",
+		 "keygen/s": 0.83,
+		 "keygen(cycles)": 1198085205, 
+		 "encaps/s": 891.7, 
+		 "encaps(cycles)": 1121002, 
+		 "decaps/s": 1156.61, 
+		 "decaps(cycles)": 864275
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-348864f",
+		 "keygen/s": 1.0,
+		 "keygen(cycles)": 1004058709, 
+		 "encaps/s": 904.67, 
+		 "encaps(cycles)": 1105269, 
+		 "decaps/s": 1165.33, 
+		 "decaps(cycles)": 858037
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-460896",
+		 "keygen/s": 0.27,
+		 "keygen(cycles)": 3696856064, 
+		 "encaps/s": 445.67, 
+		 "encaps(cycles)": 2243615, 
+		 "decaps/s": 480.51, 
+		 "decaps(cycles)": 2081246
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-460896f",
+		 "keygen/s": 0.26,
+		 "keygen(cycles)": 3801146880, 
+		 "encaps/s": 447.37, 
+		 "encaps(cycles)": 2234860, 
+		 "decaps/s": 481.33, 
+		 "decaps(cycles)": 2077602
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-6688128",
+		 "keygen/s": 0.08,
+		 "keygen(cycles)": 12250652416, 
+		 "encaps/s": 226.92, 
+		 "encaps(cycles)": 4406708, 
+		 "decaps/s": 423.86, 
+		 "decaps(cycles)": 2358905
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-6688128f",
+		 "keygen/s": 0.14,
+		 "keygen(cycles)": 6954275328, 
+		 "encaps/s": 225.37, 
+		 "encaps(cycles)": 4436679, 
+		 "decaps/s": 434.19, 
+		 "decaps(cycles)": 2302849
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-6960119",
+		 "keygen/s": 0.09,
+		 "keygen(cycles)": 11761363712, 
+		 "encaps/s": 234.02, 
+		 "encaps(cycles)": 4272187, 
+		 "decaps/s": 448.85, 
+		 "decaps(cycles)": 2227366
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-6960119f",
+		 "keygen/s": 0.16,
+		 "keygen(cycles)": 6173014016, 
+		 "encaps/s": 234.02, 
+		 "encaps(cycles)": 4272166, 
+		 "decaps/s": 447.04, 
+		 "decaps(cycles)": 2236718
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-8192128",
+		 "keygen/s": 0.1,
+		 "keygen(cycles)": 9869747200, 
+		 "encaps/s": 177.49, 
+		 "encaps(cycles)": 5632872, 
+		 "decaps/s": 444.37, 
+		 "decaps(cycles)": 2250339
+ 	 }, 
+	 { 
+		"Algorithm": "Classic-McEliece-8192128f",
+		 "keygen/s": 0.13,
+		 "keygen(cycles)": 7450968320, 
+		 "encaps/s": 174.38, 
+		 "encaps(cycles)": 5734400, 
+		 "decaps/s": 435.71, 
+		 "decaps(cycles)": 2294935
+ 	 }, 
+	 { 
+		"Algorithm": "HQC-128",
+		 "keygen/s": 1192.94,
+		 "keygen(cycles)": 838029, 
+		 "encaps/s": 669.44, 
+		 "encaps(cycles)": 1493406, 
+		 "decaps/s": 456.0, 
+		 "decaps(cycles)": 2192882
+ 	 }, 
+	 { 
+		"Algorithm": "HQC-192",
+		 "keygen/s": 504.17,
+		 "keygen(cycles)": 1983121, 
+		 "encaps/s": 266.73, 
+		 "encaps(cycles)": 3749365, 
+		 "decaps/s": 186.88, 
+		 "decaps(cycles)": 5351808
+ 	 }, 
+	 { 
+		"Algorithm": "HQC-256",
+		 "keygen/s": 274.73,
+		 "keygen(cycles)": 3639389, 
+		 "encaps/s": 139.62, 
+		 "encaps(cycles)": 7161025, 
+		 "decaps/s": 97.14, 
+		 "decaps(cycles)": 10293105
+ 	 }, 
+	 { 
+		"Algorithm": "Kyber512",
+		 "keygen/s": 8378.33,
+		 "keygen(cycles)": 119208, 
+		 "encaps/s": 8545.33, 
+		 "encaps(cycles)": 116874, 
+		 "decaps/s": 11761.33, 
+		 "decaps(cycles)": 84875
+ 	 }, 
+	 { 
+		"Algorithm": "Kyber768",
+		 "keygen/s": 6267.0,
+		 "keygen(cycles)": 159423, 
+		 "encaps/s": 5983.33, 
+		 "encaps(cycles)": 166994, 
+		 "decaps/s": 7577.0, 
+		 "decaps(cycles)": 131828
+ 	 }, 
+	 { 
+		"Algorithm": "Kyber1024",
+		 "keygen/s": 4550.67,
+		 "keygen(cycles)": 219613, 
+		 "encaps/s": 4196.0, 
+		 "encaps(cycles)": 238165, 
+		 "decaps/s": 4929.33, 
+		 "decaps(cycles)": 202712
+ 	 }, 
+	 { 
+		"Algorithm": "Kyber512-90s",
+		 "keygen/s": 3325.0,
+		 "keygen(cycles)": 300606, 
+		 "encaps/s": 2771.67, 
+		 "encaps(cycles)": 360658, 
+		 "decaps/s": 2410.33, 
+		 "decaps(cycles)": 414729
+ 	 }, 
+	 { 
+		"Algorithm": "Kyber768-90s",
+		 "keygen/s": 2025.67,
+		 "keygen(cycles)": 493523, 
+		 "encaps/s": 1729.33, 
+		 "encaps(cycles)": 578084, 
+		 "decaps/s": 1521.33, 
+		 "decaps(cycles)": 657183
+ 	 }, 
+	 { 
+		"Algorithm": "Kyber1024-90s",
+		 "keygen/s": 1334.0,
+		 "keygen(cycles)": 749553, 
+		 "encaps/s": 1168.28, 
+		 "encaps(cycles)": 855690, 
+		 "decaps/s": 1042.32, 
+		 "decaps(cycles)": 959146
+ 	 }, 
+	 { 
+		"Algorithm": "NTRU-HPS-2048-509",
+		 "keygen/s": 142.38,
+		 "keygen(cycles)": 7022862, 
+		 "encaps/s": 3075.67, 
+		 "encaps(cycles)": 324964, 
+		 "decaps/s": 2410.67, 
+		 "decaps(cycles)": 414695
+ 	 }, 
+	 { 
+		"Algorithm": "NTRU-HPS-2048-677",
+		 "keygen/s": 83.58,
+		 "keygen(cycles)": 11962351, 
+		 "encaps/s": 2131.0, 
+		 "encaps(cycles)": 469120, 
+		 "decaps/s": 1560.0, 
+		 "decaps(cycles)": 640863
+ 	 }, 
+	 { 
+		"Algorithm": "NTRU-HPS-4096-821",
+		 "keygen/s": 58.29,
+		 "keygen(cycles)": 17153409, 
+		 "encaps/s": 1694.33, 
+		 "encaps(cycles)": 590121, 
+		 "decaps/s": 1194.33, 
+		 "decaps(cycles)": 837244
+ 	 }, 
+	 { 
+		"Algorithm": "NTRU-HPS-4096-1229",
+		 "keygen/s": 26.89,
+		 "keygen(cycles)": 37179746, 
+		 "encaps/s": 979.67, 
+		 "encaps(cycles)": 1020561, 
+		 "decaps/s": 613.13, 
+		 "decaps(cycles)": 1630675
+ 	 }, 
+	 { 
+		"Algorithm": "NTRU-HRSS-701",
+		 "keygen/s": 78.67,
+		 "keygen(cycles)": 12711851, 
+		 "encaps/s": 3376.67, 
+		 "encaps(cycles)": 296012, 
+		 "decaps/s": 1506.33, 
+		 "decaps(cycles)": 663745
+ 	 }, 
+	 { 
+		"Algorithm": "NTRU-HRSS-1373",
+		 "keygen/s": 21.1,
+		 "keygen(cycles)": 47386808, 
+		 "encaps/s": 1072.98, 
+		 "encaps(cycles)": 931750, 
+		 "decaps/s": 410.53, 
+		 "decaps(cycles)": 2435836
+ 	 }, 
+	 { 
+		"Algorithm": "ntrulpr653",
+		 "keygen/s": 1274.0,
+		 "keygen(cycles)": 784837, 
+		 "encaps/s": 848.67, 
+		 "encaps(cycles)": 1178185, 
+		 "decaps/s": 639.12, 
+		 "decaps(cycles)": 1564330
+ 	 }, 
+	 { 
+		"Algorithm": "ntrulpr761",
+		 "keygen/s": 1033.0,
+		 "keygen(cycles)": 967997, 
+		 "encaps/s": 670.33, 
+		 "encaps(cycles)": 1491733, 
+		 "decaps/s": 498.33, 
+		 "decaps(cycles)": 2006651
+ 	 }, 
+	 { 
+		"Algorithm": "ntrulpr857",
+		 "keygen/s": 871.71,
+		 "keygen(cycles)": 1146886, 
+		 "encaps/s": 555.0, 
+		 "encaps(cycles)": 1801679, 
+		 "decaps/s": 409.33, 
+		 "decaps(cycles)": 2442855
+ 	 }, 
+	 { 
+		"Algorithm": "ntrulpr1277",
+		 "keygen/s": 476.84,
+		 "keygen(cycles)": 2096791, 
+		 "encaps/s": 287.9, 
+		 "encaps(cycles)": 3473747, 
+		 "decaps/s": 206.79, 
+		 "decaps(cycles)": 4836152
+ 	 }, 
+	 { 
+		"Algorithm": "sntrup653",
+		 "keygen/s": 58.94,
+		 "keygen(cycles)": 16964650, 
+		 "encaps/s": 1442.0, 
+		 "encaps(cycles)": 693348, 
+		 "decaps/s": 793.74, 
+		 "decaps(cycles)": 1259639
+ 	 }, 
+	 { 
+		"Algorithm": "sntrup761",
+		 "keygen/s": 44.4,
+		 "keygen(cycles)": 22520440, 
+		 "encaps/s": 1152.0, 
+		 "encaps(cycles)": 867966, 
+		 "decaps/s": 606.8, 
+		 "decaps(cycles)": 1648039
+ 	 }, 
+	 { 
+		"Algorithm": "sntrup857",
+		 "keygen/s": 34.22,
+		 "keygen(cycles)": 29220504, 
+		 "encaps/s": 961.68, 
+		 "encaps(cycles)": 1039584, 
+		 "decaps/s": 492.84, 
+		 "decaps(cycles)": 2028578
+ 	 }, 
+	 { 
+		"Algorithm": "sntrup1277",
+		 "keygen/s": 15.93,
+		 "keygen(cycles)": 62780635, 
+		 "encaps/s": 510.0, 
+		 "encaps(cycles)": 1960643, 
+		 "decaps/s": 239.35, 
+		 "decaps(cycles)": 4177455
+ 	 }, 
+	 { 
+		"Algorithm": "LightSaber-KEM",
+		 "keygen/s": 7034.67,
+		 "keygen(cycles)": 142006, 
+		 "encaps/s": 8538.33, 
+		 "encaps(cycles)": 116965, 
+		 "decaps/s": 10469.67, 
+		 "decaps(cycles)": 95373
+ 	 }, 
+	 { 
+		"Algorithm": "Saber-KEM",
+		 "keygen/s": 5348.33,
+		 "keygen(cycles)": 186829, 
+		 "encaps/s": 6009.0, 
+		 "encaps(cycles)": 166274, 
+		 "decaps/s": 6743.0, 
+		 "decaps(cycles)": 148145
+ 	 }, 
+	 { 
+		"Algorithm": "FireSaber-KEM",
+		 "keygen/s": 4083.33,
+		 "keygen(cycles)": 244760, 
+		 "encaps/s": 4310.33, 
+		 "encaps(cycles)": 231847, 
+		 "decaps/s": 4615.33, 
+		 "decaps(cycles)": 216520
+ 	 }, 
+	 { 
+		"Algorithm": "FrodoKEM-640-AES",
+		 "keygen/s": 62.44,
+		 "keygen(cycles)": 16017977, 
+		 "encaps/s": 59.98, 
+		 "encaps(cycles)": 16673950, 
+		 "decaps/s": 60.09, 
+		 "decaps(cycles)": 16640286
+ 	 }, 
+	 { 
+		"Algorithm": "FrodoKEM-640-SHAKE",
+		 "keygen/s": 102.06,
+		 "keygen(cycles)": 9798894, 
+		 "encaps/s": 77.54, 
+		 "encaps(cycles)": 12895748, 
+		 "decaps/s": 77.84, 
+		 "decaps(cycles)": 12845877
+ 	 }, 
+	 { 
+		"Algorithm": "FrodoKEM-976-AES",
+		 "keygen/s": 27.13,
+		 "keygen(cycles)": 36858018, 
+		 "encaps/s": 26.2, 
+		 "encaps(cycles)": 38169474, 
+		 "decaps/s": 26.27, 
+		 "decaps(cycles)": 38066289
+ 	 }, 
+	 { 
+		"Algorithm": "FrodoKEM-976-SHAKE",
+		 "keygen/s": 45.86,
+		 "keygen(cycles)": 21806030, 
+		 "encaps/s": 35.03, 
+		 "encaps(cycles)": 28548391, 
+		 "decaps/s": 35.26, 
+		 "decaps(cycles)": 28357325
+ 	 }, 
+	 { 
+		"Algorithm": "FrodoKEM-1344-AES",
+		 "keygen/s": 14.3,
+		 "keygen(cycles)": 69906444, 
+		 "encaps/s": 13.86, 
+		 "encaps(cycles)": 72132736, 
+		 "decaps/s": 13.91, 
+		 "decaps(cycles)": 71901531
+ 	 }, 
+	 { 
+		"Algorithm": "FrodoKEM-1344-SHAKE",
+		 "keygen/s": 25.14,
+		 "keygen(cycles)": 39775667, 
+		 "encaps/s": 19.14, 
+		 "encaps(cycles)": 52265446, 
+		 "decaps/s": 19.21, 
+		 "decaps(cycles)": 52043886
+ 	 } 
+ ]

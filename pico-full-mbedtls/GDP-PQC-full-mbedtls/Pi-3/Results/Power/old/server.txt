@@ -1,0 +1,125 @@
+DS: ECDSA        KEM: ECDHE
+power=4.153736  util=0.086226
+
+DS: ECDSA        KEM: Kyber Level 1
+power=4.086323  util=0.066683
+
+DS: ECDSA        KEM: Kyber Level 3
+power=4.085630  util=0.066482
+
+DS: ECDSA        KEM: Kyber Level 5
+power=4.077096  util=0.064008
+
+DS: ECDSA        KEM: Saber Level 1
+power=4.105074  util=0.072119
+
+DS: ECDSA        KEM: Kyber Level 3
+power=4.088474  util=0.067307
+
+DS: ECDSA        KEM: Kyber Level 5
+power=4.092371  util=0.068436
+
+DS: Falcon Level 1       KEM: ECDHE
+power=4.228461  util=0.107889
+
+DS: Falcon Level 1       KEM: Kyber Level 1
+power=4.207609  util=0.101844
+
+DS: Falcon Level 1       KEM: Kyber Level 3
+power=4.208465  util=0.102092
+
+DS: Falcon Level 1       KEM: Kyber Level 5
+power=4.221369  util=0.105832
+
+DS: Falcon Level 1       KEM: Saber Level 1
+power=4.209000  util=0.102247
+
+DS: Falcon Level 1       KEM: Kyber Level 3
+power=4.225365  util=0.106991
+
+DS: Falcon Level 1       KEM: Kyber Level 5
+power=4.215063  util=0.104004
+
+DS: Falcon Level 5       KEM: ECDHE
+power=4.315154  util=0.133020
+
+DS: Falcon Level 5       KEM: Kyber Level 1
+power=4.329121  util=0.137069
+
+DS: Falcon Level 5       KEM: Kyber Level 3
+power=4.294270  util=0.126966
+
+DS: Falcon Level 5       KEM: Kyber Level 5
+power=4.300095  util=0.128655
+
+DS: Falcon Level 5       KEM: Saber Level 1
+power=4.315191  util=0.133031
+
+DS: Falcon Level 5       KEM: Kyber Level 3
+power=4.288047  util=0.125162
+
+DS: Falcon Level 5       KEM: Kyber Level 5
+power=4.318573  util=0.134011
+
+DS: Dilithium 2          KEM: ECDHE
+power=4.168460  util=0.090494
+
+DS: Dilithium 2          KEM: Kyber Level 1
+power=4.058662  util=0.058664
+
+DS: Dilithium 2          KEM: Kyber Level 3
+power=4.071982  util=0.062526
+
+DS: Dilithium 2          KEM: Kyber Level 5
+power=4.098778  util=0.070294
+
+DS: Dilithium 2          KEM: Saber Level 1
+power=4.069885  util=0.061918
+
+DS: Dilithium 2          KEM: Kyber Level 3
+power=4.073590  util=0.062992
+
+DS: Dilithium 2          KEM: Kyber Level 5
+power=4.112894  util=0.074386
+
+DS: Dilithium 3          KEM: ECDHE
+power=4.150463  util=0.085277
+
+DS: Dilithium 3          KEM: Kyber Level 1
+power=4.091721  util=0.068248
+
+DS: Dilithium 3          KEM: Kyber Level 3
+power=4.113434  util=0.074543
+
+DS: Dilithium 3          KEM: Kyber Level 5
+power=4.110093  util=0.073574
+
+DS: Dilithium 3          KEM: Saber Level 1
+power=4.102803  util=0.071461
+
+DS: Dilithium 3          KEM: Kyber Level 3
+power=4.124801  util=0.077838
+
+DS: Dilithium 3          KEM: Kyber Level 5
+power=4.153969  util=0.086293
+
+DS: Dilithium 5          KEM: ECDHE
+power=4.861498  util=0.291404
+
+DS: Dilithium 5          KEM: Kyber Level 1
+power=4.350599  util=0.143296
+
+DS: Dilithium 5          KEM: Kyber Level 3
+power=4.120781  util=0.076672
+
+DS: Dilithium 5          KEM: Kyber Level 5
+power=4.138158  util=0.081710
+
+DS: Dilithium 5          KEM: Saber Level 1
+power=4.154117  util=0.086336
+
+DS: Dilithium 5          KEM: Kyber Level 3
+power=4.136985  util=0.081370
+
+DS: Dilithium 5          KEM: Kyber Level 5
+power=4.337887  util=0.139611
