@@ -3300,7 +3300,6 @@ static int ssl_prepare_server_key_exchange( mbedtls_ssl_context *ssl,
              * } DigitallySigned;
              *
              */
-
             ssl->out_msg[ssl->out_msglen++] =
                 mbedtls_ssl_hash_from_md_alg( md_alg );
             ssl->out_msg[ssl->out_msglen++] =
@@ -3331,7 +3330,6 @@ static int ssl_prepare_server_key_exchange( mbedtls_ssl_context *ssl,
             }
         }
 #endif /* MBEDTLS_SSL_ASYNC_PRIVATE */
-
         if( mbedtls_ssl_own_key( ssl ) == NULL )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "got no private key" ) );
@@ -3420,7 +3418,6 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
         /* ServerKeyExchange is needed. Prepare the message. */
         ret = ssl_prepare_server_key_exchange( ssl, &signature_len );
     }
-
     if( ret != 0 )
     {
         /* If we're starting to write a new message, set ssl->out_msglen
@@ -3433,7 +3430,6 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
             ssl->out_msglen = 0;
         return( ret );
     }
-
     /* If there is a signature, write its length.
      * ssl_prepare_server_key_exchange already wrote the signature
      * itself at its proper place in the output buffer. */
@@ -3451,7 +3447,6 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
         ssl->out_msglen += signature_len;
     }
 #endif /* MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED */
-
     /* Add header and send. */
     ssl->out_msgtype = MBEDTLS_SSL_MSG_HANDSHAKE;
     ssl->out_msg[0]  = MBEDTLS_SSL_HS_SERVER_KEY_EXCHANGE;
@@ -3463,7 +3458,6 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_write_handshake_msg", ret );
         return( ret );
     }
-
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= write server key exchange" ) );
     return( 0 );
 }

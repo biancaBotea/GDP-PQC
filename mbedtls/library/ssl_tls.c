@@ -6040,7 +6040,6 @@ crt_verify:
             if( ret == 0 )
                 ret = MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE;
         }
-
         /* mbedtls_x509_crt_verify_with_profile is supposed to report a
          * verification failure through MBEDTLS_ERR_X509_CERT_VERIFY_FAILED,
          * with details encoded in the verification flags. All other kinds
@@ -6109,7 +6108,6 @@ crt_verify:
     ssl->state++;
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= parse certificate" ) );
-
     return( ret );
 }
 #endif /* !MBEDTLS_KEY_EXCHANGE_RSA_ENABLED
@@ -9803,7 +9801,7 @@ unsigned char mbedtls_ssl_hash_from_md_alg( int md )
 #if defined(MBEDTLS_SHAKE256_C)
 		case MBEDTLS_MD_SHAKE256:
 			return( MBEDTLS_SSL_HASH_SHAKE256 );
-#endif*/
+#endif
         default:
             return( MBEDTLS_SSL_HASH_NONE );
     }
