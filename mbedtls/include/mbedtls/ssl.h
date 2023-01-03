@@ -606,6 +606,7 @@ typedef struct mbedtls_ssl_session mbedtls_ssl_session;
 typedef struct mbedtls_ssl_context mbedtls_ssl_context;
 typedef struct mbedtls_ssl_config  mbedtls_ssl_config;
 typedef struct mbedtls_pq_performance  mbedtls_pq_performance;
+typedef struct mbedtls_pq_avg_performance  mbedtls_pq_avg_performance;
 
 /* Defined in ssl_internal.h */
 typedef struct mbedtls_ssl_transform mbedtls_ssl_transform;
@@ -1101,6 +1102,23 @@ struct mbedtls_pq_performance
     uint32_t dilithium_sign;
     uint32_t dilithium_verify;
     uint32_t hashs;
+};
+
+struct mbedtls_pq_avg_performance
+{
+    double handshake_x;
+    double handshake_x2;
+    double kyber_genkey_x;
+    double kyber_genkey_x2;
+    double kyber_enc_x;
+    double kyber_enc_x2;
+    double kyber_dec_x;
+    double kyber_dec_x2;
+    double sphincs_sign_x;
+    double sphincs_sign_x2;
+    double sphincs_verify_x;
+    double sphincs_verify_x2;
+    uint32_t count;
 };
 
 struct mbedtls_ssl_context
