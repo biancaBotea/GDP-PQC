@@ -288,7 +288,7 @@ int main( int argc, char *argv[] )
                 opt.type = MBEDTLS_PK_RSA;
             else if( strcmp( q, "ec" ) == 0 )
                 opt.type = MBEDTLS_PK_ECKEY;
-            else if (strcmp(q, "pq") == 0)
+            else if (strcmp(q, "sphincs") == 0)
 				opt.type = MBEDTLS_PK_SPHINCS;
             else if (strcmp(q, "dilithium") == 0)
 				opt.type = MBEDTLS_PK_DILITHIUM;
