@@ -9,10 +9,11 @@
 #define mbedtls_free       free
 #endif
 
-#define SPHINCS_128F
-//#define SPHINCS_256F
+#define SPHINCS_R3_128F
+//#define SPHINCS_R1_256F
 
-#if defined(SPHINCS_256F)
+/***OLD PARAMS***/
+#if defined(SPHINCS_R1_256F)
 /* Hash output length in bytes. */
 #define SPX_N 32
 /* Height of the hypertree. */
@@ -26,7 +27,7 @@
 #define SPX_WOTS_W 16
 #endif
 
-#if defined(SPHINCS_128F)
+#if defined(SPHINCS_R1_128F)
 /* Hash output length in bytes. */
 #define SPX_N 16
 /* Height of the hypertree. */
@@ -36,6 +37,49 @@
 /* FORS tree dimensions. */
 #define SPX_FORS_HEIGHT 9
 #define SPX_FORS_TREES 30
+/* Winternitz parameter, */
+#define SPX_WOTS_W 16
+#endif
+
+/***NEW PARAMS***/
+#if defined(SPHINCS_R3_256F)
+/* Hash output length in bytes. */
+#define SPX_N 32
+/* Height of the hypertree. */
+#define SPX_FULL_HEIGHT 68
+/* Number of subtree layer. */
+#define SPX_D 17
+/* FORS tree dimensions. */
+#define SPX_FORS_HEIGHT 8
+#define SPX_FORS_TREES 35
+/* Winternitz parameter, */
+#define SPX_WOTS_W 16
+#endif
+
+#if defined(SPHINCS_R3_192F)
+/* Hash output length in bytes. */
+#define SPX_N 16
+/* Height of the hypertree. */
+#define SPX_FULL_HEIGHT 66
+/* Number of subtree layer. */
+#define SPX_D 22
+/* FORS tree dimensions. */
+#define SPX_FORS_HEIGHT 8
+#define SPX_FORS_TREES 33
+/* Winternitz parameter, */
+#define SPX_WOTS_W 16
+#endif
+
+#if defined(SPHINCS_R3_128F)
+/* Hash output length in bytes. */
+#define SPX_N 16
+/* Height of the hypertree. */
+#define SPX_FULL_HEIGHT 66
+/* Number of subtree layer. */
+#define SPX_D 22
+/* FORS tree dimensions. */
+#define SPX_FORS_HEIGHT 6
+#define SPX_FORS_TREES 33
 /* Winternitz parameter, */
 #define SPX_WOTS_W 16
 #endif
