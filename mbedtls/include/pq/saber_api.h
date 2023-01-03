@@ -59,9 +59,9 @@ typedef struct
 }
 mbedtls_saber_context;
 
-int crypto_kem_keypair(unsigned char *pk, unsigned char *sk, int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
-int crypto_kem_enc(unsigned char *ct, unsigned char *ss, const unsigned char *pk, int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
-int crypto_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned char *sk);
+int crypto_saber_kem_keypair(unsigned char *pk, unsigned char *sk, int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
+int crypto_saber_kem_enc(unsigned char *ct, unsigned char *ss, const unsigned char *pk, int(*f_rng)(void *, unsigned char *, size_t), void *p_rng);
+int crypto_saber_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned char *sk);
 
 /* MBEDTLS */
 
