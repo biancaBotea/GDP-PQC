@@ -1,0 +1,68 @@
+Test Configuration:
+Server Address - 10.9.11.155
+Units - ms
+Repeats - 100
+
+Testing MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		828.78		59.46
+Key Encapsulation		289.95		1.04
+Certificate Verification	80.69		0.20
+
+Testing MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		286.50		69.48
+Key Encapsulation		4.09		0.07
+Certificate Verification	80.78		1.47
+
+Testing MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		308.97		30.89
+Key Encapsulation		13.28		0.64
+Certificate Verification	81.37		2.71
+
+Testing MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		3778.02		66.60
+Key Encapsulation		290.41		5.17
+Certificate Verification	192.63		25.14
+
+Testing MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		3119.13		47.47
+Key Encapsulation		4.07		0.01
+Certificate Verification	192.77		24.50
+
+Testing MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		3148.58		58.53
+Key Encapsulation		13.14		0.02
+Certificate Verification	193.81		25.30
+
+Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		709.90		42.84
+Key Encapsulation		295.54		14.63
+Certificate Verification	3.58		0.95
+
+Testing MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		139.71		54.16
+Key Encapsulation		6.55		1.60
+Certificate Verification	5.30		1.31
+
+Testing MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		171.70		110.68
+Key Encapsulation		18.12		5.79
+Certificate Verification	4.49		1.43
+
