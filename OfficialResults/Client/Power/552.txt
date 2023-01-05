@@ -1,0 +1,57 @@
+Test Configuration:
+Server Address - 10.9.11.155
+
+Testing MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Power - 4.436885 W
+Utilisation - 0.168310 %
+Handshakes Completed - 12
+
+Testing MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Power - 4.535349 W
+Utilisation - 0.196854 %
+Handshakes Completed - 29
+
+Testing MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Power - 4.623938 W
+Utilisation - 0.222536 %
+Handshakes Completed - 31
+
+Testing MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Power - 4.020427 W
+Utilisation - 0.047580 %
+Handshakes Completed - 3
+
+Testing MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Power - 3.974711 W
+Utilisation - 0.034327 %
+Handshakes Completed - 4
+
+Testing MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Power - 3.976399 W
+Utilisation - 0.034816 %
+Handshakes Completed - 3
+
+Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Power - 4.234556 W
+Utilisation - 0.109655 %
+Handshakes Completed - 14
+
+Testing MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Power - 4.081038 W
+Utilisation - 0.065151 %
+Handshakes Completed - 73
+
+Testing MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Power - 4.097634 W
+Utilisation - 0.069962 %
+Handshakes Completed - 64
+
