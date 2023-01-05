@@ -1,0 +1,27 @@
+cmd: ./client 0
+9744
+
+cmd: ./client 1
+15984
+
+cmd: ./client 2
+18192
+
+cmd: ./client 3
+25776
+
+cmd: ./client 4
+25776
+
+cmd: ./client 5
+25776
+
+cmd: ./client 6
+66432
+
+cmd: ./client 7
+66432
+
+cmd: ./client 8
+66432
+

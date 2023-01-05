@@ -1,0 +1,27 @@
+cmd: ./client 0
+9744
+
+cmd: ./client 1
+27504
+
+cmd: ./client 2
+31200
+
+cmd: ./client 3
+25776
+
+cmd: ./client 4
+27504
+
+cmd: ./client 5
+31200
+
+cmd: ./client 6
+44288
+
+cmd: ./client 7
+44288
+
+cmd: ./client 8
+44288
+
