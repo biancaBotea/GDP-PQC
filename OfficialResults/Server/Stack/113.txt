@@ -1,0 +1,27 @@
+cmd: ./server 0
+10060
+
+cmd: ./server 1
+18960
+
+cmd: ./server 2
+18512
+
+cmd: ./server 3
+10060
+
+cmd: ./server 4
+18960
+
+cmd: ./server 5
+18512
+
+cmd: ./server 6
+92776
+
+cmd: ./server 7
+92776
+
+cmd: ./server 8
+92776
+

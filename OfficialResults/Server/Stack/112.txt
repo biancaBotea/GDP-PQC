@@ -1,0 +1,54 @@
+cmd: ./server 0
+10060
+
+cmd: ./server 1
+24976
+
+cmd: ./server 2
+26128
+
+cmd: ./server 3
+10060
+
+cmd: ./server 4
+24976
+
+cmd: ./server 5
+26128
+
+cmd: ./server 6
+136184
+
+cmd: ./server 7
+136184
+
+cmd: ./server 8
+136184
+
+cmd: ./server 0
+10060
+
+cmd: ./server 1
+18960
+
+cmd: ./server 2
+18512
+
+cmd: ./server 3
+10060
+
+cmd: ./server 4
+18960
+
+cmd: ./server 5
+18512
+
+cmd: ./server 6
+63016
+
+cmd: ./server 7
+63016
+
+cmd: ./server 8
+63016
+
