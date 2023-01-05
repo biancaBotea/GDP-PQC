@@ -1,0 +1,72 @@
+Testing MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		815.89		30.20
+Certificate Verification	47.25		1.01
+Key Decapsulation		201.49		12.17
+Key Generation			178.28		9.61
+
+Testing MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		316.96		35.75
+Certificate Verification	57.30		15.25
+Key Decapsulation		7.30		2.91
+Key Generation			5.43		2.13
+
+Testing MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		329.35		39.90
+Certificate Verification	56.16		13.73
+Key Decapsulation		13.52		5.23
+Key Generation			9.42		3.51
+
+Testing MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		3777.57		101.02
+Certificate Verification	2800.10		5.12
+Key Decapsulation		215.01		16.11
+Key Generation			177.04		8.25
+
+Testing MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		3173.62		69.75
+Certificate Verification	2813.28		14.93
+Key Decapsulation		5.41		0.28
+Key Generation			4.14		0.89
+
+Testing MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		3168.94		66.91
+Certificate Verification	2807.04		13.69
+Key Decapsulation		10.22		0.02
+Key Generation			6.97		1.05
+
+Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		736.43		103.10
+Certificate Verification	42.97		21.02
+Key Decapsulation		177.63		13.63
+Key Generation			176.46		6.64
+
+Testing MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		152.28		63.02
+Certificate Verification	53.93		31.01
+Key Decapsulation		5.85		1.33
+Key Generation			4.77		1.61
+
+Testing MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384...
+
+Performance Measurements:	Mean		Std Dev
+Handshake Latency		137.35		23.14
+Certificate Verification	45.97		20.27
+Key Decapsulation		10.88		1.84
+Key Generation			7.87		2.18
+
