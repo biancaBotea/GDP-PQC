@@ -1,4 +1,5 @@
 Kyber & Saber l1
+Dilithium l2
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -23,6 +24,7 @@ Certificate Verification	14.28		8.99
 Key Decapsulation		6.16		1.58
 Key Generation			3.39		0.88
 
+Dilithium l3
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -47,6 +49,7 @@ Certificate Verification	22.71		15.99
 Key Decapsulation		5.49		0.64
 Key Generation			3.04		0.50
 
+Dilithium l5
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -114,6 +117,7 @@ Key Decapsulation		5.65		1.05
 Key Generation			3.10		0.76
 
 Kyber & Saber l3
+Dilithium l2
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -138,6 +142,7 @@ Certificate Verification	14.34		10.69
 Key Decapsulation		9.95		0.88
 Key Generation			6.35		0.81
 
+Dilithium l3
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -162,6 +167,7 @@ Certificate Verification	21.59		13.95
 Key Decapsulation		10.01		1.23
 Key Generation			6.40		0.91
 
+Dilithium l5
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -229,6 +235,7 @@ Key Decapsulation		10.24		1.94
 Key Generation			6.61		1.63
 
 Kyber & Saber l5
+Dilithium l2
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -253,6 +260,7 @@ Certificate Verification	15.11		12.27
 Key Decapsulation		15.95		1.96
 Key Generation			11.05		1.83
 
+Dilithium l3
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
@@ -277,6 +285,7 @@ Certificate Verification	24.06		18.32
 Key Decapsulation		15.87		1.86
 Key Generation			10.88		0.89
 
+Dilithium l5
 Testing MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384...
 
 Performance Measurements:	Mean		Std Dev
