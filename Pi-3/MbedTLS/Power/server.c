@@ -45,30 +45,42 @@
 #include "mbedtls/certs.h"
 
 /* application args */
-const char *cipherSuiteStrings[] = {"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256", 
-                                    "TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256",
-                                    "TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256",
-                                    "TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256",
-                                    "MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256",
-									"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256"};
-const int cipherSuites[] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256,
-							MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256};
+const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", 
+					"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384"};
+const int cipherSuites[] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384};
 const char *certs[] = {TEST_SRV_CRT_EC_PEM,
+                       TEST_SRV_CRT_EC_PEM,
                        TEST_SRV_CRT_EC_PEM,
                        TEST_SRV_CRT_SPHINCS_SHAKE256_PEM,
                        TEST_SRV_CRT_SPHINCS_SHAKE256_PEM,
+                       TEST_SRV_CRT_SPHINCS_SHAKE256_PEM,
                        TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM,
-					   TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM};
+                       TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM,
+			TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM};
 const char *keys[] = {TEST_SRV_KEY_EC_PEM,
+                      TEST_SRV_KEY_EC_PEM,
                       TEST_SRV_KEY_EC_PEM,
                       TEST_SRV_KEY_SPHINCS_SHAKE256_PEM,
                       TEST_SRV_KEY_SPHINCS_SHAKE256_PEM,
+                      TEST_SRV_KEY_SPHINCS_SHAKE256_PEM,
                       TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM,
-					  TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM};
+                      TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM,
+			TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM};
 char * MsgToClient = "Test Response";
 
 int main() {
@@ -78,7 +90,7 @@ int main() {
     end.tv_sec = 0;
     end.tv_usec = 0;
     
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 9; i++) {
         printf("Testing %s...\n\n", cipherSuiteStrings[i]);
 
         //Wait for port to become available on slower devices

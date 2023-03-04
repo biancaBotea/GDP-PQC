@@ -42,59 +42,83 @@
 #include "../ssl_server.h"
 #include "mbedtls/ssl_ciphersuites.h"
 #include "../new_certs.h"
-#include "../std_dev.h"
+#include <math.h>
 #include "mbedtls/certs.h"
 
 /* application args */
-const char *cipherSuiteStrings[] = {"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256", 
-                                    "TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256",
-                                    "TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256",
-                                    "TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256",
-                                    "MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256",
-									"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256"};
-const int cipherSuites[] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256,
-                            MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256,
-							MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256};
+const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", 
+					"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384",
+					"MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384"};
+const int cipherSuites[] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384,
+				MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384};
 const char *certs[] = {TEST_SRV_CRT_EC_PEM,
+                       TEST_SRV_CRT_EC_PEM,
                        TEST_SRV_CRT_EC_PEM,
                        TEST_SRV_CRT_SPHINCS_SHAKE256_PEM,
                        TEST_SRV_CRT_SPHINCS_SHAKE256_PEM,
+                       TEST_SRV_CRT_SPHINCS_SHAKE256_PEM,
                        TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM,
-					   TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM};
+                       TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM,
+			TEST_SRV_CRT_DILITHIUM_SHAKE256_PEM};
 const char *keys[] = {TEST_SRV_KEY_EC_PEM,
+                      TEST_SRV_KEY_EC_PEM,
                       TEST_SRV_KEY_EC_PEM,
                       TEST_SRV_KEY_SPHINCS_SHAKE256_PEM,
                       TEST_SRV_KEY_SPHINCS_SHAKE256_PEM,
+                      TEST_SRV_KEY_SPHINCS_SHAKE256_PEM,
                       TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM,
-					  TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM};
+                      TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM,
+			TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM};
 char * MsgToClient = "Test Response";
 
-int main() {
-    for (int i = 0; i < 6; i++) {
-        printf("Testing %s...\n\n", cipherSuiteStrings[i]);
+double calc_std_dev(double x, double x2, int n) {
+	double mean = x / n;
+	double variance = x2 / n - pow(mean, 2);
+	double std_dev = sqrt(variance);
+	return std_dev;
+}
 
-        //Wait for port to become available on slower devices
-        sleep(1);
+int main(int argc, char *argv[]) {
+	if(argc == 2) {
+	    printf("Testing %s...\n\n", cipherSuiteStrings[atoi(argv[1])]);
 
-        mbedtls_pq_avg_performance avg_performance = run_server(certs[i], keys[i], cipherSuites[i], MsgToClient);
-        
-        // Calculate Standard Deviation for each metric
-        int test_size = avg_performance.count;
+	    //Wait for port to become available on slower devices
+	    sleep(1);
+
+	    mbedtls_pq_avg_performance avg_performance = run_server(certs[atoi(argv[1])], keys[atoi(argv[1])], cipherSuites[atoi(argv[1])], MsgToClient);
+	    
+		//printf("Key encap: %.3f  %.3f \n", avg_performance.kyber_dec_x, avg_performance.kyber_dec_x2);
+		//printf("Key gen: %.3f  %.3f \n", avg_performance.kyber_genkey_x, avg_performance.kyber_genkey_x2);
+	
+	    // Calculate Standard Deviation for each metric
+	    int test_size = avg_performance.count;
 		double handshake_std_dev = calc_std_dev(avg_performance.handshake_x, avg_performance.handshake_x2, test_size);
 		double key_dec_std_dev = calc_std_dev(avg_performance.kyber_dec_x, avg_performance.kyber_dec_x2, test_size);
 		double key_gen_std_dev = calc_std_dev(avg_performance.kyber_genkey_x, avg_performance.kyber_genkey_x2, test_size);
 		double sphincs_sign_std_dev = calc_std_dev(avg_performance.sphincs_sign_x, avg_performance.sphincs_sign_x2, test_size);
 
-        // Output performance measurements
-        printf("Performance Measurements:\tMean\t\tStd Dev\n");
+	    // Output performance measurements
+	    printf("Performance Measurements:\tMean\t\tStd Dev\n");
 		printf("Handshake Latency\t\t%.2f\t\t%.2f\n", avg_performance.handshake_x / test_size, handshake_std_dev);
 		printf("Certificate Verification\t%.2f\t\t%.2f\n", avg_performance.sphincs_sign_x / test_size, sphincs_sign_std_dev);
 		printf("Key Decapsulation\t\t%.2f\t\t%.2f\n", avg_performance.kyber_dec_x / test_size, key_dec_std_dev);
 		printf("Key Generation\t\t\t%.2f\t\t%.2f\n\n", avg_performance.kyber_genkey_x / test_size, key_gen_std_dev);
-    }
+	} else {
+    	printf("Incorrect arguments supplied\n");
+  	}
 
     return 0;
 }

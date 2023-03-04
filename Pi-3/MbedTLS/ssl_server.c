@@ -180,8 +180,45 @@ mbedtls_pq_avg_performance run_server(const char *cert, const char *key, const i
     mbedtls_net_init( &client_fd );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
+    
 #if defined(MBEDTLS_PEFORMANCE)
     mbedtls_pq_performance performance;
+    /*performance.handshake = 0;
+    performance.sphincs_sign,
+    performance.dilithium_sign = 0;
+    performance.kyber_dec = 0;
+    performance.kyber_genkey = 0;
+    performance.write_client_hello = 0;
+    performance.parse_server_hello = 0;
+    performance.parse_server_certificate = 0;
+    performance.parse_server_key_exchange = 0;
+    performance.parse_server_hello_done = 0;
+    performance.write_client_key_exchange = 0;
+    performance.write_client_change_cipher = 0;
+    performance.write_client_finish = 0;
+    performance.parse_server_change_cipher = 0;
+    performance.parse_server_finish = 0;
+    performance.hashs = 0;*/
+    
+    /*mbedtls_printf( "  . Performance Data: %.3f,%.3f,%.3f,%.3f,%.3f,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%.3f\n",
+            performance.handshake,
+            performance.sphincs_sign,
+            performance.dilithium_sign,
+            performance.kyber_dec,
+            performance.kyber_genkey,
+            performance.parse_client_hello,
+            performance.write_server_hello,
+            performance.write_server_certificate,
+            performance.write_server_key_exchange,
+            performance.write_server_hello_done,
+            performance.parse_client_key_exchange,
+            performance.parse_client_change_cipher,
+            performance.parse_client_finish,
+            performance.write_server_change_cipher,
+            performance.write_server_finish,
+            performance.hashs
+        );*/
+    
     mbedtls_pq_avg_performance avg_performance;
 	ssl.performance = &performance;
     avg_performance.handshake_x = 0;
@@ -379,9 +416,10 @@ reset:
 	ssl.performance->handshake = mbedtls_timing_get_timer(&handshaketimer, 0);
 	
     if (DEBUG_LEVEL >= 1) {
-        mbedtls_printf( "  . Performance Data: %.3f,%.3f,%.3f,%.3f,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%.3f\n",
+        mbedtls_printf( "  . Performance Data: %.3f,%.3f,%.3f,%.3f,%.3f,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%.3f\n",
             performance.handshake,
             performance.sphincs_sign,
+            performance.dilithium_sign,
             performance.kyber_dec,
             performance.kyber_genkey,
             performance.parse_client_hello,
@@ -408,6 +446,9 @@ reset:
     avg_performance.kyber_genkey_x += performance.kyber_genkey;
     avg_performance.kyber_genkey_x2 += pow(performance.kyber_genkey, 2);
     avg_performance.count += 1;
+    //printf("Key gen: %.3f ", performance.kyber_genkey);
+   // printf("Key decap: %.3f \n", performance.kyber_dec);
+    
 #endif	
     
 
