@@ -49,23 +49,32 @@
 #include "mbedtls/ssl.h"
 
 /* application args */
-const char *server_addr = "127.0.0.1";
-const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256", 
-									"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256",
-									"MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256",
-									"MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256",
-									"MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256",
-									"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256"};
-const int cipherSuites[] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA256,
-							MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA256,
-							MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA256,
-							MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA256,
-							MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA256,
-							MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA256};
+const char *server_addr = "169.254.252.212";
+const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", 
+									"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384"};
+const int cipherSuites[] = {MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384,
+							MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384};
 const char *certs[] = {TEST_CA_CRT_EC_PEM,
+					   TEST_CA_CRT_EC_PEM,
 					   TEST_CA_CRT_EC_PEM,
 					   TEST_CA_CRT_SPHINCS_SHAKE256_PEM,
 					   TEST_CA_CRT_SPHINCS_SHAKE256_PEM,
+					   TEST_CA_CRT_SPHINCS_SHAKE256_PEM,
+					   TEST_CA_CRT_DILITHIUM_SHAKE256_PEM,
 					   TEST_CA_CRT_DILITHIUM_SHAKE256_PEM,
 					   TEST_CA_CRT_DILITHIUM_SHAKE256_PEM};
 char * MsgToServer = "Test Message";
@@ -79,7 +88,7 @@ int main() {
 
 	printf("Test Configuration:\nServer Address - %s\n\n", server_addr);
 	
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 9; i++) {
 		printf("Testing %s...\n\n", cipherSuiteStrings[i]);
 		//Wait for server to start
 		sleep(2);
@@ -96,7 +105,7 @@ int main() {
 		gettimeofday(&end, 0);
 		int counter = 0;
 
-		while ((end.tv_sec - begin.tv_sec) < 5) {
+		while ((end.tv_sec - begin.tv_sec) < 60) {
 			run_client(server_addr, certs[i], cipherSuites[i], MsgToServer);
 			gettimeofday(&end, 0);
 			counter++;

@@ -176,9 +176,42 @@ mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const
     mbedtls_x509_crt_init( &cacert );
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
+
 #if defined(MBEDTLS_PEFORMANCE)
     mbedtls_pq_performance performance;
+    /*performance.handshake = 0;
+    performance.sphincs_verify = 0;
+    performance.dilithium_verify = 0;
+    performance.kyber_enc = 0;
+    performance.write_client_hello = 0;
+    performance.parse_server_hello = 0;
+    performance.parse_server_certificate = 0;
+    performance.parse_server_key_exchange = 0;
+    performance.parse_server_hello_done = 0;
+    performance.write_client_key_exchange = 0;
+    performance.write_client_change_cipher = 0;
+    performance.write_client_finish = 0;
+    performance.parse_server_change_cipher = 0;
+    performance.parse_server_finish = 0;
+    performance.hashs = 0;*/
     ssl.performance = &performance;
+   /* mbedtls_printf("  . SSL Performance Data: %.3f,%.3f,%.3f,%.3f,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%.3f\n",
+        performance.handshake,
+        performance.sphincs_verify,
+        performance.dilithium_verify,
+        performance.kyber_enc,
+        performance.write_client_hello,
+        performance.parse_server_hello,
+        performance.parse_server_certificate,
+        performance.parse_server_key_exchange,
+        performance.parse_server_hello_done,
+        performance.write_client_key_exchange,
+        performance.write_client_change_cipher,
+        performance.write_client_finish,
+        performance.parse_server_change_cipher,
+        performance.parse_server_finish,
+        performance.hashs
+        );*/
 #endif
 
     PRINT_AT_DEBUG_LEVEL( 1, "\n  . Seeding the random number generator..." );
@@ -322,7 +355,7 @@ mbedtls_pq_performance run_client(const char *server_ip, const char *cert, const
     /*
      * 5. Verify the server certificate
      */
-    PRINT_AT_DEBUG_LEVEL(1, "  . Verifying peer X.509 certificate..." );
+    /*PRINT_AT_DEBUG_LEVEL(1, "  . Verifying peer X.509 certificate..." );
 
     /* In real life, we probably want to bail out when ret != 0 */
     if( ( flags = mbedtls_ssl_get_verify_result( &ssl ) ) != 0 )
