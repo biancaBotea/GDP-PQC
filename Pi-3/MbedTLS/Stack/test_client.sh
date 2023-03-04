@@ -23,7 +23,7 @@ do
 		cd /home/pi57/GDP-PQC/Pi-3/MbedTLS/Stack/
 
 		gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client
-		bash test_client.sh
+		bash loop_client.sh
 		sudo bash get_results.sh |& tee ./results/$j$j$k.txt
 		rm massif*
 	done
