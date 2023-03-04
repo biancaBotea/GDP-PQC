@@ -29,3 +29,13 @@ This tests all algorithms but only for the security levels specified in the mbed
 2. Run the client using `./client` or to save the results to a file use 
      
     `./client |& tee ./results.txt`
+
+### Server
+
+1. From `/GDP-PQC/Pi-3/MbedTLS/Heap`, compile client.c using the following command
+
+    `gcc server.c ../ssl_server.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o server`
+
+2. Run the client using `./server` or to save the results to a file use 
+     
+    `./server |& tee ./results.txt`

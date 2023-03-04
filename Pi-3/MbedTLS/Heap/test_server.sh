@@ -25,6 +25,6 @@ do
 		cd $WRK_DIR
 
 		gcc server.c ../ssl_server.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o server
-		./server #|& tee ./results/$j$j${k}b.txt
+		./server |& tee ./results/$j$j${k}b.txt
 	done
 done
