@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/pi57/GDP-PQC/Pi-3/MbedTLS/Stack/
+cd /home/pi57/GDP-PQC/Pi-3/MbedTLS/Power/
 
 for j in 1 3 5
 do
@@ -13,18 +13,16 @@ do
 		cp ./config/new_certs_l$k.h ../new_certs.h
 
 		cd /home/pi57/mbedtls
-		sudo rm -rf build
+		rm -rf build
 		mkdir build
 		cd build
 		cmake .. -DENABLE_TESTING=OFF ..
 		cmake --build .
-		sudo cmake --install .
+		cmake --install .
 
-		cd /home/pi57/GDP-PQC/Pi-3/MbedTLS/Stack/
+		cd /home/pi57/GDP-PQC/Pi-3/MbedTLS/Power/
 
 		gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client
-		bash test_client.sh
-		sudo bash get_results.sh |& tee ./results/$j$j$k.txt
-		rm massif*
+		./client |& tee ./results/$j$j${k}b.txt
 	done
 done
