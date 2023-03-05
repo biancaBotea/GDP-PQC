@@ -22,11 +22,12 @@ This tests all algorithms but only for the security levels specified in the mbed
 
 ### Client
 
-1. From `/GDP-PQC/Pi-3/MbedTLS/Latency`, compile client.c using the following command
+1. Set `server_addr` (client.c, line: 52) to the IP address of the server
+2. From `/GDP-PQC/Pi-3/MbedTLS/Latency`, compile client.c using the following command
 
     `gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client`
 
-2. Run the client using `./client` or to save the results to a file use 
+3. Run the client using `./client` or to save the results to a file use 
      
     `./client |& tee ./results.txt`
 
