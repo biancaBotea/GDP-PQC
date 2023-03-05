@@ -50,6 +50,7 @@
 
 /* application args */
 const char *server_addr = "169.254.252.212";
+const int test_length = 10;
 const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", 
 									"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384",
 									"MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384",
@@ -105,7 +106,7 @@ int main() {
 		gettimeofday(&end, 0);
 		int counter = 0;
 
-		while ((end.tv_sec - begin.tv_sec) < 60) {
+		while ((end.tv_sec - begin.tv_sec) < test_length) {
 			run_client(server_addr, certs[i], cipherSuites[i], MsgToServer);
 			gettimeofday(&end, 0);
 			counter++;
