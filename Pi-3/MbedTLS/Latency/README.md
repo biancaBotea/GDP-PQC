@@ -1,7 +1,8 @@
-# PQC Heap Memory Usage Benchmarking on the Raspberry Pi 3b+
+# PQC Handshake Latency Benchmarking on the Raspberry Pi 3b+
 
 Instructions:
 
+(Note: GDP_MEM_TEST should not be defined for these tests)
 
 ## Full Test
 This tests all combinations of algorithms
@@ -9,13 +10,11 @@ This tests all combinations of algorithms
 ### Client
 
 1. Set the environment variable `MBEDTLS_PATH` to the path of your mbedtls library
-2. Modify `../ssl_client1.c` to ensure `GDP_MEM_TEST` is defined (line 94)
-3. Set `server_addr` (client.c, line: 52) to the IP address of the server
-4. Run `test_client.sh` from `/GDP-PQC/Pi-3/MbedTLS/Heap`
+2. Set `server_addr` (client.c, line: 52) to the IP address of the server
+3. Run `test_client.sh` from `/GDP-PQC/Pi-3/MbedTLS/Heap`
 
 ### Server
 1. Set the environment variable `MBEDTLS_PATH` to the path of your mbedtls library
-2. Modify `../ssl_server.c` to ensure `GDP_MEM_TEST` is defined (line 111)
 2. Run `test_server.sh` from `/GDP-PQC/Pi-3/MbedTLS/Heap`
 
 ## Partial Test
@@ -23,7 +22,7 @@ This tests all algorithms but only for the security levels specified in the mbed
 
 ### Client
 
-1. From `/GDP-PQC/Pi-3/MbedTLS/Heap`, compile client.c using the following command
+1. From `/GDP-PQC/Pi-3/MbedTLS/Latency`, compile client.c using the following command
 
     `gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client`
 
@@ -33,7 +32,7 @@ This tests all algorithms but only for the security levels specified in the mbed
 
 ### Server
 
-1. From `/GDP-PQC/Pi-3/MbedTLS/Heap`, compile client.c using the following command
+1. From `/GDP-PQC/Pi-3/MbedTLS/Latency`, compile client.c using the following command
 
     `gcc server.c ../ssl_server.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o server`
 
