@@ -1,7 +1,6 @@
 #!/bin/bash
 
 WRK_DIR="`pwd`"
-DMM_SCRIPT_LOC="/home/Documents/gdp/dmm_control.py"
 
 flash_pico () {
 	cd $WRK_DIR/Benchmarks/Latency
@@ -21,6 +20,7 @@ do
 	echo "Kyber & Saber l$j"
 	for k in 2 3 5
 	do
+		pwd
 		cd $WRK_DIR		
 		cp ./config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
 		cp ./config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
@@ -28,7 +28,7 @@ do
 		cp ./config/new_certs_l$k.h $WRK_DIR/Benchmarks/new_certs.h
 
 		# Give Server time to compile mbed
-		sleep 30		
+		sleep 30
 		
 		echo "Dilithium l$k"
 		# Flash pico once with dilithium client then run it another 2 times by resetting device with breaks in between to allow for server to restart/recompile?
@@ -36,17 +36,17 @@ do
 		cp ./config/dilithium_client.c $WRK_DIR/Benchmarks/Latency/client.c
 		flash_pico
 		cd $WRK_DIR
-		sudo python3 dmm_control.py -l on -f KS${j}D${k}_ecdhe_dilithium.csv
+		sudo python3 dmm_control.py -l on -f ${j}${k}t1.csv
 		python3 ./server.py
 		sudo python3 dmm_control.py -l off
 
 		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
-		sudo python3 dmm_control.py -l on -f KS${j}D${k}_kyber_dilithium.csv
+		sudo python3 dmm_control.py -l on -f ${j}${k}t2.csv
 		python3 ./server.py
 		sudo python3 dmm_control.py -l off
 
 		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
-		sudo python3 dmm_control.py -l on -f KS${j}D${k}_saber_dilithium.csv
+		sudo python3 dmm_control.py -l on -f ${j}${k}t3.csv
 		python3 ./server.py
 		sudo python3 dmm_control.py -l off
 	done
