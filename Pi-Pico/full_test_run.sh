@@ -36,17 +36,17 @@ do
 		cp ./config/dilithium_client.c $WRK_DIR/Benchmarks/Latency/client.c
 		flash_pico
 		cd $WRK_DIR
-		sudo python3 dmm_control.py -l on -f ${j}${k}t1.csv
+		sudo python3 dmm_control.py -l on -f k${j}d${k}t1.csv
 		python3 ./server.py
 		sudo python3 dmm_control.py -l off
 
 		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
-		sudo python3 dmm_control.py -l on -f ${j}${k}t2.csv
+		sudo python3 dmm_control.py -l on -f k${j}d${k}t2.csv
 		python3 ./server.py
 		sudo python3 dmm_control.py -l off
 
 		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
-		sudo python3 dmm_control.py -l on -f ${j}${k}t3.csv
+		sudo python3 dmm_control.py -l on -f k${j}d${k}t3.csv
 		python3 ./server.py
 		sudo python3 dmm_control.py -l off
 	done
@@ -55,13 +55,13 @@ do
 	cd $WRK_DIR
 	cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
 	flash_pico
-	sudo python3 dmm_control.py -l on -f KS${j}D${k}_kyber_sphincs.csv
+	sudo python3 dmm_control.py -l on -f k${j}d${k}t4.csv
 	cd $WRK_DIR
 	python3 ./server.py
 	sudo python3 dmm_control.py -l off
 
 	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
-	sudo python3 dmm_control.py -l on -f KS${j}D${k}_saber_sphincs.csv
+	sudo python3 dmm_control.py -l on -f k${j}d${k}t5.csv
 	python3 ./server.py
 	sudo python3 dmm_control.py -l off
 
@@ -69,13 +69,13 @@ do
 	cd $WRK_DIR
 	cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
 	flash_pico
-	sudo python3 dmm_control.py -l on -f KS${j}D${k}_kyber_ecdsa.csv
+	sudo python3 dmm_control.py -l on -f k${j}d${k}t6.csv
 	cd $WRK_DIR
 	python3 ./server.py
 	sudo python3 dmm_control.py -l off
 
 	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
-	sudo python3 dmm_control.py -l on -f KS${j}D${k}_saber_ecdsa.csv
+	sudo python3 dmm_control.py -l on -f k${j}d${k}t7.csv
 	python3 ./server.py
 	sudo python3 dmm_control.py -l off
 	
@@ -85,7 +85,7 @@ echo "ECDHE with Sphincs or ECDSA"
 cd $WRK_DIR
 cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
 flash_pico
-sudo python3 dmm_control.py -l on -f KS${j}D${k}_ecdhe_sphincs.csv
+sudo python3 dmm_control.py -l on -f k${j}d${k}t8.csv
 cd $WRK_DIR
 python3 ./server.py
 sudo python3 dmm_control.py -l off
@@ -93,7 +93,7 @@ sudo python3 dmm_control.py -l off
 cd $WRK_DIR
 cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
 flash_pico
-sudo python3 dmm_control.py -l on -f KS${j}D${k}_ecdhe_ecdsa.csv
+sudo python3 dmm_control.py -l on -f k${j}d${k}t9.csv
 cd $WRK_DIR
 python3 ./server.py
 sudo python3 dmm_control.py -l off
