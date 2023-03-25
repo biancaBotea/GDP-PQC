@@ -14,7 +14,7 @@ def main(argv):
             command = arg
     
     s.connect((host, port))
-    s.send(bytes(command))
+    s.send(str.encode(command))
     s.close()
 
 if __name__ == "__main__":
