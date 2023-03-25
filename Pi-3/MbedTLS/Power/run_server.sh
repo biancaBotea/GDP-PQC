@@ -8,7 +8,6 @@ for j in 1 3 5
 do
 	for k in 2 3 5
 	do
-		sleep 5
 		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
 		cp ../test_config/saber_params_l$j.h $MBEDTLS_PATH/include/pq/saber_params.h
 		cp ../test_config/dilithium_params_l$k.h $MBEDTLS_PATH/include/pq/dilithium_params.h
@@ -24,9 +23,7 @@ do
 
 		cd $WRK_DIR
 
-		gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client
-		python3 messenger.py -c Start
-		./client 0
-		python3 messenger.py -c Stop
+		gcc server.c ../ssl_server.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o server
+		./server 0
 	done
 done

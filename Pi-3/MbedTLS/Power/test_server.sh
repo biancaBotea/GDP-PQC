@@ -24,6 +24,8 @@ do
 		cd $WRK_DIR
 
 		gcc server.c ../ssl_server.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o server
-		./server #|& tee ./results/$j$j${k}b.txt
+		python3 messenger.py -c Start
+		./server 0
+		python3 messenger.py -c Stop
 	done
 done

@@ -8,7 +8,7 @@ flash_pico () {
 	mkdir build
 	cd build
 	cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" ..
-	cmake --build .
+	cmake --build --config Release .
 	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit"
 }
 
@@ -20,7 +20,6 @@ do
 	echo "Kyber & Saber l$j"
 	for k in 2 3 5
 	do
-		pwd
 		cd $WRK_DIR		
 		cp ./config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
 		cp ./config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
@@ -37,17 +36,17 @@ do
 		flash_pico
 		cd $WRK_DIR
 		sudo python3 dmm_control.py -l on -f k${j}d${k}t1.csv
-		python3 ./server.py
+		python3 ./termination_server.py
 		sudo python3 dmm_control.py -l off
 
 		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
 		sudo python3 dmm_control.py -l on -f k${j}d${k}t2.csv
-		python3 ./server.py
+		python3 ./termination_server.py
 		sudo python3 dmm_control.py -l off
 
 		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
 		sudo python3 dmm_control.py -l on -f k${j}d${k}t3.csv
-		python3 ./server.py
+		python3 ./termination_server.py
 		sudo python3 dmm_control.py -l off
 	done
 
@@ -57,12 +56,12 @@ do
 	flash_pico
 	sudo python3 dmm_control.py -l on -f k${j}d${k}t4.csv
 	cd $WRK_DIR
-	python3 ./server.py
+	python3 ./termination_server.py
 	sudo python3 dmm_control.py -l off
 
 	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
 	sudo python3 dmm_control.py -l on -f k${j}d${k}t5.csv
-	python3 ./server.py
+	python3 ./termination_server.py
 	sudo python3 dmm_control.py -l off
 
 	echo "ECDSA"
@@ -71,12 +70,12 @@ do
 	flash_pico
 	sudo python3 dmm_control.py -l on -f k${j}d${k}t6.csv
 	cd $WRK_DIR
-	python3 ./server.py
+	python3 ./termination_server.py
 	sudo python3 dmm_control.py -l off
 
 	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
 	sudo python3 dmm_control.py -l on -f k${j}d${k}t7.csv
-	python3 ./server.py
+	python3 ./termination_server.py
 	sudo python3 dmm_control.py -l off
 	
 done
@@ -87,7 +86,7 @@ cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
 flash_pico
 sudo python3 dmm_control.py -l on -f k${j}d${k}t8.csv
 cd $WRK_DIR
-python3 ./server.py
+python3 ./termination_server.py
 sudo python3 dmm_control.py -l off
 
 cd $WRK_DIR
@@ -95,5 +94,5 @@ cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
 flash_pico
 sudo python3 dmm_control.py -l on -f k${j}d${k}t9.csv
 cd $WRK_DIR
-python3 ./server.py
+python3 ./termination_server.py
 sudo python3 dmm_control.py -l off

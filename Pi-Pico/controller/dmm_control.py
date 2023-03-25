@@ -1,7 +1,3 @@
-
-
-
-
 import sys, getopt
 import easy_scpi as scpi
 

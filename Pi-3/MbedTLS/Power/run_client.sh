@@ -25,8 +25,6 @@ do
 		cd $WRK_DIR
 
 		gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client
-		python3 messenger.py -c Start
 		./client 0
-		python3 messenger.py -c Stop
 	done
 done
