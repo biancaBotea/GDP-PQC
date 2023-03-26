@@ -52,5 +52,4 @@ do
 	run_test 2
 done
 
-echo "ECDHE ----------- \\n"
-run_test 
+run_test 0

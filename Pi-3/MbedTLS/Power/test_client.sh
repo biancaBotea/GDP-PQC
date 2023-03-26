@@ -5,12 +5,12 @@ WRK_DIR="`pwd`"
 run_test () {
 	echo "Initialising Logging"
 	python3 messenger.py -c Start
-	sleep 3
+	sleep 5
 	echo "Starting test"
 	./client $1
 	echo "Terminating Logging"
 	python3 messenger.py -c Stop
-	sleep 3
+	sleep 5
 	echo "Test Finished"
 	echo ""
 } 
@@ -59,5 +59,4 @@ do
 	run_test 2
 done
 
-echo "ECDHE ----------- \\n"
 run_test 0
