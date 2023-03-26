@@ -8,9 +8,10 @@ run_test () {
 	sleep 3
 	echo "Starting test"
 	./server $1
-	echo "Test Finished"
 	echo "Terminating Logging"
 	python3 messenger.py -c Stop
+	sleep 3
+	echo "Test Finished"
 	echo ""
 } 
 

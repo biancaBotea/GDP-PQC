@@ -8,9 +8,10 @@ run_test () {
 	sleep 3
 	echo "Starting test"
 	./client $1
-	echo "Test Finished"
 	echo "Terminating Logging"
 	python3 messenger.py -c Stop
+	sleep 3
+	echo "Test Finished"
 	echo ""
 } 
 
@@ -48,7 +49,7 @@ do
 		run_test 7
 		run_test 8
 	done
-	
+
 	echo "Sphincs --------- \\n"
 	run_test 3
 	run_test 4
