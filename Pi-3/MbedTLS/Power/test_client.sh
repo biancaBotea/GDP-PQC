@@ -2,12 +2,26 @@
 
 WRK_DIR="`pwd`"
 
+run_test () {
+	echo "Initialising Logging"
+	python3 messenger.py -c Start
+	sleep 3
+	echo "Starting test"
+	./client $1
+	echo "Test Finished"
+	echo "Terminating Logging"
+	python3 messenger.py -c Stop
+	echo ""
+} 
+
 cd $WRK_DIR
 
 for j in 1 3 5
 do
+	echo "Kyber & Saber L$j"
 	for k in 2 3 5
 	do
+		echo "Dilithium L$k"
 		sleep 2
 		echo "Copying Files"
 		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
@@ -29,14 +43,20 @@ do
 		
 		echo "Compiling client application"
 		gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client
-		echo "Initialising Logging"
-		python3 messenger.py -c Start
-		sleep 3
-		echo "Starting test"
-		./client 0
-		echo "Test Finished"
-		echo "Terminating Logging"
-		python3 messenger.py -c Stop
-		echo ""
+
+		run_test 6
+		run_test 7
+		run_test 8
 	done
+	
+	echo "Sphincs --------- \\n"
+	run_test 3
+	run_test 4
+	run_test 5
+	echo "ECDSA ----------- \\n"
+	run_test 1
+	run_test 2
 done
+
+echo "ECDHE ----------- \\n"
+run_test 0
