@@ -27,10 +27,12 @@ def main(argv):
 
     if no_tries == 5:
         exit(1)
-
+    
+    print("Listening...")
+    
     while True:
         s.listen()                  # Now wait for client connection.
-        print("waiting for test to finish")
+        
         c, addr = s.accept()       # Establish connection with client.
         msg = c.recv(1024)
         if (msg == b'Start'):
