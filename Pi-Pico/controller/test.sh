@@ -9,7 +9,7 @@ flash_pico () {
 	cd build
 	echo "Building pico-sdk and client application"
 	cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" .. &> /dev/null
-	cmake --build --config Release . &> /dev/null
+	cmake --build . --config Release &> /dev/null
 	echo "Flashing Pico"
 	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit" &> /dev/null
 }
@@ -30,13 +30,10 @@ log_test () {
 	echo ""
 }
 
-rm results.txt
-rm results_srv.txt
-
-for j in 1 3 5
+for j in 5
 do
 	echo "Kyber & Saber l$j"
-	for k in 2 3 5
+	for k in 5
 	do
 		cd $WRK_DIR
 		echo "Copying files"

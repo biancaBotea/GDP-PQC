@@ -54,7 +54,7 @@
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
 
-#define TEST_SIZE	1
+#define TEST_SIZE	30
 
 double calc_std_dev(double x, double x2, int n) {
 	double mean = x / n;
@@ -99,7 +99,7 @@ int main() {
 	}
 	printf("Connected.\n");
 	cyw43_wifi_pm(&cyw43_state, CYW43_PERFORMANCE_PM);
-	IP4_ADDR(&server_ip,192,168,12,100);
+	IP4_ADDR(&server_ip,192,168,12,26);
 	int cert_index = 1;
 
 	// Wait for server to start
