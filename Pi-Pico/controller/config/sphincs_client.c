@@ -74,9 +74,7 @@ const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SH
 									"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384",
 									"MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384"};									
 
-const char *certs[] = {TEST_CA_CRT_EC_PEM,
-		TEST_CA_CRT_SPHINCS_SHAKE256_PEM,
-		TEST_CA_CRT_DILITHIUM_SHAKE256_PEM};
+const char *cert = TEST_CA_CRT_SPHINCS_SHAKE256_PEM;
 char * MsgToServer = "Test Message";
 
 ip_addr_t server_ip;
@@ -100,8 +98,7 @@ int main() {
 	printf("Connected.\n");
 	cyw43_wifi_pm(&cyw43_state, CYW43_PERFORMANCE_PM);
 	IP4_ADDR(&server_ip,192,168,12,26);
-	int cert_index = 1;
-
+	
 	// Wait for server to start
 	sleep_ms(5000);
 	
@@ -118,7 +115,7 @@ int main() {
 	// Loop for a given number of handshakes
 	for (int j = 0; j < TEST_SIZE; j++) {
 		
-		mbedtls_pq_performance new_data = run_client(server_ip, certs[cert_index], MsgToServer);
+		mbedtls_pq_performance new_data = run_client(server_ip, cert, MsgToServer);
 		handshake_count++;
 		
 		// Update average performance metrics
