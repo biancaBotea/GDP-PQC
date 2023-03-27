@@ -3,18 +3,22 @@
 WRK_DIR="`pwd`"
 
 run_test () {
+	sleep 7
 	echo "Starting test"
 	./client $1
 	echo "Test finished"
 	echo ""
+	sleep 7
 } 
 
 cd $WRK_DIR
 
 for j in 1 3 5
 do
+	echo "Kyber & Saber L$j"
 	for k in 2 3 5
 	do
+		echo "Dilithium L$j"
 		sleep 5
 		echo "Copying files"
 		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
