@@ -52,6 +52,7 @@
 #define TEST_SIZE	30
 
 const char *server_addr = "169.254.117.47";
+// const char *server_addr = "169.254.239.91";
 const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", 
 									"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384",
 									"MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384",
