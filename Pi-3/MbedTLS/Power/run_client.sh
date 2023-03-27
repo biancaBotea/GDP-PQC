@@ -15,10 +15,10 @@ cd $WRK_DIR
 
 for j in 1 3 5
 do
-	echo "Kyber & Saber L$j"
+	echo "Kyber & Saber L$j ---------"
 	for k in 2 3 5
 	do
-		echo "Dilithium L$j"
+		echo "Dilithium L$j -------------"
 		sleep 5
 		echo "Copying files"
 		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
@@ -46,11 +46,11 @@ do
 		run_test 8
 	done
 
-	echo "Sphincs --------- \\n"
+	echo "Sphincs -------------------"
 	run_test 3
 	run_test 4
 	run_test 5
-	echo "ECDSA ----------- \\n"
+	echo "ECDSA ---------------------"
 	run_test 1
 	run_test 2
 done
