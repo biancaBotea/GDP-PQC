@@ -54,7 +54,7 @@
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
 
-#define TEST_SIZE	30
+#define TEST_SIZE	1
 
 double calc_std_dev(double x, double x2, int n) {
 	double mean = x / n;
@@ -129,7 +129,7 @@ int main() {
 	}
 
 	// Shutdown the server
-	run_client(server_ip, certs[cert_index], "Shutdown");
+	run_client(server_ip, cert, "Shutdown");
 
 	//printf("Key encap: %.3f  %.3f \n", avg_performance.kyber_enc_x, avg_performance.kyber_enc_x2);
 
