@@ -8,10 +8,10 @@ flash_pico () {
 	mkdir build
 	cd build
 	echo "Building pico-sdk and client application"
-	cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" .. #&> /dev/null
-	cmake --build . --config Release #&> /dev/null
+	cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" .. &> /dev/null
+	cmake --build . --config Release &> /dev/null
 	echo "Flashing Pico"
-	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit" #&> /dev/null
+	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit" &> /dev/null
 }
 
 reset_pico () {
@@ -37,9 +37,9 @@ do
 	do
 		cd $WRK_DIR
 		echo "Copying files"
-		#cp ./config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
-		#cp ./config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
-		#cp ./config/dilithium_params_l$k.h $PICO_SDK_PATH/lib/mbedtls/include/pq/dilithium_params.h
+		cp ./config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
+		cp ./config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
+		cp ./config/dilithium_params_l$k.h $PICO_SDK_PATH/lib/mbedtls/include/pq/dilithium_params.h
 		cp ./config/new_certs_l$k.h $WRK_DIR/Benchmarks/new_certs.h
 
 		# Give Server time to compile mbed
