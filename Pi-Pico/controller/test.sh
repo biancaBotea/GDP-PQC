@@ -8,10 +8,10 @@ flash_pico () {
 	mkdir build
 	cd build
 	echo "Building pico-sdk and client application"
-	cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" .. &> /dev/null
-	cmake --build . --config Release &> /dev/null
+	cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" .. #&> /dev/null
+	cmake --build . --config Release #&> /dev/null
 	echo "Flashing Pico"
-	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit" &> /dev/null
+	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit" #&> /dev/null
 }
 
 reset_pico () {
@@ -22,7 +22,7 @@ reset_pico () {
 log_test () {
 	cd $WRK_DIR
 	echo "Initialising Logging"
-	sudo python3 dmm_control.py -l on -f k${1}d${2}t1.csv
+	sudo python3 dmm_control.py -l on -f k${1}d${2}t${3}.csv
 	python3 ./termination_server.py
 	echo "Terminating Logging"
 	sudo python3 dmm_control.py -l off
@@ -30,16 +30,16 @@ log_test () {
 	echo ""
 }
 
-for j in 5
+for j in 1 3 5
 do
 	echo "Kyber & Saber l$j"
-	for k in 5
+	for k in 2 3 5
 	do
 		cd $WRK_DIR
 		echo "Copying files"
-		cp ./config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
-		cp ./config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
-		cp ./config/dilithium_params_l$k.h $PICO_SDK_PATH/lib/mbedtls/include/pq/dilithium_params.h
+		#cp ./config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
+		#cp ./config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
+		#cp ./config/dilithium_params_l$k.h $PICO_SDK_PATH/lib/mbedtls/include/pq/dilithium_params.h
 		cp ./config/new_certs_l$k.h $WRK_DIR/Benchmarks/new_certs.h
 
 		# Give Server time to compile mbed
@@ -52,13 +52,13 @@ do
 		cp ./config/dilithium_client.c $WRK_DIR/Benchmarks/Latency/client.c
 		
 		flash_pico
-		log_test $j $k
+		log_test $j $k 1
 
 		reset_pico
-		log_test $j $k
+		log_test $j $k 2
 
 		reset_pico
-		log_test $j $k
+		log_test $j $k 3
 	done
 
 	echo "Sphincs"
@@ -66,20 +66,20 @@ do
 	cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
 	
 	flash_pico
-	log_test $j $k
+	log_test $j $k 4
 
 	reset_pico
-	log_test $j $k
+	log_test $j $k 5
 
 	echo "ECDSA"
 	cd $WRK_DIR
 	cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
 	
 	flash_pico
-	log_test $j $k
+	log_test $j $k 6
 
 	reset_pico
-	log_test $j $k
+	log_test $j $k 7
 	
 done
 
@@ -88,10 +88,10 @@ cd $WRK_DIR
 cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
 
 flash_pico
-log_test $j $k
+log_test $j $k 8
 
 cd $WRK_DIR
 cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
 
 flash_pico
-log_test $j $k
+log_test $j $k 9
