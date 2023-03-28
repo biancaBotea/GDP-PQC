@@ -90,15 +90,13 @@ int main() {
 	return 1;
 	}
 	cyw43_arch_enable_sta_mode();
-	int ret = cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 300000);	
-	if (ret) {
-	printf("failed to connect %d\n", ret);
-	return 1;
-	}
-	printf("Connected.\n");
+	while (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 10000)) {
+		printf("Failed to connect, trying again\n");
+    }
+    printf("Connected\n");
 	cyw43_wifi_pm(&cyw43_state, CYW43_PERFORMANCE_PM);
 	IP4_ADDR(&server_ip,192,168,12,26);
-	
+
 	// Wait for server to start
 	sleep_ms(5000);
 	
