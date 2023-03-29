@@ -3,6 +3,7 @@
 WRK_DIR="`pwd`"
 
 debug=1
+count=1
 test_name="Power"
 
 flash_pico () {
@@ -38,12 +39,13 @@ reset_pico () {
 log_test () {
 	cd $WRK_DIR
 	echo "Initialising Logging"
-	sudo python3 dmm_control.py -l on -f k${1}d${2}t1.csv
+	sudo python3 dmm_control.py -l on -f ${count}.csv
 	python3 ./termination_server.py
 	echo "Terminating Logging"
 	sudo python3 dmm_control.py -l off
 	echo "Test Finished"
 	echo ""
+	let "count++"
 }
 
 for j in 5
@@ -68,13 +70,13 @@ do
 		cp ./Benchmarks/$test_name/config/dilithium_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 		
 		flash_pico
-		log_test $j $k
+		log_test
 
 		reset_pico
-		log_test $j $k
+		log_test
 
 		reset_pico
-		log_test $j $k
+		log_test
 	done
 
 	echo "Sphincs"
@@ -82,20 +84,20 @@ do
 	cp ./Benchmarks/$test_name/config/sphincs_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 	
 	flash_pico
-	log_test $j $k
+	log_test
 
 	reset_pico
-	log_test $j $k
+	log_test
 
 	echo "ECDSA"
 	cd $WRK_DIR
 	cp ./Benchmarks/$test_name/config/ecdsa_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 	
 	flash_pico
-	log_test $j $k
+	log_test
 
 	reset_pico
-	log_test $j $k
+	log_test
 	
 done
 
@@ -104,10 +106,10 @@ cd $WRK_DIR
 cp ./Benchmarks/$test_name/config/sphincs_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 
 flash_pico
-log_test $j $k
+log_test
 
 cd $WRK_DIR
 cp ./Benchmarks/$test_name/config/ecdsa_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 
 flash_pico
-log_test $j $k
+log_test
