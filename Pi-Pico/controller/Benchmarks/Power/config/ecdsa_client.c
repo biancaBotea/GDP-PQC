@@ -102,47 +102,14 @@ int main() {
 	// Wait for server to start
 	sleep_ms(5000);
 	
-	// Initialise average performance record
-	mbedtls_pq_avg_performance avg_performance;
-	avg_performance.handshake_x = 0;
-	avg_performance.handshake_x2 = 0;
-	avg_performance.kyber_enc_x = 0;
-	avg_performance.kyber_enc_x2 = 0;
-	avg_performance.sphincs_verify_x = 0;
-	avg_performance.sphincs_verify_x2 = 0;
-	int handshake_count = 0;
-
 	// Loop for a given number of handshakes
 	for (int j = 0; j < TEST_SIZE; j++) {
-		
-		mbedtls_pq_performance new_data = run_client(server_ip, cert, MsgToServer);
-		handshake_count++;
-		
-		// Update average performance metrics
-		avg_performance.handshake_x += new_data.handshake;
-		avg_performance.handshake_x2 += pow(new_data.handshake, 2);
-		avg_performance.kyber_enc_x += new_data.kyber_enc;
-		avg_performance.kyber_enc_x2 += pow(new_data.kyber_enc, 2);
-		avg_performance.sphincs_verify_x += new_data.sphincs_verify;
-		avg_performance.sphincs_verify_x2 += pow(new_data.sphincs_verify, 2);
+		run_client(server_ip, cert, MsgToServer);
 		sleep_ms(500);
 	}
 
 	// Shutdown the server
 	run_client(server_ip, cert, "Shutdown");
-
-	//printf("Key encap: %.3f  %.3f \n", avg_performance.kyber_enc_x, avg_performance.kyber_enc_x2);
-
-	double handshake_std_dev = calc_std_dev(avg_performance.handshake_x, avg_performance.handshake_x2, TEST_SIZE);
-	double key_enc_std_dev = calc_std_dev(avg_performance.kyber_enc_x, avg_performance.kyber_enc_x2, TEST_SIZE);
-	double sphincs_verify_std_dev = calc_std_dev(avg_performance.sphincs_verify_x, avg_performance.sphincs_verify_x2, TEST_SIZE);
-
-	// Output performance measurements
-	printf("Performance Measurements:\tMean\t\tStd Dev\n");
-	printf("Handshake Latency\t\t%f\t\t%f\n", avg_performance.handshake_x / TEST_SIZE, handshake_std_dev);
-	printf("Key Encapsulation\t\t%.2f\t\t%.2f\n", avg_performance.kyber_enc_x / TEST_SIZE, key_enc_std_dev);
-	printf("Signature Verification\t\t%.2f\t\t%.2f\n\n", avg_performance.sphincs_verify_x / TEST_SIZE, sphincs_verify_std_dev);
-	
 
 	printf("Finished.\n");
 	/* sleep a bit to let usb stdio write out any buffer to host */
