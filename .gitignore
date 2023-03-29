@@ -1,7 +1,6 @@
 massif.out.*
 client
 server
-.gitignore
 Pi-3/Analysis/test_parse.py
 Pi-3/Analysis/.vscode/
 Pi-3/Analysis/__pycache__/
