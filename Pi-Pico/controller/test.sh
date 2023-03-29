@@ -2,21 +2,36 @@
 
 WRK_DIR="`pwd`"
 
+debug=1
+
 flash_pico () {
 	cd $WRK_DIR/Benchmarks/Latency
 	sudo rm -r build
 	mkdir build
 	cd build
 	echo "Building pico-sdk and client application"
-	cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" .. &> /dev/null
-	cmake --build . --config Release &> /dev/null
-	echo "Flashing Pico"
-	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit" &> /dev/null
+	if [ $debug -eq 1 ]
+	then
+		cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" ..
+		cmake --build . --config Release 
+		echo "Flashing Pico"
+		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit"
+	else
+		cmake .. -DWIFI_SSID="TOMS LAPTOP" -DWIFI_PASSWORD="12345678" .. &> /dev/null
+		cmake --build . --config Release &> /dev/null
+		echo "Flashing Pico"
+		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program latency_benchmark_client.elf verify reset exit" &> /dev/null
+	fi
 }
 
 reset_pico () {
 	echo "Resetting Pico - Starting test"
-	sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit" &> /dev/null
+	if [ $debug -eq 1 ]
+	then
+		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit"
+	else
+		sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "init; reset; exit" &> /dev/null
+	fi
 }
 
 log_test () {
