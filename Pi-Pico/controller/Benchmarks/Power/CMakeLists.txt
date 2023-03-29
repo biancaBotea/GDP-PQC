@@ -13,8 +13,6 @@ set(PICO_MBEDTLS_PATH $ENV{PICO_SDK_PATH}/lib/mbedtls)
 
 pico_sdk_init()
 
-add_subdirectory(src)
-
 add_executable(latency_benchmark_client
         client.c
         pico_client.c
@@ -32,8 +30,6 @@ target_link_libraries(latency_benchmark_client
         pico_mbedtls
         pico_stdlib
         pico_time
-        pqc_utimer
-        pqc_systick
         )
 pico_add_extra_outputs(latency_benchmark_client)
 

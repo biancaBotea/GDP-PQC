@@ -8,17 +8,6 @@
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
 
-//#define PICO_LATENCY
-//#define PICO_CYCLES_BREAKDOWN
-#define PICO_CYCLES_OVERALL
-#if defined(PICO_LATENCY)|| \
-    defined(PICO_CYCLES_BREAKDOWN)|| \
-    defined(PICO_CYCLES_OVERALL)
-#include "pqc-pico/utimer.h"
-#include "pqc-pico/systick.h"
-#endif
-
-
 #define TLS_CLIENT_TIMEOUT_SECS  90
 #define DFL_SERVER_PORT 4433
 #define SERVER_IP 192,168,1,87
@@ -214,7 +203,7 @@ static TLS_CLIENT_T* tls_client_init(void) {
     return state;
 }
 
-mbedtls_pq_performance run_client(const ip_addr_t server_ip, const char *cert, char *msg) {
+int run_client(const ip_addr_t server_ip, const char *cert, char *msg) {
     /* No CA certificate checking */
     //tls_config = altcp_tls_create_config_client();
     
@@ -236,23 +225,6 @@ mbedtls_pq_performance run_client(const ip_addr_t server_ip, const char *cert, c
     msgToServer = msg;
     
     tls_config = altcp_tls_create_config_client((const unsigned char *) cert, strlen(cert) + 1);
-    
-#if defined(PICO_LATENCY)
-    // start the overall latency timer
-
-    microsecond_count_t* utp = (microsecond_count_t*) malloc(sizeof(microsecond_count_t));
-    init_utimer(utp);
-
-    //printf("Begin utimer\n");
-    begin_utimer(utp);
-#elif defined(PICO_CYCLES_OVERALL)
-    // start the overall latency timer
-    init_systick_reg();
-    systick_count_t* stp = (systick_count_t*) malloc(sizeof(systick_count_t));
-    init_systick(stp);
-    begin_systick(stp);
-            
-#endif
 
     TLS_CLIENT_T *state = tls_client_init();
     if (!state) {
@@ -277,36 +249,9 @@ mbedtls_pq_performance run_client(const ip_addr_t server_ip, const char *cert, c
         sleep_ms(100);
 #endif
     }
-#if defined(PICO_LATENCY)
-    // end the overall latency timer
-    //printf("End utimer\n");
-    end_utimer(utp);
-    double overall_handshake = (double)utp->ut_diff /1000.0;
-    //printf("\nOverall latency = %llu\n",utp->ut_diff);
-    free_utimer(utp);
-    mbedtls_pq_performance performance = get_mbedtls_pq_performance();
-    performance.handshake = overall_handshake;
-#elif defined(PICO_CYCLES_BREAKDOWN)
-    // end cycle counter
-    mbedtls_pq_performance performance = get_mbedtls_pq_performance();
-    if(DEBUG_LEVEL >= 1){
-        printf("\nKEM Cycles = %f\n",performance.kyber_enc);
-        printf("\nSIG Cycles = %f\n",performance.sphincs_verify);
-    }
-
-    performance.handshake = 0.0;
-#elif defined(PICO_CYCLES_OVERALL)
-    // end cycle counter
-    end_systick(stp);
-    double overall_handshake = (double)stp->st_diff;
-    free_systick(stp);
-    mbedtls_pq_performance performance;
-
-    performance.handshake = overall_handshake;      
-#endif
     free(state);
     altcp_tls_free_config(tls_config);
     fflush(stdout);
-    return performance;
+    return 0;
 }
 
