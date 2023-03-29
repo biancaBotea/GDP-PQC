@@ -2,7 +2,7 @@
 
 WRK_DIR="`pwd`"
 
-debug=1
+debug=0
 count=1
 test_name="Power"
 
@@ -48,10 +48,10 @@ log_test () {
 	let "count++"
 }
 
-for j in 5
+for j in 1 3 5
 do
 	echo "Kyber & Saber l$j"
-	for k in 5
+	for k in 2 3 5
 	do
 		cd $WRK_DIR
 		echo "Copying files"
