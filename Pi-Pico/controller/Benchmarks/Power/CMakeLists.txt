@@ -25,7 +25,7 @@ target_include_directories(latency_benchmark_client PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         )
 target_link_libraries(latency_benchmark_client
-        pico_cyw43_arch_lwip_threadsafe_background
+        pico_cyw43_arch_lwip_poll
         pico_lwip_mbedtls
         pico_mbedtls
         pico_stdlib
