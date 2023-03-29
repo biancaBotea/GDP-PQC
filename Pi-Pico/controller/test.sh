@@ -65,7 +65,7 @@ do
 		echo "Dilithium l$k"
 		# Flash pico once with dilithium client then run it another 2 times by resetting device with breaks in between to allow for server to restart/recompile?
 		cd $WRK_DIR
-		cp ./config/dilithium_client.c $WRK_DIR/Benchmarks/$test_name/client.c
+		cp ./Benchmarks/$test_name/config/dilithium_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 		
 		flash_pico
 		log_test $j $k
