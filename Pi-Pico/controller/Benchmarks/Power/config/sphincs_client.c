@@ -43,8 +43,8 @@
 #endif /* MBEDTLS_PLATFORM_C */
 
 /* extra src files */
-#include "../pico_client.h"
-#include "../new_certs.h"
+#include "./pico_client.h"
+#include "./new_certs.h"
 #include "mbedtls/ssl.h"
 #include <time.h>
 
