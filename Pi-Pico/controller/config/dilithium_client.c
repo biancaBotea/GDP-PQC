@@ -119,7 +119,7 @@ int main() {
 	}
 
 	// Shutdown the server
-	run_client(server_ip, certs[cert_index], "Shutdown");
+	run_client(server_ip, cert, "Shutdown");
 
 	//printf("Key encap: %.3f  %.3f \n", avg_performance.kyber_enc_x, avg_performance.kyber_enc_x2);
 
