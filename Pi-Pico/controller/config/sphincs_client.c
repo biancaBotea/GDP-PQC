@@ -54,7 +54,7 @@
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
 
-#define TEST_SIZE	1
+#define TEST_SIZE	30
 
 double calc_std_dev(double x, double x2, int n) {
 	double mean = x / n;
@@ -90,13 +90,15 @@ int main() {
 	return 1;
 	}
 	cyw43_arch_enable_sta_mode();
-	while (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 10000)) {
-		printf("Failed to connect, trying again\n");
-    }
-    printf("Connected\n");
+	int ret = cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 300000);	
+	if (ret) {
+	printf("failed to connect %d\n", ret);
+	return 1;
+	}
+	printf("Connected.\n");
 	cyw43_wifi_pm(&cyw43_state, CYW43_PERFORMANCE_PM);
 	IP4_ADDR(&server_ip,192,168,12,26);
-
+	
 	// Wait for server to start
 	sleep_ms(5000);
 	
@@ -127,7 +129,7 @@ int main() {
 	}
 
 	// Shutdown the server
-	run_client(server_ip, cert, "Shutdown");
+	run_client(server_ip, certs[cert_index], "Shutdown");
 
 	//printf("Key encap: %.3f  %.3f \n", avg_performance.kyber_enc_x, avg_performance.kyber_enc_x2);
 

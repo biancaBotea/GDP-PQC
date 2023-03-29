@@ -22,7 +22,7 @@ reset_pico () {
 log_test () {
 	cd $WRK_DIR
 	echo "Initialising Logging"
-	sudo python3 dmm_control.py -l on -f k${1}d${2}t${3}.csv
+	sudo python3 dmm_control.py -l on -f k${1}d${2}t1.csv
 	python3 ./termination_server.py
 	echo "Terminating Logging"
 	sudo python3 dmm_control.py -l off
@@ -30,10 +30,10 @@ log_test () {
 	echo ""
 }
 
-for j in 1 3 5
+for j in 5
 do
 	echo "Kyber & Saber l$j"
-	for k in 2 3 5
+	for k in 5
 	do
 		cd $WRK_DIR
 		echo "Copying files"
@@ -52,13 +52,13 @@ do
 		cp ./config/dilithium_client.c $WRK_DIR/Benchmarks/Latency/client.c
 		
 		flash_pico
-		log_test $j $k 1
+		log_test $j $k
 
 		reset_pico
-		log_test $j $k 2
+		log_test $j $k
 
 		reset_pico
-		log_test $j $k 3
+		log_test $j $k
 	done
 
 	echo "Sphincs"
@@ -66,20 +66,20 @@ do
 	cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
 	
 	flash_pico
-	log_test $j $k 4
+	log_test $j $k
 
 	reset_pico
-	log_test $j $k 5
+	log_test $j $k
 
 	echo "ECDSA"
 	cd $WRK_DIR
 	cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
 	
 	flash_pico
-	log_test $j $k 6
+	log_test $j $k
 
 	reset_pico
-	log_test $j $k 7
+	log_test $j $k
 	
 done
 
@@ -88,10 +88,10 @@ cd $WRK_DIR
 cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
 
 flash_pico
-log_test $j $k 8
+log_test $j $k
 
 cd $WRK_DIR
 cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
 
 flash_pico
-log_test $j $k 9
+log_test $j $k

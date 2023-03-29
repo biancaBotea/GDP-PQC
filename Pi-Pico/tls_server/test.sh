@@ -16,7 +16,7 @@ cd $WRK_DIR
 for j in 1 3 5
 do
 	echo "Kyber & Saber L$j"
-	for k in 2 3 5
+	for k in 5
 	do
 		sleep 2
 		echo "Copying files"
