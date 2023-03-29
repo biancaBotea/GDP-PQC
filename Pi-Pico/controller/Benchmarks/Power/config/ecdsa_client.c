@@ -64,7 +64,17 @@ double calc_std_dev(double x, double x2, int n) {
 }
 
 /* application args */
-const char *cert = TEST_CA_CRT_DILITHIUM_SHAKE256_PEM;
+const char *cipherSuiteStrings[] = {"MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", 
+									"MBEDTLS_TLS_KYBER_ECDSA_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_SABER_ECDSA_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_ECDHE_SPHINCS_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_KYBER_SPHINCS_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_SABER_SPHINCS_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_ECDHE_DILITHIUM_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_KYBER_DILITHIUM_WITH_AES_256_GCM_SHA384",
+									"MBEDTLS_TLS_SABER_DILITHIUM_WITH_AES_256_GCM_SHA384"};									
+
+const char *cert = TEST_CA_CRT_EC_PEM;
 char * MsgToServer = "Test Message";
 
 ip_addr_t server_ip;

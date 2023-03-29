@@ -3,9 +3,10 @@
 WRK_DIR="`pwd`"
 
 debug=1
+test_name="Power"
 
 flash_pico () {
-	cd $WRK_DIR/Benchmarks/Latency
+	cd $WRK_DIR/Benchmarks/$test_name
 	sudo rm -r build
 	mkdir build
 	cd build
@@ -52,10 +53,10 @@ do
 	do
 		cd $WRK_DIR
 		echo "Copying files"
-		cp ./config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
-		cp ./config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
-		cp ./config/dilithium_params_l$k.h $PICO_SDK_PATH/lib/mbedtls/include/pq/dilithium_params.h
-		cp ./config/new_certs_l$k.h $WRK_DIR/Benchmarks/new_certs.h
+		cp ./Benchmarks/$test_name/config/kyber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/kyber_params.h
+		cp ./Benchmarks/$test_name/config/saber_params_l$j.h $PICO_SDK_PATH/lib/mbedtls/include/pq/saber_params.h
+		cp ./Benchmarks/$test_name/config/dilithium_params_l$k.h $PICO_SDK_PATH/lib/mbedtls/include/pq/dilithium_params.h
+		cp ./Benchmarks/$test_name/config/new_certs_l$k.h $WRK_DIR/Benchmarks/$test_name/new_certs.h
 
 		# Give Server time to compile mbed
 		echo "Waiting for server to compile Mbed TLS"
@@ -64,7 +65,7 @@ do
 		echo "Dilithium l$k"
 		# Flash pico once with dilithium client then run it another 2 times by resetting device with breaks in between to allow for server to restart/recompile?
 		cd $WRK_DIR
-		cp ./config/dilithium_client.c $WRK_DIR/Benchmarks/Latency/client.c
+		cp ./config/dilithium_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 		
 		flash_pico
 		log_test $j $k
@@ -78,7 +79,7 @@ do
 
 	echo "Sphincs"
 	cd $WRK_DIR
-	cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
+	cp ./Benchmarks/$test_name/config/sphincs_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 	
 	flash_pico
 	log_test $j $k
@@ -88,7 +89,7 @@ do
 
 	echo "ECDSA"
 	cd $WRK_DIR
-	cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
+	cp ./Benchmarks/$test_name/config/ecdsa_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 	
 	flash_pico
 	log_test $j $k
@@ -100,13 +101,13 @@ done
 
 echo "ECDHE with Sphincs or ECDSA"
 cd $WRK_DIR
-cp ./config/sphincs_client.c $WRK_DIR/Benchmarks/Latency/client.c
+cp ./Benchmarks/$test_name/config/sphincs_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 
 flash_pico
 log_test $j $k
 
 cd $WRK_DIR
-cp ./config/ecdsa_client.c $WRK_DIR/Benchmarks/Latency/client.c
+cp ./Benchmarks/$test_name/config/ecdsa_client.c $WRK_DIR/Benchmarks/$test_name/client.c
 
 flash_pico
 log_test $j $k
