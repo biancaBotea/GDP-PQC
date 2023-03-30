@@ -31,3 +31,5 @@ while not pico_done:
         print("Pi -> Ubuntu: Pico Finished")
         c.close()
         pico_done = True
+
+s.close()
