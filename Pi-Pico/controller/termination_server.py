@@ -3,7 +3,7 @@ import time
 
 s = socket.socket()         # Create a socket object
 host = "192.168.12.1"          # Get local machine name
-port = 4444               	# Reserve a port for your service.
+port = 12345              	# Reserve a port for your service.
 
 no_tries = 0
 
