@@ -3,7 +3,7 @@ import time
 
 s = socket.socket()         # Create a socket object
 host = "192.168.12.1"          # Get local machine name
-port = 12345              	# Reserve a port for your service.
+port = 6060              	# Reserve a port for your service.
 
 no_tries = 0
 
@@ -30,6 +30,6 @@ while not pico_done:
     if (msg == b'Finished'):
         print("Pi -> Ubuntu: Pico Finished")
         c.close()
+        s.shutdown(socket.SHUT_RDWR)
+        s.close()
         pico_done = True
-
-s.close()
