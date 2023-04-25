@@ -7,6 +7,8 @@ port = 6060              	# Reserve a port for your service.
 
 no_tries = 0
 
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
 for i in range(0,5):
     try:
         s.bind((host, port))# Bind to the port
