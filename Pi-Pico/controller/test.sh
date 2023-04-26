@@ -62,7 +62,7 @@ do
 
 		# Give Server time to compile mbed
 		echo "Waiting for server to compile Mbed TLS"
-		sleep 28
+		sleep 40
 		
 		echo "Dilithium l$k"
 		# Flash pico once with dilithium client then run it another 2 times by resetting device with breaks in between to allow for server to restart/recompile?
