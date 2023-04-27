@@ -1,10 +1,12 @@
 #!/bin/bash
 
 WRK_DIR="`pwd`"
+start=26
+count=0
 
 run_test () {
 	let "count++"
-	if [ $start -le $count ]
+	if [ $start -lt $count ]
 	then
 		echo "Initialising Logging"
 		python3 messenger.py -c Start
@@ -26,7 +28,7 @@ do
 	echo "Kyber & Saber L$j ---------"
 	for k in 2 3 5
 	do
-		if [ $start -le $count ]
+		if [ $start -lt $count ]
 		then
 			echo "Dilithium L$k -------------"
 			echo "Copying Files"

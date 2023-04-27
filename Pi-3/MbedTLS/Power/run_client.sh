@@ -6,7 +6,7 @@ count=0
 
 run_test () {
 	let "count++"
-	if [ $start -le $count ]
+	if [ $start -lt $count ]
 	then
 		sleep 7
 		echo "Starting test"
@@ -24,7 +24,7 @@ do
 	echo "Kyber & Saber L$j ---------"
 	for k in 2 3 5
 	do
-		if [ $start -le $count ]
+		if [ $start -lt $count ]
 		then
 			echo "Dilithium L$k -------------"
 			sleep 5
