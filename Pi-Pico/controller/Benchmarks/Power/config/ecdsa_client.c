@@ -54,7 +54,7 @@
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
 
-#define TEST_SIZE	1
+#define TEST_SIZE	7
 
 double calc_std_dev(double x, double x2, int n) {
 	double mean = x / n;
@@ -102,6 +102,7 @@ int main() {
 	
 	// Loop for a given number of handshakes
 	for (int j = 0; j < TEST_SIZE; j++) {
+		printf("%d: ", j+1);
 		run_client(server_ip, cert, MsgToServer);
 		sleep_ms(500);
 	}
