@@ -16,7 +16,7 @@ do
 	echo "Kyber & Saber L$j ---------"
 	for k in 2 3 5
 	do
-		echo "Dilithium L$j -------------"
+		echo "Dilithium L$k -------------"
 		echo "Copying files"
 		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
 		cp ../test_config/saber_params_l$j.h $MBEDTLS_PATH/include/pq/saber_params.h
