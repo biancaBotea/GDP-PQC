@@ -5,7 +5,7 @@ start=26
 count=0
 
 run_test () {
-	if [ $start -lt $count ]
+	if [ $start -le $count ]
 	then
 		sleep 7
 		echo "Starting test"
@@ -24,7 +24,7 @@ do
 	echo "Kyber & Saber L$j ---------"
 	for k in 2 3 5
 	do
-		if [ $start -lt $count ]
+		if [ $start -le $count ]
 		then
 			echo "Dilithium L$k -------------"
 			sleep 5
