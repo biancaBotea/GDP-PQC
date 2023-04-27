@@ -5,7 +5,6 @@ start=26
 count=0
 
 run_test () {
-	let "count++"
 	if [ $start -lt $count ]
 	then
 		sleep 7
@@ -15,6 +14,7 @@ run_test () {
 		echo ""
 		sleep 7
 	fi
+	let "count++"
 } 
 
 cd $WRK_DIR

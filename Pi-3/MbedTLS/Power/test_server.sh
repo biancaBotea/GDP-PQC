@@ -5,7 +5,6 @@ start=26
 count=0
 
 run_test () {
-	let "count++"
 	if [ $start -lt $count ]
 	then
 		echo "Initialising Logging"
@@ -19,6 +18,7 @@ run_test () {
 		echo "Test Finished"
 		echo ""
 	fi
+	let "count++"
 } 
 
 cd $WRK_DIR
