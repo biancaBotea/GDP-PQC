@@ -1,14 +1,20 @@
 #!/bin/bash
 
 WRK_DIR="`pwd`"
+start=26
+count=0
 
 run_test () {
-	sleep 7
-	echo "Starting test"
-	./client $1
-	echo "Test finished"
-	echo ""
-	sleep 7
+	let "count++"
+	if [ $start -le $count ]
+	then
+		sleep 7
+		echo "Starting test"
+		./client $1
+		echo "Test finished"
+		echo ""
+		sleep 7
+	fi
 } 
 
 cd $WRK_DIR
@@ -18,28 +24,31 @@ do
 	echo "Kyber & Saber L$j ---------"
 	for k in 2 3 5
 	do
-		echo "Dilithium L$k -------------"
-		sleep 5
-		echo "Copying files"
-		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
-		cp ../test_config/saber_params_l$j.h $MBEDTLS_PATH/include/pq/saber_params.h
-		cp ../test_config/dilithium_params_l$k.h $MBEDTLS_PATH/include/pq/dilithium_params.h
-		cp ../test_config/new_certs_l$k.h ../new_certs.h
+		if [ $start -le $count ]
+		then
+			echo "Dilithium L$k -------------"
+			sleep 5
+			echo "Copying files"
+			cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
+			cp ../test_config/saber_params_l$j.h $MBEDTLS_PATH/include/pq/saber_params.h
+			cp ../test_config/dilithium_params_l$k.h $MBEDTLS_PATH/include/pq/dilithium_params.h
+			cp ../test_config/new_certs_l$k.h ../new_certs.h
 
-		cd $MBEDTLS_PATH
-		rm -rf build
-		mkdir build
-		cd build
-		echo "Building Mbed TLS"
-		cmake .. -DENABLE_TESTING=OFF .. &> /dev/null
-		cmake --build . &> /dev/null
-		echo "Installing Mbed TLS"
-		sudo cmake --install . &> /dev/null
+			cd $MBEDTLS_PATH
+			rm -rf build
+			mkdir build
+			cd build
+			echo "Building Mbed TLS"
+			cmake .. -DENABLE_TESTING=OFF .. &> /dev/null
+			cmake --build . &> /dev/null
+			echo "Installing Mbed TLS"
+			sudo cmake --install . &> /dev/null
 
-		cd $WRK_DIR
+			cd $WRK_DIR
 
-		echo "Compiling client application"
-		gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client
+			echo "Compiling client application"
+			gcc client.c ../ssl_client1.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o client
+		fi
 		
 		run_test 6
 		run_test 7
