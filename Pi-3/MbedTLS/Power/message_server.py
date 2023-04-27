@@ -10,6 +10,8 @@ def main(argv):
     host = "192.168.12.1"          # Get local machine name
     port = 4444               	# Reserve a port for your service.
 
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
     no_tries = 0
     test_count = 0
 
