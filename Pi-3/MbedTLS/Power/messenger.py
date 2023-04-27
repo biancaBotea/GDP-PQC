@@ -3,7 +3,7 @@ import sys, getopt
 
       
 host = "192.168.12.1" 
-port = 4444                	# Reserve a port for your service.
+port = 6060                	# Reserve a port for your service.
 
 def main(argv):
     s = socket.socket()     # Create a socket object

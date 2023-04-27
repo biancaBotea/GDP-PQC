@@ -8,7 +8,7 @@ import easy_scpi as scpi
 def main(argv):
     s = socket.socket()         # Create a socket object
     host = "192.168.12.1"          # Get local machine name
-    port = 4444               	# Reserve a port for your service.
+    port = 6060               	# Reserve a port for your service.
 
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
