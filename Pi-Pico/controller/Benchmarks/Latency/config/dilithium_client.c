@@ -54,7 +54,7 @@
 #include "lwip/altcp_tcp.h"
 #include "lwip/altcp_tls.h"
 
-#define TEST_SIZE	30
+#define TEST_SIZE	8
 
 double calc_std_dev(double x, double x2, int n) {
 	double mean = x / n;
@@ -80,12 +80,10 @@ int main() {
 	return 1;
 	}
 	cyw43_arch_enable_sta_mode();
-	int ret = cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 300000);	
-	if (ret) {
-	printf("failed to connect %d\n", ret);
-	return 1;
-	}
-	printf("Connected.\n");
+	while (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 15000)) {
+		printf("Failed to connect, trying again...\n");
+    }
+	printf("Connected\n");
 	cyw43_wifi_pm(&cyw43_state, CYW43_PERFORMANCE_PM);
 	IP4_ADDR(&server_ip,192,168,12,26);
 
@@ -104,6 +102,7 @@ int main() {
 
 	// Loop for a given number of handshakes
 	for (int j = 0; j < TEST_SIZE; j++) {
+		printf("%d: ", j+1);
 		
 		mbedtls_pq_performance new_data = run_client(server_ip, cert, MsgToServer);
 		handshake_count++;
@@ -115,6 +114,7 @@ int main() {
 		avg_performance.kyber_enc_x2 += pow(new_data.kyber_enc, 2);
 		avg_performance.sphincs_verify_x += new_data.sphincs_verify;
 		avg_performance.sphincs_verify_x2 += pow(new_data.sphincs_verify, 2);
+		printf("   Handshake Latency: %f\n", new_data.handshake);
 		sleep_ms(500);
 	}
 

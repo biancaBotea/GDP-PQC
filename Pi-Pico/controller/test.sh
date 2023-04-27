@@ -4,7 +4,7 @@ WRK_DIR="`pwd`"
 
 debug=0
 count=1
-test_name="Power"
+test_name="Latency"
 
 flash_pico () {
 	cd $WRK_DIR/Benchmarks/$test_name
@@ -38,11 +38,17 @@ reset_pico () {
 
 log_test () {
 	cd $WRK_DIR
-	echo "Initialising Logging"
-	sudo python3 dmm_control.py -l on -f ${count}.csv
+	if [ $test_name == "Power" ]
+	then
+		echo "Initialising Logging"
+		sudo python3 dmm_control.py -l on -f ${count}.csv
+	fi
 	python3 ./termination_server.py
-	echo "Terminating Logging"
-	sudo python3 dmm_control.py -l off
+	if [ $test_name == "Power" ]
+	then
+		echo "Terminating Logging"
+		sudo python3 dmm_control.py -l off
+	fi
 	echo "Test Finished"
 	echo ""
 	let "count++"
