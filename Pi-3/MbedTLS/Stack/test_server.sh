@@ -25,6 +25,7 @@ do
 		sudo rm -rf build
 		mkdir build
 		cd build
+		if [ $debug -eq 1 ]
 		then
 			cmake .. -DENABLE_TESTING=OFF ..
 			cmake --build .
