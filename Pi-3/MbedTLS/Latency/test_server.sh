@@ -10,11 +10,13 @@ do
 	echo "Kyber & Saber l$j" |& tee -a ./results.txt
 	for k in 2 3 5
 	do
+		echo "Copying Files"
 		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
 		cp ../test_config/saber_params_l$j.h $MBEDTLS_PATH/include/pq/saber_params.h
 		cp ../test_config/dilithium_params_l$k.h $MBEDTLS_PATH/include/pq/dilithium_params.h
 		cp ../test_config/new_certs_l$k.h ../new_certs.h
 
+		echo "Building mbedtls"
 		cd $MBEDTLS_PATH
 		rm -rf build
 		mkdir build
@@ -32,6 +34,7 @@ do
 
 		cd $WRK_DIR
 
+		echo "Building server application"
 		gcc server.c ../ssl_server.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o server
 		echo "Dilithium l$k" |& tee -a ./results.txt
 		./server 6 |& tee -a ./results.txt
