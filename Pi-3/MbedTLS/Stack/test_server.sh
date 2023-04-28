@@ -15,7 +15,7 @@ do
 	echo "Kyber & Saber L$j" |& tee -a ./results.txt
 	for k in 2 3 5
 	do
-		sleep 5
+		echo "Building mbedtls"
 		cp ../test_config/kyber_params_l$j.h $MBEDTLS_PATH/include/pq/kyber_params.h
 		cp ../test_config/saber_params_l$j.h $MBEDTLS_PATH/include/pq/saber_params.h
 		cp ../test_config/dilithium_params_l$k.h $MBEDTLS_PATH/include/pq/dilithium_params.h
@@ -39,6 +39,7 @@ do
 		cd $WRK_DIR
 
 		echo "Dilithium L$k" |& tee -a ./results.txt
+		echo "Building server application"
 		gcc server.c ../ssl_server.c -lmbedtls -lmbedx509 -lmbedcrypto -lm -o server
     	valgrind --tool=massif --heap=no --stacks=yes --detailed-freq=100 ./server 6
 		process_results
