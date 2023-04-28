@@ -1,6 +1,7 @@
 #!/bin/bash
 
 WRK_DIR="`pwd`"
+debug=0
 
 cd $WRK_DIR
 
@@ -19,9 +20,16 @@ do
 		rm -rf build
 		mkdir build
 		cd build
-		cmake .. -DENABLE_TESTING=OFF ..
-		cmake --build .
-		sudo cmake --install .
+		if [ $debug -eq 1 ]
+		then
+			cmake .. -DENABLE_TESTING=OFF ..
+			cmake --build .
+			sudo cmake --install .
+		else
+			cmake .. -DENABLE_TESTING=OFF .. &> /dev/null
+			cmake --build . &> /dev/null
+			sudo cmake --install . &> /dev/null
+		fi
 
 		cd $WRK_DIR
 
