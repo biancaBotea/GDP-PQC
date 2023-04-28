@@ -83,15 +83,17 @@ const char *keys[] = {TEST_SRV_KEY_EC_PEM,
 			TEST_SRV_KEY_DILITHIUM_SHAKE256_PEM};
 char * MsgToClient = "Test Response";
 
-int main() {
-    for (int i = 0; i < 9; i++) {
-        printf("Testing %s...\n\n", cipherSuiteStrings[i]);
+int main(int argc, char *argv[]) {
+	if(argc == 2) {
+        printf("Testing %s...\n\n", cipherSuiteStrings[atoi(argv[1])]);
 
         //Wait for port to become available on slower devices
         sleep(1);
 
-        run_server(certs[i], keys[i], cipherSuites[i], MsgToClient);
-    }
+        run_server(certs[atoi(argv[1])], keys[atoi(argv[1])], cipherSuites[atoi(argv[1])], MsgToClient);
+    } else {
+        printf("Incorrect arguments supplied\n");
+	}
 
     return 0;
 }

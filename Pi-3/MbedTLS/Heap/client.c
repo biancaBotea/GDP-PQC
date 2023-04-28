@@ -79,16 +79,17 @@ const char *certs[] = {TEST_CA_CRT_EC_PEM,
 					   TEST_CA_CRT_DILITHIUM_SHAKE256_PEM};
 char * MsgToServer = "Test Message";
 
-int main() {
-	printf("Test Configuration:\nServer Address - %s\n\n", server_addr);
-	
-	for (int i = 0; i < 9; i++) {
-		printf("Testing %s...\n\n", cipherSuiteStrings[i]);
+int main(int argc, char *argv[]) {
+	if(argc == 2) {
+		printf("Testing %s...\n\n", cipherSuiteStrings[atoi(argv[1])]);
 		
 		//Wait for server to start
 		sleep(2);
 
-		run_client(server_addr, certs[i], cipherSuites[i], "Shutdown");
+		run_client(server_addr, certs[atoi(argv[1])], cipherSuites[atoi(argv[1])], "Shutdown");
+		
+	} else {
+		printf("Incorrect arguments supplied\n");
 	}
 
   	return 0;
