@@ -50,6 +50,7 @@ do
 		sleep 2
     	valgrind --tool=massif --heap=no --stacks=yes --detailed-freq=100 ./client 8
 		process_results
+		sleep 2
 	done
 	echo "Sphincs" |& tee -a ./results.txt
 	valgrind --tool=massif --heap=no --stacks=yes --detailed-freq=100 ./client 4
@@ -64,6 +65,7 @@ do
 	sleep 2
 	valgrind --tool=massif --heap=no --stacks=yes --detailed-freq=100 ./client 2
 	process_results
+	sleep 2
 done
 echo "ECDHE - Sphincs" |& tee -a ./results.txt
 valgrind --tool=massif --heap=no --stacks=yes --detailed-freq=100 ./client 3
