@@ -1,6 +1,6 @@
 # GDP-PQC
 
-This repository contains the code used to support the research conducted for the paper titled ["Evaluation of Performance, Energy, and Computation Costs of Quantum-Attack Resilient Encryption Algorithms for Embedded Devices"] (https://ieeexplore.ieee.org/document/10382535). The research focuses on assessing the performance, energy consumption, and computational costs of encryption algorithms designed to withstand quantum attacks, particularly when implemented on embedded devices.
+This repository contains the code used to support the research conducted for the paper titled ["Evaluation of Performance, Energy, and Computation Costs of Quantum-Attack Resilient Encryption Algorithms for Embedded Devices"](https://ieeexplore.ieee.org/document/10382535). The research focuses on assessing the performance, energy consumption, and computational costs of encryption algorithms designed to withstand quantum attacks, particularly when implemented on embedded devices.
 
 ## Getting started with the raspberry pi
 
